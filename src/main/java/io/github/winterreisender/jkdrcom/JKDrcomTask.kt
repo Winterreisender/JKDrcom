@@ -102,16 +102,18 @@ class JKDrcomTask(
      */
     @Throws(DrcomException::class)
     private fun init() {
-
-        //每次使用同一个端口 若有多个客户端运行这里会抛出异常
-        client = DatagramSocket(Constants.PORT)
-        client.soTimeout = Constants.TIMEOUT
-        serverAddress = InetAddress.getByName(Constants.AUTH_SERVER)
-        /* catch (e: SocketException) {
+        try{
+            //每次使用同一个端口 若有多个客户端运行这里会抛出异常
+            client = DatagramSocket(Constants.PORT)
+            client.soTimeout = Constants.TIMEOUT
+            serverAddress = InetAddress.getByName(Constants.AUTH_SERVER)
+        }
+        catch (e: SocketException) {
             throw DrcomException("The port ${Constants.PORT} may be occupied, do you have any other clients not exited?", e, DrcomException.CODE.ex_init)
-        } catch (e: UnknownHostException) {
+        }
+        catch (e: UnknownHostException) {
             throw DrcomException("The server could not be found. (check DNS settings)", DrcomException.CODE.ex_init)
-        }*/
+        }
     }
 
     /**
