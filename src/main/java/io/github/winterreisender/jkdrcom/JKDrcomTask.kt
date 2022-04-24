@@ -1,8 +1,9 @@
-package me.winterreisender.jkdrcom
+package io.github.winterreisender.jkdrcom
 
-import me.winterreisender.jkdrcom.util.*
+import io.github.winterreisender.jkdrcom.util.*
 import java.io.IOException
 import java.net.*
+import java.util.logging.Level
 import java.util.logging.Logger
 
 /**
@@ -14,7 +15,7 @@ class JKDrcomTask(
     private val username: String,
     private val password: String,
     private val hostInfo: HostInfo,
-    val onInfoSend :(String)->(Unit) = {}
+    val onSignalEmit :(String)->(Unit) = {}
 ) : Runnable {
     /**
      * 在 challenge 的回复报文中获得 [4:8]
@@ -53,14 +54,19 @@ class JKDrcomTask(
 
     // Modified
     override fun run() {
-        Retry.retry(Constants.MAX_RETRY) {
-            init()
-            Thread.currentThread().name = "JDrcomChallenge"
+        log.level = Level.ALL
+
+        onSignalEmit("INITIALIZING")
+        init()
+
+        Retry.retry(1, cleanup = {client.close();onSignalEmit("RETRYING");Thread.sleep(1000L)}) {
+            onSignalEmit("CHALLENGING")
             if (!challenge(challengeTimes++)) {
                 log.warning("challenge failed...")
                 throw DrcomException("Server refused the request.{0}" + DrcomException.CODE.ex_challenge)
             }
-            Thread.currentThread().name = "JDrcomLogin"
+
+            onSignalEmit("LONGING")
             if (!login()) {
                 log.warning("login failed...")
                 throw DrcomException("Failed to send authentication information.{0}" + DrcomException.CODE.ex_login)
@@ -69,7 +75,7 @@ class JKDrcomTask(
             //showWebPage(Constants.NOTICE_URL, Constants.NOTICE_W, Constants.NOTICE_H)
 
             //keep alive
-            Thread.currentThread().name = "JDrcomKeepAlive"
+            onSignalEmit("KEEPING_ALIVE")
             count = 0
             while (!notifyLogout && alive()) { //收到注销通知则停止
                 Thread.sleep(20000) //每 20s 一次
@@ -96,16 +102,16 @@ class JKDrcomTask(
      */
     @Throws(DrcomException::class)
     private fun init() {
-        try {
-            //每次使用同一个端口 若有多个客户端运行这里会抛出异常
-            client = DatagramSocket(Constants.PORT)
-            client.soTimeout = Constants.TIMEOUT
-            serverAddress = InetAddress.getByName(Constants.AUTH_SERVER)
-        } catch (e: SocketException) {
-            throw DrcomException("The port is occupied, do you have any other clients not exited?", e, DrcomException.CODE.ex_init)
+
+        //每次使用同一个端口 若有多个客户端运行这里会抛出异常
+        client = DatagramSocket(Constants.PORT)
+        client.soTimeout = Constants.TIMEOUT
+        serverAddress = InetAddress.getByName(Constants.AUTH_SERVER)
+        /* catch (e: SocketException) {
+            throw DrcomException("The port ${Constants.PORT} may be occupied, do you have any other clients not exited?", e, DrcomException.CODE.ex_init)
         } catch (e: UnknownHostException) {
             throw DrcomException("The server could not be found. (check DNS settings)", DrcomException.CODE.ex_init)
-        }
+        }*/
     }
 
     /**
@@ -192,6 +198,7 @@ class JKDrcomTask(
         data[1] = type
         data[2] = EOF
         data[3] = (username.length + 20).toByte()
+
         System.arraycopy(
             MD5.md5(byteArrayOf(code, type), salt, password.toByteArray()),
             0, md5a, 0, 16

@@ -1,6 +1,6 @@
 # JKDrcom
 
-JKDrcom(JLU Kotlin Drcom)是一个从jlu-drcom-java修改而来的Drcom客户端,删减了一些原版的功能(国际化,JavaFX GUI),同时用Kotlin重写。
+JKDrcom(JLU Kotlin Drcom)是一个从jlu-drcom-java修改而来的Drcom客户端,抽出了核心的联网功能并用Kotlin重写。
 
 
 ## 版权与许可

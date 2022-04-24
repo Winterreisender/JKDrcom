@@ -4,7 +4,7 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.6.10'
     id 'org.openjfx.javafxplugin' version '0.0.10'
     id 'org.beryx.jlink' version '2.24.1'
-    id "com.github.johnrengelman.shadow" version "latest.release"
+    id "com.github.johnrengelman.shadow" version "7.1.2"
     id "com.gluonhq.gluonfx-gradle-plugin" version "1.0.12"
 }
 
