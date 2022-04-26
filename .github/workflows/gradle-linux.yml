@@ -1,0 +1,47 @@
+name: Gradle CI Linux
+
+on:
+    push:
+        branches:
+            - master
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Setup Java JDK 17
+              uses: actions/setup-java@v3.0.0
+              with:
+                  java-version: '17'
+                  distribution: 'temurin'
+
+            - name: Make gradlew executable
+              run: chmod +x ./gradlew
+
+            - name: Setup Gradle
+              uses: gradle/gradle-build-action@v2
+              with:
+                  gradle-version: 7.4.1
+
+            - name: packageUberJarForCurrentOS with Gradle
+              uses: gradle/gradle-build-action@v2
+              with:
+                  arguments: packageUberJarForCurrentOS
+
+            - name: packageDeb with Gradle
+              uses: gradle/gradle-build-action@v2
+              with:
+                  arguments: packageDeb
+
+            - name: Copy Jars to Staging
+              run: mkdir staging && cp -r build/compose/jars/*.jar staging/
+
+            - name: Copy Debs to Staging
+              run: cp -r build/compose/binaries/main/deb/*.deb staging/
+
+            - name: Upload
+              uses: actions/upload-artifact@v2
+              with:
+                  name: Package
+                  path: staging
