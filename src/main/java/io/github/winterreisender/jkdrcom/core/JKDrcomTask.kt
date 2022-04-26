@@ -1,6 +1,6 @@
-package io.github.winterreisender.jkdrcom
+package io.github.winterreisender.jkdrcom.core
 
-import io.github.winterreisender.jkdrcom.util.*
+import io.github.winterreisender.jkdrcom.core.util.*
 import java.io.IOException
 import java.net.*
 import java.util.logging.Level
@@ -15,6 +15,7 @@ class JKDrcomTask(
     private val username: String,
     private val password: String,
     private val hostInfo: HostInfo,
+    private val maxRetry :Int = Constants.MAX_RETRY,
     val onSignalEmit :(String)->(Unit) = {}
 ) : Runnable {
     /**
@@ -59,14 +60,14 @@ class JKDrcomTask(
         onSignalEmit("INITIALIZING")
         init()
 
-        Retry.retry(1, cleanup = {client.close();onSignalEmit("RETRYING");Thread.sleep(1000L)}) {
+        Retry.retry(maxRetry, cleanup = {client.close();onSignalEmit("RETRYING");Thread.sleep(1000L)}) {
             onSignalEmit("CHALLENGING")
             if (!challenge(challengeTimes++)) {
                 log.warning("challenge failed...")
                 throw DrcomException("Server refused the request.{0}" + DrcomException.CODE.ex_challenge)
             }
 
-            onSignalEmit("LONGING")
+            onSignalEmit("LOGGING")
             if (!login()) {
                 log.warning("login failed...")
                 throw DrcomException("Failed to send authentication information.{0}" + DrcomException.CODE.ex_login)
@@ -184,7 +185,7 @@ class JKDrcomTask(
     private fun makeLoginPacket(): ByteArray {
         val code: Byte = 0x03
         val type: Byte = 0x01
-        val EOF: Byte = 0x00
+        val eof: Byte = 0x00
         val controlCheck: Byte = 0x20
         val adapterNum: Byte = 0x05
         val ipDog: Byte = 0x01
@@ -198,7 +199,7 @@ class JKDrcomTask(
         val data = ByteArray(dataLen)
         data[0] = code
         data[1] = type
-        data[2] = EOF
+        data[2] = eof
         data[3] = (username.length + 20).toByte()
 
         System.arraycopy(

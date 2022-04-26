@@ -1,8 +1,8 @@
-package io.github.winterreisender.jkdrcom.util
+package io.github.winterreisender.jkdrcom.core.util
 
-import io.github.winterreisender.jkdrcom.util.ByteUtil.fromHex
-import io.github.winterreisender.jkdrcom.util.ByteUtil.ljust
-import io.github.winterreisender.jkdrcom.util.ByteUtil.toHexString
+import io.github.winterreisender.jkdrcom.core.util.ByteUtil.fromHex
+import io.github.winterreisender.jkdrcom.core.util.ByteUtil.ljust
+import io.github.winterreisender.jkdrcom.core.util.ByteUtil.toHexString
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import javax.crypto.Cipher

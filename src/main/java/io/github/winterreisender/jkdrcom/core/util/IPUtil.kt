@@ -1,6 +1,6 @@
-package io.github.winterreisender.jkdrcom.util
+package io.github.winterreisender.jkdrcom.core.util
 
-import io.github.winterreisender.jkdrcom.util.ByteUtil.toHexString
+import io.github.winterreisender.jkdrcom.core.util.ByteUtil.toHexString
 import java.net.NetworkInterface
 import java.net.SocketException
 import java.util.*

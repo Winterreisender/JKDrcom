@@ -1,4 +1,4 @@
-package io.github.winterreisender.jkdrcom.util
+package io.github.winterreisender.jkdrcom.core.util
 
 /**
  * Created by lin on 2017-01-09-009.

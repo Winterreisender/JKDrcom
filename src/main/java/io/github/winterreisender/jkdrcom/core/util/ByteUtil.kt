@@ -1,4 +1,4 @@
-package io.github.winterreisender.jkdrcom.util
+package io.github.winterreisender.jkdrcom.core.util
 
 import java.math.BigInteger
 import java.util.*

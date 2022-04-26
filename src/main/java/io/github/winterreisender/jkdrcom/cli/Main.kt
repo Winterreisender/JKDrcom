@@ -1,6 +1,7 @@
-package io.github.winterreisender.jkdrcom
+package io.github.winterreisender.jkdrcom.cli
 
-import io.github.winterreisender.jkdrcom.util.HostInfo
+import io.github.winterreisender.jkdrcom.core.JKDrcomTask
+import io.github.winterreisender.jkdrcom.core.util.HostInfo
 
 fun onThreadMsgRecv(msg :String) {
     println(msg)
@@ -21,7 +22,7 @@ fun main(args :Array<String>) {
     val hostname = argOrInput({args[2]}, "主机名:")
     val password = argOrInput({args[3]}, "密码:")
 
-    val jkDrcomThread = Thread(JKDrcomTask(username,password, HostInfo(hostname,macAddress,""),::onThreadMsgRecv))
+    val jkDrcomThread = Thread(JKDrcomTask(username,password, HostInfo(hostname,macAddress,""),1,::onThreadMsgRecv))
     jkDrcomThread.start()
     jkDrcomThread.join()
 
