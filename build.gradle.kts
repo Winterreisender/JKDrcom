@@ -39,24 +39,24 @@ tasks.withType<JavaCompile> {
 
 compose.desktop {
     application {
-        mainClass = "MainKt"
+        mainClass = "io.github.winterreisender.jkdrcom.gui.MainKt"
         jvmArgs += listOf()//"-Xmx512m","-Xms32m","-XX:+UseZGC","-Dfile.encoding=gbk")
         args += listOf()
-        description = "Compose Example App"
+        description = "JKDrcom client"
         nativeDistributions {
             //includeAllModules = true
             targetFormats(TargetFormat.Msi, TargetFormat.Deb, TargetFormat.Dmg)
             packageName = "JKDrcom"
             packageVersion = "0.1.0"
-            copyright = "©Copyright 2022 My Name. All rights reserved."
-            vendor = "Example vendor"
-            licenseFile.set(project.file("LICENSE.txt"))
+            copyright = "©Copyright 2022 Winterreisender. License under AGPL-3.0-only."
+            vendor = "Winterreisender"
+            licenseFile.set(project.file("LICENSE"))
             windows {
                 upgradeUuid = "f7dac7eb-0136-48db-8103-85c56d4bf3f5"
                 dirChooser = true
                 shortcut = true
                 msiPackageVersion = "0.1.0"
-                iconFile.set(project.file("icon.ico"))
+                //iconFile.set(project.file("icon.ico"))
             }
             linux {
                 shortcut = true
