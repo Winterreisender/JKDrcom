@@ -15,22 +15,15 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
 import io.github.winterreisender.jkdrcom.core.JKDrcomTask
-import io.github.winterreisender.jkdrcom.core.util.HostInfo
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import java.awt.Desktop
 import java.net.URI
 import javax.swing.JOptionPane
 import javax.swing.UIManager
 
-object ComposeUtils {
-}
-
-
-
-val coreConfig = CoreConfig("", "", "")
-val guiConfig = GUIConfig(false, false)
-
+val appConfig = AppConfig.getDummyAppConfig()
 
 enum class AppStatus {
     IDLE,
@@ -39,9 +32,9 @@ enum class AppStatus {
 
 @Composable
 fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
-    var username by remember { mutableStateOf(coreConfig.username) }
-    var password by remember { mutableStateOf(coreConfig.password) }
-    var macAddress by remember { mutableStateOf(coreConfig.macAddress) }
+    var username by remember { mutableStateOf(appConfig.username) }
+    var password by remember { mutableStateOf(appConfig.password) }
+    var macAddress by remember { mutableStateOf(appConfig.macAddress) }
 
     var autoLogin by remember { mutableStateOf(false) }
     var rememberPassword by remember { mutableStateOf(false) }
@@ -66,12 +59,12 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
             Row {
                 Button(
                     onClick =  {
-                        coreConfig.username = username
-                        coreConfig.password = password
-                        coreConfig.macAddress = macAddress
+                        appConfig.username = username
+                        appConfig.password = password
+                        appConfig.macAddress = macAddress
                         setAppStatus(AppStatus.CONNECTING)
                     },
-                    enabled = !coreConfig.inValid(),
+                    enabled = macAddress.isValidMacAddress(),
                     content = {
                         Text("登录")
                     }
@@ -82,16 +75,21 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
 }
 
 @Composable
-fun ConnectingPage(coreConfig: CoreConfig, guiConfig: GUIConfig, setStatus: (AppStatus) -> Unit) {
+fun ConnectingPage(appConfig: AppConfig, setStatus: (AppStatus) -> Unit) {
     var threadNotification by remember { mutableStateOf("") }
     var task :JKDrcomTask? = null
 
+    val unconnectedNotification = rememberNotification("JKDrcom","已断开连接",Notification.Type.Warning)
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
-            task = JKDrcomTask(coreConfig.username, coreConfig.password, coreConfig.toHostInfo(), maxRetry = coreConfig.maxRetry ,{threadNotification = it})
+            task = JKDrcomTask(appConfig.username, appConfig.password, appConfig.toHostInfo(), maxRetry = appConfig.maxRetry ,{threadNotification = it})
             val thread = Thread(task)
             thread.start()
             thread.join()
+
+            //JOptionPane.showMessageDialog(ComposeWindow(),"已断开连接","JKDrcom",JOptionPane.WARNING_MESSAGE)
+            //TrayState().sendNotification(unconnectedNotification)
+            delay(2000L)
             setStatus(AppStatus.IDLE)
         }
     }
@@ -123,23 +121,19 @@ fun ConnectingPage(coreConfig: CoreConfig, guiConfig: GUIConfig, setStatus: (App
 @Preview
 @Composable
 fun AppPage() {
-    val (status,setStatus) = remember { mutableStateOf(if (guiConfig.autoLogin) AppStatus.CONNECTING else AppStatus.IDLE) }
+    val (status,setStatus) = remember { mutableStateOf(if (appConfig.autoLogin) AppStatus.CONNECTING else AppStatus.IDLE) }
 
     when(status) {
         AppStatus.IDLE -> IdlePage(setStatus)
-        AppStatus.CONNECTING -> ConnectingPage(coreConfig, guiConfig,setStatus)
+        AppStatus.CONNECTING -> ConnectingPage(appConfig, setStatus)
     }
 
 }
 
 fun main(args :Array<String>) {
     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
-    coreConfig.username = args.getOrElse(0,{""})
-    coreConfig.password = args.getOrElse(1,{""})
-    coreConfig.macAddress = args.getOrElse(2,{""})
-    coreConfig.hostName = "HWAWEI-XCKK"
-    coreConfig.networkInterfaceDisplayName = "HWAWEI-XCKK"
-
+    appConfig.readFromFile()
+    println(appConfig)
 
     application {
         var windowVisible by remember { mutableStateOf(true) }
@@ -157,7 +151,6 @@ fun main(args :Array<String>) {
                         windowVisible = false
                     }
 
-
                 Item("退出 Exit") {
                     exitApplication()
                 }
@@ -166,7 +159,7 @@ fun main(args :Array<String>) {
                 }
             }
 
-            Window({exitApplication()}, rememberWindowState(size = DpSize(600.dp,450.dp)),windowVisible, title = "JKDrcom") {
+            Window({ appConfig.saveToFile(); exitApplication()}, rememberWindowState(size = DpSize(600.dp,450.dp)),windowVisible, title = "JKDrcom") {
                 MenuBar {
                     Menu("文件") {
 
