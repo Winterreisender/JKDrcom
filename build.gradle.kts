@@ -47,25 +47,25 @@ compose.desktop {
             //includeAllModules = true
             targetFormats(TargetFormat.Msi, TargetFormat.Deb, TargetFormat.Dmg)
             packageName = "JKDrcom"
-            packageVersion = "0.1.0"
-            copyright = "©Copyright 2022 Winterreisender. License under AGPL-3.0-only."
+            packageVersion = "1.0.0"
+            copyright = "Copyright 2022 Winterreisender. License under AGPL-3.0-only."
             vendor = "Winterreisender"
             licenseFile.set(project.file("LICENSE"))
             windows {
                 upgradeUuid = "f7dac7eb-0136-48db-8103-85c56d4bf3f5"
                 dirChooser = true
                 shortcut = true
-                msiPackageVersion = "0.1.0"
-                //iconFile.set(project.file("icon.ico"))
+                msiPackageVersion = "1.0.0"
+                iconFile.set(project.file("asset/logo.ico"))
             }
             linux {
                 shortcut = true
                 packageName = "jkdrcom"
-                //iconFile.set(project.file("icon.png"))
+                iconFile.set(project.file("asset/logo.png"))
             }
             macOS {
-                dmgPackageVersion = "1.0.0"
-                //iconFile.set(project.file("icon.icns"))
+                //dmgPackageVersion = "1.0.0"
+                iconFile.set(project.file("asset/logo.icns"))
             }
 
 

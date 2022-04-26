@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.ComposeWindow
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -140,7 +141,7 @@ fun main(args :Array<String>) {
         MaterialTheme {
             val trayState = rememberTrayState()
             val notification = rememberNotification("测试","信息",Notification.Type.Warning)
-            Tray(rememberVectorPainter(Icons.Default.Send),trayState) {
+            Tray(painterResource("logo.png"), onAction = {windowVisible=true}) {
 
                 if(!windowVisible)
                     Item("显示 Show") {
@@ -159,7 +160,7 @@ fun main(args :Array<String>) {
                 }
             }
 
-            Window({ appConfig.saveToFile(); exitApplication()}, rememberWindowState(size = DpSize(600.dp,450.dp)),windowVisible, title = "JKDrcom") {
+            Window({ appConfig.saveToFile(); exitApplication()}, rememberWindowState(size = DpSize(600.dp,450.dp)),windowVisible, title = "JKDrcom",icon = painterResource("logo.png")) {
                 MenuBar {
                     Menu("文件") {
 
