@@ -3,9 +3,9 @@
 JKDrcom(JLU Kotlin Drcom)是一个从YouthLin的[jlu-drcom-java](https://github.com/YouthLin/jlu-drcom-client/tree/master/jlu-drcom-java)修改而来的Drcom客户端,抽出了核心的联网功能并用Kotlin重写GUI。
 
 
-[![Gradle CI Windows](https://github.com/Winterreisender/ComposeDesktopDemo/actions/workflows/gradle-windows.yml/badge.svg)](https://github.com/Winterreisender/ComposeDesktopDemo/actions/workflows/gradle-windows.yml)
-[![Gradle CI Linux](https://github.com/Winterreisender/ComposeDesktopDemo/actions/workflows/gradle-linux.yml/badge.svg)](https://github.com/Winterreisender/ComposeDesktopDemo/actions/workflows/gradle-linux.yml)
-[![Gradle CI MacOS](https://github.com/Winterreisender/ComposeDesktopDemo/actions/workflows/gradle-macos.yml/badge.svg)](https://github.com/Winterreisender/ComposeDesktopDemo/actions/workflows/gradle-macos.yml)
+[![Gradle CI Windows](https://github.com/Winterreisender/JKDrcom/actions/workflows/gradle-windows.yml/badge.svg)](https://github.com/Winterreisender/JKDrcom/actions/workflows/gradle-windows.yml)
+[![Gradle CI Linux](https://github.com/Winterreisender/JKDrcom/actions/workflows/gradle-linux.yml/badge.svg)](https://github.com/Winterreisender/JKDrcom/actions/workflows/gradle-linux.yml)
+[![Gradle CI MacOS](https://github.com/Winterreisender/JKDrcom/actions/workflows/gradle-macos.yml/badge.svg)](https://github.com/Winterreisender/JKDrcom/actions/workflows/gradle-macos.yml)
 
 
 ![screenshot](screenshot.png)
