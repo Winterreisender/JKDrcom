@@ -20,6 +20,12 @@ object IPUtil {
         return ret
     }
 
+    fun getHostInfo() = getHostInfo(object :IPUtil.OnGetHostInfoCallback {
+        override fun update(current: Int, total: Int) {
+        }
+        override fun done(hostInfoList: List<HostInfo>?) {
+        }
+    })
     fun getHostInfo(callback: OnGetHostInfoCallback): List<HostInfo> {
         val hostInfoList: MutableList<HostInfo> = ArrayList()
         try {
@@ -83,7 +89,7 @@ object IPUtil {
                 if (!(a == 10 || a == 127)) {
                     return true
                 }
-            } else if (a >= 128 && a < 192) {
+            } else if (a in 128..191) {
                 // 169.254.X.X 是保留地址。
                 // 如果你的 IP 地址是自动获取 IP 地址，
                 // 而你在网络上又没有找到可用的 DHCP 服务器。就会得到其中一个 IP。
@@ -91,7 +97,7 @@ object IPUtil {
                 if (!(a == 172 && b >= 16 && b < 31) && !(a == 169 && b == 254)) {
                     return true
                 }
-            } else if (a >= 192 && a < 224) {
+            } else if (a in 192..223) {
                 if (!(a == 192 && b == 168)) {
                     return true
                 }

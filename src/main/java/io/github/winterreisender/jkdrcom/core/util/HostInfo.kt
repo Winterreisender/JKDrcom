@@ -1,14 +1,17 @@
 package io.github.winterreisender.jkdrcom.core.util
 
+import java.util.Timer
+
 /**
  * Created by lin on 2017-01-10-010.
+ * Modified by winterreisender 2022-04-27
  * 机器的IP、HostName、MAC等
  */
-class HostInfo(var hostname: String, macHex: String, var networkInterfaceDisplayName: String) {
+class HostInfo(var hostname: String, macHex: String,displayName :String = "") {
     val macBytes = ByteArray(6)
-    var macHexDash: String? = null
+    var macHexDash: String = ""
         private set
-    var macNoDash: String? = null
+    var macNoDash: String = ""
         private set
     var address4 = "0.0.0.0" //仅用于显示
 
@@ -39,15 +42,14 @@ class HostInfo(var hostname: String, macHex: String, var networkInterfaceDisplay
         }
         macHexDash = sb.substring(0, 17)
         macNoDash = mac
-        val split = macHexDash!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        val split = macHexDash.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         for (i in split.indices) {
             macBytes[i] = split[i].toInt(16).toByte()
         }
     }
 
     override fun toString(): String {
-        return ("[" + macHexDash + '/' + address4 + " - "
-                + networkInterfaceDisplayName + '/' + hostname + ']')
+        return "$macHexDash/$hostname/$address4"
     }
 
     fun setMacHexDash(macHexDash: String) {
@@ -57,4 +59,8 @@ class HostInfo(var hostname: String, macHex: String, var networkInterfaceDisplay
     fun setMacNoDash(macNoDash: String) {
         checkHexToDashMac(macNoDash)
     }
+}
+
+fun main() {
+    IPUtil.getHostInfo().forEach(::println)
 }

@@ -1,24 +1,29 @@
 package io.github.winterreisender.jkdrcom.gui
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.ComposeWindow
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.max
 import androidx.compose.ui.window.*
 import io.github.winterreisender.jkdrcom.core.JKDrcomTask
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
+import io.github.winterreisender.jkdrcom.core.util.HostInfo
+import io.github.winterreisender.jkdrcom.core.util.IPUtil
+import io.github.winterreisender.jkdrcom.core.util.JKDNotification
+import isValidMacAddress
+import kotlinx.coroutines.*
+import showNetWindow
 import java.awt.Desktop
 import java.net.URI
 import javax.swing.JOptionPane
@@ -33,19 +38,63 @@ enum class AppStatus {
 
 @Composable
 fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
+    val scope = rememberCoroutineScope()
+
     var username by remember { mutableStateOf(appConfig.username) }
     var password by remember { mutableStateOf(appConfig.password) }
     var macAddress by remember { mutableStateOf(appConfig.macAddress) }
+    var hostName by remember { mutableStateOf(appConfig.hostName) }
 
-    var autoLogin by remember { mutableStateOf(false) }
-    var rememberPassword by remember { mutableStateOf(false) }
+    var autoLogin by remember { mutableStateOf(appConfig.autoLogin) }
+    var rememberPassword by remember { mutableStateOf(appConfig.rememberPassword) }
 
+    var hostMenuExpand by remember { mutableStateOf(false) }
+
+    var hostInfos = remember { listOf<HostInfo>() }
 
     Card(Modifier.fillMaxSize().padding(16.dp)) {
-        Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.SpaceAround, horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(Modifier.fillMaxSize().padding(16.dp).animateContentSize(), verticalArrangement = Arrangement.SpaceAround, horizontalAlignment = Alignment.CenterHorizontally) {
             OutlinedTextField(username,{username = it}, label = {Text("用户名")})
             OutlinedTextField(password,{password = it}, label = {Text("密码")},visualTransformation = PasswordVisualTransformation('*'))
-            OutlinedTextField(macAddress,{macAddress = it}, label = {Text("MAC")}, isError = !macAddress.isValidMacAddress())
+            OutlinedTextField(hostName,{hostName = it}, label = {Text("计算机名称")}, isError = hostName.isEmpty())
+            OutlinedTextField(macAddress,{macAddress = it}, label = {Text("MAC")}, isError = !macAddress.isValidMacAddress(),
+                trailingIcon = {
+                    var isLoading by remember { mutableStateOf(false) }
+                    Button(onClick = {
+                        isLoading = true
+                        Thread {
+                            hostInfos = IPUtil.getHostInfo() //CPU密集
+                            hostMenuExpand=true
+                            isLoading = false
+                        }.start()
+                        },
+                        modifier = Modifier.padding(5.dp),
+                        enabled = !isLoading,
+                        content = {
+                            if (isLoading) {
+                                CircularProgressIndicator(Modifier.size(18.dp))
+                            }else{
+                                Text("检测")
+                            }
+                        }
+                    )
+                })
+
+            DropdownMenu(hostMenuExpand, {hostMenuExpand=false}, modifier = Modifier.fillMaxWidth(0.62f)) {
+                hostInfos.forEach {
+                    DropdownMenuItem(
+                        onClick = {
+                            macAddress = it.macHexDash
+                            hostName = it.hostname
+                            hostMenuExpand=false
+                        },
+                        content = {
+                            Text(it.toString(), maxLines = 1, fontSize = 0.8.em, overflow = TextOverflow.Ellipsis)
+                        }
+                    )
+                }
+            }
+
 
             Row(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -60,9 +109,7 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
             Row {
                 Button(
                     onClick =  {
-                        appConfig.username = username
-                        appConfig.password = password
-                        appConfig.macAddress = macAddress
+                        appConfig.set(username,password,macAddress,hostName,autoLogin,rememberPassword, 8)
                         setAppStatus(AppStatus.CONNECTING)
                     },
                     enabled = macAddress.isValidMacAddress(),
@@ -77,19 +124,36 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
 
 @Composable
 fun ConnectingPage(appConfig: AppConfig, setStatus: (AppStatus) -> Unit) {
-    var threadNotification by remember { mutableStateOf("") }
     var task :JKDrcomTask? = null
+    val scope = rememberCoroutineScope()
 
-    val unconnectedNotification = rememberNotification("JKDrcom","已断开连接",Notification.Type.Warning)
+    // 处理线程的副作用
+    var threadNotification :JKDNotification by remember { mutableStateOf(JKDNotification.NOTHING) } // 线程返回的通知,如CHALLENGING
+    var guiText by remember { mutableStateOf("") }
+    LaunchedEffect(threadNotification) {
+        guiText = threadNotification.toString()
+
+        when(threadNotification) {
+            JKDNotification.EXITED -> {
+                //TrayState().sendNotification(Notification("JKDrcom","已断开",Notification.Type.Info))
+            }
+            JKDNotification.KEEPING_ALIVE -> {
+                showNetWindow();
+                //TrayState().sendNotification(Notification("JKDrcom","已连接",Notification.Type.Info))
+            }
+            else -> {}
+        }
+
+    }
+
+    // 页面首次渲染时启动网络线程
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
             task = JKDrcomTask(appConfig.username, appConfig.password, appConfig.toHostInfo(), maxRetry = appConfig.maxRetry ,{threadNotification = it})
             val thread = Thread(task)
             thread.start()
             thread.join()
-
-            //JOptionPane.showMessageDialog(ComposeWindow(),"已断开连接","JKDrcom",JOptionPane.WARNING_MESSAGE)
-            //TrayState().sendNotification(unconnectedNotification)
+            threadNotification = JKDNotification.EXITED
             delay(2000L)
             setStatus(AppStatus.IDLE)
         }
@@ -98,18 +162,12 @@ fun ConnectingPage(appConfig: AppConfig, setStatus: (AppStatus) -> Unit) {
     Card(Modifier.fillMaxSize().padding(16.dp)) {
         Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.SpaceAround, horizontalAlignment = Alignment.CenterHorizontally) {
             CircularProgressIndicator()
-
-            Text(when(threadNotification) {
-                "INITIALIZING" -> "初始化线程"
-                "CHALLENGING" -> "握手"
-                "LOGGING" -> "登录中"
-                "KEEPING_ALIVE" -> "保持连接中"
-                else -> threadNotification
-            })
-
+            Text(guiText)
             Button(
                 onClick = {
-                    task?.notifyLogout()
+                    scope.launch{
+                        task?.notifyLogout()
+                    }
                     setStatus(AppStatus.IDLE)
                 },
                 content = {
@@ -118,6 +176,8 @@ fun ConnectingPage(appConfig: AppConfig, setStatus: (AppStatus) -> Unit) {
             )
         }
     }
+
+
 }
 @Preview
 @Composable
@@ -160,14 +220,19 @@ fun main(args :Array<String>) {
                 }
             }
 
-            Window({ appConfig.saveToFile(); exitApplication()}, rememberWindowState(size = DpSize(600.dp,450.dp)),windowVisible, title = "JKDrcom",icon = painterResource("logo.png")) {
+            Window({ appConfig.saveToFile(); exitApplication()}, rememberWindowState(size = DpSize(600.dp,500.dp)),windowVisible, title = "JKDrcom",icon = painterResource("logo.png")) {
                 MenuBar {
-                    Menu("文件") {
-
+                    Menu("功能") {
+                        Item("校园网之窗") {
+                            showNetWindow()
+                        }
                     }
                     Menu("帮助") {
                         Item("网址") {
                             Desktop.getDesktop().browse(URI("https://github.com/Winterreisender/JKDrcom"))
+                        }
+                        Item("讨论/报告Bug") {
+                            Desktop.getDesktop().browse(URI("https://github.com/Winterreisender/JKDrcom/discussions"))
                         }
                         Item("关于") {
                             JOptionPane.showMessageDialog(ComposeWindow(),"JKDrcom v0.1.0")

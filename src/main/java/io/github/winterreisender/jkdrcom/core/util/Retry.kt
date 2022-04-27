@@ -4,18 +4,26 @@ import java.util.logging.Logger
 
 // 重试maxTimes次
 object Retry {
-    fun<R> retry(maxTimes: Int, cleanup :()->Unit ,body :()->R) :Result<R> {
+    /**
+     * 重试maxTimes次body,每次遇到异常后运行cleanup :剩余次数,异常->Unit
+     *
+     * @param maxTimes max retry times
+     * @param cleanup actions on failed, (timesRemain :Int, exception :Throwable?)->Unit
+     * @param body main body of retry
+     * @return Result(body()) if success finally and Result(last exception) if all failed
+     */
+    fun<R> retry(maxTimes: Int, cleanup :(Int,Throwable?)->Unit ,body :()->R) :Result<R> {
 
-        var r = runCatching(body)
         var timesRemain = maxTimes-1;
+        var r = runCatching { body() }
 
         while (timesRemain != 0) {
             if(r.isSuccess) {
                 break
             }else{
                 Logger.getLogger("Retry").warning("Failed with Exception(${r.exceptionOrNull()}). Times remain $timesRemain")
-                cleanup()
-                r = runCatching(body)
+                cleanup(timesRemain,r.exceptionOrNull())
+                r = runCatching { body() }
                 timesRemain--
             }
         }

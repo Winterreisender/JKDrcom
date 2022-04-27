@@ -16,7 +16,7 @@ class JKDrcomTask(
     private val password: String,
     private val hostInfo: HostInfo,
     private val maxRetry :Int = Constants.MAX_RETRY,
-    val onSignalEmit :(String)->(Unit) = {}
+    val onSignalEmit :(JKDNotification)->(Unit) = {}
 ) : Runnable {
     /**
      * 在 challenge 的回复报文中获得 [4:8]
@@ -57,17 +57,22 @@ class JKDrcomTask(
     override fun run() {
         log.level = Level.ALL
 
-        onSignalEmit("INITIALIZING")
+        Thread.currentThread().name = "JKDrcom/DrcomJava Thread"
+        onSignalEmit(JKDNotification.INITIALIZING)
         init()
 
-        Retry.retry(maxRetry, cleanup = {client.close();onSignalEmit("RETRYING");Thread.sleep(1000L)}) {
-            onSignalEmit("CHALLENGING")
+        Retry.retry(maxRetry, cleanup = {timesRemain, exception ->
+            client.close();
+            onSignalEmit(JKDNotification.RETRYING(timesRemain))
+            Thread.sleep(1000L)
+        }) {
+            onSignalEmit(JKDNotification.CHALLENGING)
             if (!challenge(challengeTimes++)) {
                 log.warning("challenge failed...")
                 throw DrcomException("Server refused the request.{0}" + DrcomException.CODE.ex_challenge)
             }
 
-            onSignalEmit("LOGGING")
+            onSignalEmit(JKDNotification.LOGGING)
             if (!login()) {
                 log.warning("login failed...")
                 throw DrcomException("Failed to send authentication information.{0}" + DrcomException.CODE.ex_login)
@@ -76,7 +81,7 @@ class JKDrcomTask(
             //showWebPage(Constants.NOTICE_URL, Constants.NOTICE_W, Constants.NOTICE_H)
 
             //keep alive
-            onSignalEmit("KEEPING_ALIVE")
+            onSignalEmit(JKDNotification.KEEPING_ALIVE)
             count = 0
             while (!notifyLogout && alive()) { //收到注销通知则停止
                 Thread.sleep(20000) //每 20s 一次
