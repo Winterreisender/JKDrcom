@@ -32,7 +32,7 @@ sealed class JKDNotification {
     object LOGGING : JKDNotification()
     object KEEPING_ALIVE : JKDNotification()
     object LOGOUT : JKDNotification()
-    class  RETRYING(val timesRemain :Int) : JKDNotification()
+    data class  RETRYING(val timesRemain :Int, val exception: Throwable?) : JKDNotification()
     object EXITED : JKDNotification()
 
     override fun toString() = when(this) {
@@ -42,7 +42,7 @@ sealed class JKDNotification {
         LOGGING ->  "登录中"
         LOGOUT ->  "已注销"
         KEEPING_ALIVE -> "保持连接中"
-        is RETRYING -> "重试中 剩余${this.timesRemain}"
+        is RETRYING -> "重试中 剩余${this.timesRemain}次 原因:$exception"
         EXITED -> "已退出"
     }
 }

@@ -86,8 +86,8 @@ class JKDrcomTask(
 
         Retry.retry(maxRetry, cleanup = {timesRemain, exception ->
             client.close();
-            onSignalEmit(JKDNotification.RETRYING(timesRemain))
-            Thread.sleep(1000L)
+            onSignalEmit(JKDNotification.RETRYING(timesRemain,exception))
+            Thread.sleep(3000L)
         }) {
             onSignalEmit(JKDNotification.CHALLENGING)
             if (!challenge(challengeTimes++)) {

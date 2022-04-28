@@ -25,12 +25,15 @@ package io.github.winterreisender.jkdrcom.gui
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.desktop.ui.tooling.preview.Preview
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.ComposeWindow
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -44,6 +47,9 @@ import io.github.winterreisender.jkdrcom.core.JKDrcomTask
 import io.github.winterreisender.jkdrcom.core.util.HostInfo
 import io.github.winterreisender.jkdrcom.core.util.IPUtil
 import io.github.winterreisender.jkdrcom.core.util.JKDNotification
+import io.github.winterreisender.jkdrcom.gui.MTopMenuBar.MMenu
+import io.github.winterreisender.jkdrcom.gui.MTopMenuBar.MMenuBar
+import io.github.winterreisender.jkdrcom.gui.MTopMenuBar.MMenuItem
 import isValidMacAddress
 import kotlinx.coroutines.*
 import showNetWindow
@@ -53,6 +59,10 @@ import javax.swing.JOptionPane
 import javax.swing.UIManager
 
 val appConfig = AppConfig.getDummyAppConfig()
+
+
+lateinit var trayState :TrayState
+
 
 enum class AppStatus {
     IDLE,
@@ -157,12 +167,16 @@ fun ConnectingPage(appConfig: AppConfig, setStatus: (AppStatus) -> Unit) {
         guiText = threadNotification.toString()
 
         when(threadNotification) {
+            is JKDNotification.RETRYING -> {
+                val (timesRemain, _) = (threadNotification as JKDNotification.RETRYING)
+                trayState.sendNotification(Notification("JKDrcom","重试中(剩余 $timesRemain 次)",Notification.Type.Warning))
+            }
             JKDNotification.EXITED -> {
-                //TrayState().sendNotification(Notification("JKDrcom","已断开",Notification.Type.Info))
+                trayState.sendNotification(Notification("JKDrcom","已断开",Notification.Type.Error))
             }
             JKDNotification.KEEPING_ALIVE -> {
-                showNetWindow();
-                //TrayState().sendNotification(Notification("JKDrcom","已连接",Notification.Type.Info))
+                Thread(::showNetWindow).start()
+                trayState.sendNotification(Notification("JKDrcom","已连接",Notification.Type.Info))
             }
             else -> {}
         }
@@ -220,50 +234,63 @@ fun main(args :Array<String>) {
     println(appConfig)
 
     application {
+        val windowState = rememberWindowState(size = DpSize(600.dp,500.dp))
         var windowVisible by remember { mutableStateOf(true) }
-        MaterialTheme {
-            val trayState = rememberTrayState()
-            val notification = rememberNotification("测试","信息",Notification.Type.Warning)
-            Tray(painterResource("logo.png"), onAction = {windowVisible=true}) {
 
-                if(!windowVisible)
-                    Item("显示 Show") {
-                        windowVisible = true
-                    }
-                else
-                    Item("隐藏 Hide") {
-                        windowVisible = false
-                    }
+        trayState = rememberTrayState()
+        Tray(painterResource("logo.png"), trayState,onAction = {windowVisible=true}) {
+            if(!windowVisible)
+                Item("显示 Show") {
+                    windowVisible = true
+                }
+            else
+                Item("隐藏 Hide") {
+                    windowVisible = false
+                }
 
-                Item("退出 Exit") {
-                    exitApplication()
-                }
-                Item("测试 Test") {
-                    trayState.sendNotification(notification)
-                }
+            Item("退出 Exit") {
+                exitApplication()
             }
+        }
 
-            Window({ appConfig.saveToFile(); exitApplication()}, rememberWindowState(size = DpSize(600.dp,500.dp)),windowVisible, title = "JKDrcom",icon = painterResource("logo.png")) {
-                MenuBar {
-                    Menu("功能") {
-                        Item("校园网之窗") {
-                            showNetWindow()
+        MaterialTheme(colors = if (isSystemInDarkTheme()) darkColors() else lightColors()) {
+            Window({appConfig.saveToFile(); exitApplication()}, windowState,windowVisible, title = "JKDrcom",icon = painterResource("logo.png"),undecorated = true) {
+                Scaffold(
+                    //modifier = Modifier.clip(RoundedCornerShape(5.dp)),
+                    topBar = {
+                        MMenuBar("JKDrcom",windowState, onExitClicked = { appConfig.saveToFile(); exitApplication() }) {
+                            MMenu("功能") {
+                                MMenuItem("校园网之窗") {
+                                    Thread(::showNetWindow).start()
+                                }
+                                MMenuItem("隐藏到托盘") {
+                                    windowVisible = false
+                                }
+                            }
+                            MMenu("帮助") {
+                                MMenuItem("网址") {
+                                    Desktop.getDesktop().browse(URI("https://github.com/Winterreisender/JKDrcom"))
+                                }
+                                MMenuItem("讨论/报告Bug") {
+                                    Desktop.getDesktop().browse(URI("https://github.com/Winterreisender/JKDrcom/discussions"))
+                                }
+                                Divider()
+                                MMenuItem("关于") {
+                                    JOptionPane.showMessageDialog(ComposeWindow(),"JKDrcom v0.3.0. \n Inspired and Powered by DrcomJava")
+                                }
+                            }
                         }
+                    },
+                    bottomBar = {
+                        BottomAppBar(modifier = Modifier.height(18.dp)) {
+                            Text("")
+                        }
+                    },
+                    content = {
+                        AppPage()
                     }
-                    Menu("帮助") {
-                        Item("网址") {
-                            Desktop.getDesktop().browse(URI("https://github.com/Winterreisender/JKDrcom"))
-                        }
-                        Item("讨论/报告Bug") {
-                            Desktop.getDesktop().browse(URI("https://github.com/Winterreisender/JKDrcom/discussions"))
-                        }
-                        Item("关于") {
-                            JOptionPane.showMessageDialog(ComposeWindow(),"JKDrcom v0.2.0. \n Inspired and Powered by DrcomJava")
-                        }
-                    }
-                }
+                )
 
-                AppPage()
             }
         }
     }
