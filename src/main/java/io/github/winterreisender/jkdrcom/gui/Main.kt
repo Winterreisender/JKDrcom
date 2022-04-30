@@ -63,7 +63,6 @@ val appConfig = AppConfig.getDummyAppConfig()
 
 lateinit var trayState :TrayState
 
-
 enum class AppStatus {
     IDLE,
     CONNECTING
@@ -218,6 +217,7 @@ fun ConnectingPage(appConfig: AppConfig, setStatus: (AppStatus) -> Unit) {
 }
 @Preview
 @Composable
+// AppPage层往下面的都要保持跨平台
 fun AppPage() {
     val (status,setStatus) = remember { mutableStateOf(if (appConfig.autoLogin) AppStatus.CONNECTING else AppStatus.IDLE) }
 
@@ -238,7 +238,7 @@ fun main(args :Array<String>) {
         var windowVisible by remember { mutableStateOf(true) }
 
         trayState = rememberTrayState()
-        Tray(painterResource("logo.png"), trayState,onAction = {windowVisible=true}) {
+        Tray(painterResource("logo.png"), trayState, onAction = {windowVisible=true}) {
             if(!windowVisible)
                 Item("显示 Show") {
                     windowVisible = true
@@ -276,21 +276,20 @@ fun main(args :Array<String>) {
                                 }
                                 Divider()
                                 MMenuItem("关于") {
-                                    JOptionPane.showMessageDialog(ComposeWindow(),"JKDrcom v0.3.0. \n Inspired and Powered by DrcomJava")
+                                    JOptionPane.showMessageDialog(ComposeWindow(),"JKDrcom v0.3.0. Inspired and Powered by DrcomJava")
                                 }
                             }
                         }
                     },
                     bottomBar = {
                         BottomAppBar(modifier = Modifier.height(18.dp)) {
-                            Text("")
+                            Text("JKDrcom v0.3.0. Inspired and Powered by DrcomJava")
                         }
                     },
                     content = {
                         AppPage()
                     }
                 )
-
             }
         }
     }

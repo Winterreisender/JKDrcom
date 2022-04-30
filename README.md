@@ -1,6 +1,6 @@
 # JKDrcom
 
-JKDrcom(JLU Kotlin Drcom)是一个从YouthLin的[jlu-drcom-java](https://github.com/YouthLin/jlu-drcom-client/tree/master/jlu-drcom-java)修改而来的Drcom客户端,抽出了核心的联网功能并用Kotlin重写GUI。
+JKDrcom(JLU Kotlin Drcom)是一个从YouthLin的[jlu-drcom-java](https://github.com/YouthLin/jlu-drcom-client/tree/master/jlu-drcom-java)修改而来的Drcom客户端实现,抽出了核心的联网功能并用Kotlin重写GUI。
 
 
 [![Gradle CI Windows](https://github.com/Winterreisender/JKDrcom/actions/workflows/gradle-windows.yml/badge.svg)](https://github.com/Winterreisender/JKDrcom/actions/workflows/gradle-windows.yml)
@@ -32,12 +32,15 @@ You should have received a copy of the GNU Affero General Public License along w
 
 ## 引用
 
-本程序使用了以下开源软件:
+本项目使用了以下开源软件:
 
-| 软件                      | 许可                                                                               |
-|-------------------------|----------------------------------------------------------------------------------|
-| Java (GraalVM JDK)      | [GPL with the classpath exception](https://openjdk.java.net/legal/gplv2+ce.html) |
-| Jetpack Compose Desktop | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                   |
+| 软件                                                                                        | 许可                                                                                 |
+|-------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------|
+| [jlu-drcom-java](https://github.com/YouthLin/jlu-drcom-client/tree/master/jlu-drcom-java) | AGPL-3.0-only                                                                      |
+| [Kotlin及其标准库和扩展库](https://kotlinlang.org/)                                                | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                     |
+| Java ([GraalVM](https://www.graalvm.org/),[Eclipse Adoptium](https://adoptium.net/))      | [GPLv2 with the classpath exception](https://openjdk.java.net/legal/gplv2+ce.html) |
+| [Jetpack Compose Desktop](https://github.com/JetBrains/compose-jb/)                       | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                     |
+| [IntelliJ IDEA Community](https://github.com/JetBrains/intellij-community)                | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                     |
 
 
 ---
