@@ -21,10 +21,7 @@
  * 你应该随程序获得一份 GNU Affero 通用公共许可证的复本。如果没有，请看 <https://www.gnu.org/licenses/>。
  */
 
-import java.awt.Component
-import java.awt.Desktop
-import java.awt.Dimension
-import java.awt.FlowLayout
+import java.awt.*
 import java.net.URI
 import javax.swing.*
 
@@ -37,10 +34,18 @@ fun showNetWindow() {
 
     JFrame("校园网之窗").apply {
         size = Dimension(600,540)
+        location = GraphicsEnvironment.getLocalGraphicsEnvironment().centerPoint
+
         JPanel().apply {
             layout = FlowLayout()
             alignmentX = Component.CENTER_ALIGNMENT
             size = Dimension(600,510)
+
+            JEditorPane(url).apply {
+                contentType = "text/html; charset=gb2312"
+                size = Dimension(600,465)
+                isEditable = false
+            }.also(::add)
 
             JButton("在浏览器中打开").apply {
                 addActionListener {
@@ -48,12 +53,8 @@ fun showNetWindow() {
                 }
             }.also(::add)
 
-            JEditorPane(url).apply {
-                contentType = "text/html; charset=gb2312"
-                size = Dimension(600,465)
-                isEditable = false
-            }.also(::add)
         }.also(::add)
+
         isVisible = true
     }
 

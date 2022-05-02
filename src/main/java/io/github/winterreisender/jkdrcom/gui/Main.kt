@@ -27,21 +27,17 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.ComposeWindow
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
-import androidx.compose.ui.unit.max
 import androidx.compose.ui.window.*
 import io.github.winterreisender.jkdrcom.core.JKDrcomTask
 import io.github.winterreisender.jkdrcom.core.util.HostInfo
@@ -86,10 +82,10 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
 
     Card(Modifier.fillMaxSize().padding(16.dp)) {
         Column(Modifier.fillMaxSize().padding(16.dp).animateContentSize(), verticalArrangement = Arrangement.SpaceAround, horizontalAlignment = Alignment.CenterHorizontally) {
-            OutlinedTextField(username,{username = it}, label = {Text("用户名")})
-            OutlinedTextField(password,{password = it}, label = {Text("密码")},visualTransformation = PasswordVisualTransformation('*'))
-            OutlinedTextField(hostName,{hostName = it}, label = {Text("计算机名称")}, isError = hostName.isEmpty())
-            OutlinedTextField(macAddress,{macAddress = it}, label = {Text("MAC")}, isError = !macAddress.isValidMacAddress(),
+            OutlinedTextField(username,{username = it}, label = {Text(Constants.UIText.Username)})
+            OutlinedTextField(password,{password = it}, label = {Text(Constants.UIText.Password)},visualTransformation = PasswordVisualTransformation('*'))
+            OutlinedTextField(hostName,{hostName = it}, label = {Text(Constants.UIText.HostName)}, isError = hostName.isEmpty())
+            OutlinedTextField(macAddress,{macAddress = it}, label = {Text(Constants.UIText.MacAddress)}, isError = !macAddress.isValidMacAddress(),
                 trailingIcon = {
                     var isLoading by remember { mutableStateOf(false) }
                     Button(onClick = {
@@ -106,7 +102,7 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
                             if (isLoading) {
                                 CircularProgressIndicator(Modifier.size(18.dp))
                             }else{
-                                Text("检测")
+                                Text(Constants.UIText.DetectMac)
                             }
                         }
                     )
@@ -131,11 +127,11 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
             Row(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Checkbox(autoLogin,{autoLogin = it})
-                    Text("自动登录")
+                    Text(Constants.UIText.AutoLogin)
                 }
                 Row(verticalAlignment = Alignment.CenterVertically)  {
                     Checkbox(rememberPassword,{rememberPassword = it})
-                    Text("记住密码")
+                    Text(Constants.UIText.SavePassword)
                 }
             }
             Row {
@@ -146,7 +142,7 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
                     },
                     enabled = macAddress.isValidMacAddress(),
                     content = {
-                        Text("登录")
+                        Text(Constants.UIText.Login)
                     }
                 )
             }
@@ -168,14 +164,14 @@ fun ConnectingPage(appConfig: AppConfig, setStatus: (AppStatus) -> Unit) {
         when(threadNotification) {
             is JKDNotification.RETRYING -> {
                 val (timesRemain, _) = (threadNotification as JKDNotification.RETRYING)
-                trayState.sendNotification(Notification("JKDrcom","重试中(剩余 $timesRemain 次)",Notification.Type.Warning))
+                trayState.sendNotification(Notification(Constants.AppName,Constants.UIText.Retrying(timesRemain),Notification.Type.Warning))
             }
             JKDNotification.EXITED -> {
-                trayState.sendNotification(Notification("JKDrcom","已断开",Notification.Type.Error))
+                trayState.sendNotification(Notification(Constants.AppName,Constants.UIText.Disconnected,Notification.Type.Error))
             }
             JKDNotification.KEEPING_ALIVE -> {
                 Thread(::showNetWindow).start()
-                trayState.sendNotification(Notification("JKDrcom","已连接",Notification.Type.Info))
+                trayState.sendNotification(Notification(Constants.AppName,Constants.UIText.Connected,Notification.Type.Info))
             }
             else -> {}
         }
@@ -207,7 +203,7 @@ fun ConnectingPage(appConfig: AppConfig, setStatus: (AppStatus) -> Unit) {
                     setStatus(AppStatus.IDLE)
                 },
                 content = {
-                    Text("注销")
+                    Text(Constants.UIText.Logout)
                 }
             )
         }
@@ -240,50 +236,50 @@ fun main(args :Array<String>) {
         trayState = rememberTrayState()
         Tray(painterResource("logo.png"), trayState, onAction = {windowVisible=true}) {
             if(!windowVisible)
-                Item("显示 Show") {
+                Item(Constants.MenuText.Tray_Show) {
                     windowVisible = true
                 }
             else
-                Item("隐藏 Hide") {
+                Item(Constants.MenuText.Tray_Hide) {
                     windowVisible = false
                 }
 
-            Item("退出 Exit") {
+            Item(Constants.MenuText.Tray_Exit) {
                 exitApplication()
             }
         }
 
         MaterialTheme(colors = if (isSystemInDarkTheme()) darkColors() else lightColors()) {
-            Window({appConfig.saveToFile(); exitApplication()}, windowState,windowVisible, title = "JKDrcom",icon = painterResource("logo.png"),undecorated = true) {
+            Window({appConfig.saveToFile(); exitApplication()}, windowState,windowVisible, title = Constants.AppName,icon = painterResource("logo.png"),undecorated = true) {
                 Scaffold(
                     //modifier = Modifier.clip(RoundedCornerShape(5.dp)),
                     topBar = {
-                        MMenuBar("JKDrcom",windowState, onExitClicked = { appConfig.saveToFile(); exitApplication() }) {
-                            MMenu("功能") {
-                                MMenuItem("校园网之窗") {
+                        MMenuBar(Constants.AppName,windowState, onExitClicked = { appConfig.saveToFile(); exitApplication() }) {
+                            MMenu(Constants.MenuText.Function) {
+                                MMenuItem(Constants.MenuText.Function_SchoolNetWindow) {
                                     Thread(::showNetWindow).start()
                                 }
-                                MMenuItem("隐藏到托盘") {
+                                MMenuItem(Constants.MenuText.Function_HideWindow) {
                                     windowVisible = false
                                 }
                             }
-                            MMenu("帮助") {
-                                MMenuItem("网址") {
-                                    Desktop.getDesktop().browse(URI("https://github.com/Winterreisender/JKDrcom"))
+                            MMenu(Constants.MenuText.Help) {
+                                MMenuItem(Constants.MenuText.Help_HomePage) {
+                                    Desktop.getDesktop().browse(URI(Constants.AppHomepage))
                                 }
-                                MMenuItem("讨论/报告Bug") {
-                                    Desktop.getDesktop().browse(URI("https://github.com/Winterreisender/JKDrcom/discussions"))
+                                MMenuItem(Constants.MenuText.Help_Feedback) {
+                                    Desktop.getDesktop().browse(URI(Constants.AppFeedback))
                                 }
                                 Divider()
-                                MMenuItem("关于") {
-                                    JOptionPane.showMessageDialog(ComposeWindow(),"JKDrcom v0.3.0. Inspired and Powered by DrcomJava")
+                                MMenuItem(Constants.MenuText.Help_About) {
+                                    JOptionPane.showMessageDialog(ComposeWindow(),Constants.AppAbout.trimIndent())
                                 }
                             }
                         }
                     },
                     bottomBar = {
                         BottomAppBar(modifier = Modifier.height(18.dp)) {
-                            Text("JKDrcom v0.3.0. Inspired and Powered by DrcomJava")
+                            Text("${Constants.AppName} ${Constants.AppVersion}")
                         }
                     },
                     content = {

@@ -1,6 +1,6 @@
 # JKDrcom
 
-JKDrcom(JLU Kotlin Drcom)是一个从YouthLin的[jlu-drcom-java](https://github.com/YouthLin/jlu-drcom-client/tree/master/jlu-drcom-java)修改而来的Drcom客户端实现,抽出了核心的联网功能并用Kotlin重写GUI。
+JKDrcom(JLU Kotlin Drcom)是一个从YouthLin的[jlu-drcom-java](https://github.com/YouthLin/jlu-drcom-client/tree/master/jlu-drcom-java)修改而来的开源Drcom客户端实现,抽出了核心的联网功能并用Kotlin重写GUI。
 
 
 [![Gradle CI Windows](https://github.com/Winterreisender/JKDrcom/actions/workflows/gradle-windows.yml/badge.svg)](https://github.com/Winterreisender/JKDrcom/actions/workflows/gradle-windows.yml)
