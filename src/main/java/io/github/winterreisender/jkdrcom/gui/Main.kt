@@ -56,7 +56,6 @@ import javax.swing.UIManager
 
 val appConfig = AppConfig.getDummyAppConfig()
 
-
 lateinit var trayState :TrayState
 
 enum class AppStatus {
@@ -66,7 +65,6 @@ enum class AppStatus {
 
 @Composable
 fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
-    val scope = rememberCoroutineScope()
 
     var username by remember { mutableStateOf(appConfig.username) }
     var password by remember { mutableStateOf(appConfig.password) }
