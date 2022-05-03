@@ -70,7 +70,7 @@ compose.desktop {
             //includeAllModules = true
             targetFormats(TargetFormat.Msi, TargetFormat.Deb, TargetFormat.Dmg)
             packageName = "JKDrcom"
-            packageVersion = "0.4.0"
+            packageVersion = "1.0.4" // MAC OS一遇到低于1.0的packageVersion就无法打包
             copyright = "Copyright 2022 Winterreisender. License under AGPL-3.0-only."
             vendor = "Winterreisender"
             licenseFile.set(project.file("LICENSE"))
