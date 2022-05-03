@@ -29,33 +29,42 @@ fun String.isValidMacAddress() = this.matches(Regex("""([A-E,\d]{2}-?){5}([A-E,\
 
 
 // Bug: not work after jpackage
+// 在新窗口中打开校园窗
+@Deprecated("JEditorPane is pretty buggy", ReplaceWith("openNetWindow"))
 fun showNetWindow() {
+    Thread {
+        val url = "http://login.jlu.edu.cn/notice_win.php"
+
+        JFrame("校园网之窗").apply {
+            size = Dimension(600, 540)
+            location = GraphicsEnvironment.getLocalGraphicsEnvironment().centerPoint
+
+            JPanel().apply {
+                layout = FlowLayout()
+                alignmentX = Component.CENTER_ALIGNMENT
+                size = Dimension(640, 510)
+
+                JEditorPane(url).apply {
+                    size = Dimension(640, 465)
+                    isEditable = false
+                }.also(::add)
+
+                JButton("在浏览器中打开").apply {
+                    addActionListener {
+                        openNetWindow()
+                    }
+                }.also(::add)
+
+            }.also(::add)
+
+            isVisible = true
+        }
+    }.start()
+
+}
+
+// 在浏览器中打开校园窗
+fun openNetWindow() {
     val url = "http://login.jlu.edu.cn/notice_win.php"
-
-    JFrame("校园网之窗").apply {
-        size = Dimension(600,540)
-        location = GraphicsEnvironment.getLocalGraphicsEnvironment().centerPoint
-
-        JPanel().apply {
-            layout = FlowLayout()
-            alignmentX = Component.CENTER_ALIGNMENT
-            size = Dimension(600,510)
-
-            JEditorPane(url).apply {
-                contentType = "text/html; charset=gb2312"
-                size = Dimension(600,465)
-                isEditable = false
-            }.also(::add)
-
-            JButton("在浏览器中打开").apply {
-                addActionListener {
-                    Desktop.getDesktop().browse(URI(url))
-                }
-            }.also(::add)
-
-        }.also(::add)
-
-        isVisible = true
-    }
-
+    Desktop.getDesktop().browse(URI(url))
 }

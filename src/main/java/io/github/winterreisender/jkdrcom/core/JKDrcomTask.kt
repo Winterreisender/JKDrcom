@@ -29,6 +29,7 @@ import java.io.IOException
 import java.net.*
 import java.util.logging.Level
 import java.util.logging.Logger
+import kotlin.math.min
 import kotlin.math.pow
 
 /**
@@ -83,16 +84,16 @@ class JKDrcomTask(
     override fun run() {
         log.level = Level.ALL
 
-        Thread.currentThread().name = "JKDrcom/DrcomJava Thread"
-        onSignalEmit(JKDNotification.INITIALIZING)
-        init()
+        Thread.currentThread().name = "JKDrcom DrcomJava Thread"
 
         Retry.retry(maxRetry, cleanup = {timesRemain, exception ->
             client.close();
             onSignalEmit(JKDNotification.RETRYING(timesRemain,exception))
-            // 指数等待间隔
-            Thread.sleep(RETRY_INTERVAL * 2f.pow(maxRetry - timesRemain).toLong())
+            // 指数等待间隔,60s封顶
+            Thread.sleep(1000L * min(1.6f.pow(maxRetry - timesRemain), 60f).toLong())
         }) {
+            onSignalEmit(JKDNotification.INITIALIZING)
+            init()
             onSignalEmit(JKDNotification.CHALLENGING)
             if (!challenge(challengeTimes++)) {
                 log.warning("challenge failed...")

@@ -48,6 +48,7 @@ import io.github.winterreisender.jkdrcom.gui.MTopMenuBar.MMenuBar
 import io.github.winterreisender.jkdrcom.gui.MTopMenuBar.MMenuItem
 import isValidMacAddress
 import kotlinx.coroutines.*
+import openNetWindow
 import showNetWindow
 import java.awt.Desktop
 import java.net.URI
@@ -169,8 +170,8 @@ fun ConnectingPage(appConfig: AppConfig, setStatus: (AppStatus) -> Unit) {
                 trayState.sendNotification(Notification(Constants.AppName,Constants.UIText.Disconnected,Notification.Type.Error))
             }
             JKDNotification.KEEPING_ALIVE -> {
-                Thread(::showNetWindow).start()
                 trayState.sendNotification(Notification(Constants.AppName,Constants.UIText.Connected,Notification.Type.Info))
+                openNetWindow()
             }
             else -> {}
         }
@@ -259,7 +260,7 @@ fun main(args :Array<String>) {
 
                             MMenu(Constants.MenuText.Function) {
                                 MMenuItem(Constants.MenuText.Function_SchoolNetWindow) {
-                                    Thread(::showNetWindow).start()
+                                    openNetWindow()
                                 }
 
                                 MMenuItem(Constants.MenuText.Function_SetMaxRetry) {
