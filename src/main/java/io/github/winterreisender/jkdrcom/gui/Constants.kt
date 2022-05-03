@@ -28,7 +28,7 @@ object Constants {
     const val AppHomepage = "https://github.com/Winterreisender/JKDrcom"
     const val AppFeedback = "https://github.com/Winterreisender/JKDrcom/discussions"
     const val AppName = "JKDrcom"
-    const val AppVersion = "v0.3.1"
+    const val AppVersion = "v0.4.0-dev"
     const val AppDescription = "使用Kotlin的Drcom开源实现."
     const val AppCopyright = """
         JKDrcom 是自由软件：你可以再分发之和/或依照由自由软件基金会发布的 GNU Affero 通用公共许可证修改之，仅版本 3 许可证。
@@ -65,6 +65,8 @@ object Constants {
     object MenuText {
         const val Function = "功能"
         const val Function_SchoolNetWindow = "校园网之窗"
+        const val Function_SetMaxRetry = "设置重试次数"
+        const val Function_SetMaxRetry_NeedNum = "请输入1~128的数字"
         const val Function_HideWindow = "隐藏到托盘"
 
         const val Help = "帮助"

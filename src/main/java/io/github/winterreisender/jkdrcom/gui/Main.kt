@@ -27,6 +27,8 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -179,7 +181,7 @@ fun ConnectingPage(appConfig: AppConfig, setStatus: (AppStatus) -> Unit) {
     // 页面首次渲染时启动网络线程
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
-            task = JKDrcomTask(appConfig.username, appConfig.password, appConfig.toHostInfo(), maxRetry = appConfig.maxRetry ,{threadNotification = it})
+            task = JKDrcomTask(appConfig.username, appConfig.password, appConfig.getHostInfo(), maxRetry = appConfig.maxRetry ,{threadNotification = it})
             val thread = Thread(task)
             thread.start()
             thread.join()
@@ -253,10 +255,29 @@ fun main(args :Array<String>) {
                     //modifier = Modifier.clip(RoundedCornerShape(5.dp)),
                     topBar = {
                         MMenuBar(Constants.AppName,windowState, onExitClicked = { appConfig.saveToFile(); exitApplication() }) {
+                            val msgBox = { text :String, title :String -> JOptionPane.showMessageDialog(ComposeWindow(),text,title,JOptionPane.INFORMATION_MESSAGE) }
+                            val inputBox = {text :String, title :String -> JOptionPane.showInputDialog(ComposeWindow(),text,title,JOptionPane.INFORMATION_MESSAGE)}
+
                             MMenu(Constants.MenuText.Function) {
                                 MMenuItem(Constants.MenuText.Function_SchoolNetWindow) {
                                     Thread(::showNetWindow).start()
                                 }
+
+                                MMenuItem(Constants.MenuText.Function_SetMaxRetry) {
+                                    when(val r :Int? = inputBox(Constants.MenuText.Function_SetMaxRetry,Constants.MenuText.Function_SetMaxRetry)?.toIntOrNull()) {
+                                        null -> {msgBox(Constants.MenuText.Function_SetMaxRetry_NeedNum,Constants.MenuText.Function_SetMaxRetry)}
+                                        in 1..128 -> {appConfig.maxRetry = r}
+                                        else -> {msgBox(Constants.MenuText.Function_SetMaxRetry_NeedNum,Constants.MenuText.Function_SetMaxRetry)}
+                                    }
+                                }
+
+                                MMenuItem("清空配置") {
+                                    with(AppConfig.getDummyAppConfig()) {
+                                        appConfig.set(username, password, macAddress, hostName, autoLogin, rememberPassword, maxRetry)
+                                    }
+                                    msgBox("已清空: $appConfig","清空配置")
+                                }
+
                                 MMenuItem(Constants.MenuText.Function_HideWindow) {
                                     windowVisible = false
                                 }

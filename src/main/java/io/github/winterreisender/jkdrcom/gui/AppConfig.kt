@@ -47,7 +47,7 @@ data class AppConfig(
 ) {
 
     fun inValid() :Boolean = username.isEmpty() || password.isEmpty() || !macAddress.isValidMacAddress() || maxRetry <= 0 || hostName.isEmpty()
-    fun toHostInfo() = HostInfo(hostName, macAddress)
+    fun getHostInfo() = HostInfo(hostName, macAddress)
     fun set(username: String, password: String, macAddress: String, hostName: String, autoLogin: Boolean, rememberPassword: Boolean, maxRetry: Int){
         this.username = username
         this.password = password
@@ -57,6 +57,8 @@ data class AppConfig(
         this.rememberPassword = rememberPassword
         this.maxRetry = maxRetry
     }
+
+
     fun saveToFile() {
         val userHome = System.getProperty("user.home")
         val jsonText = Json.encodeToString(this)
@@ -82,7 +84,7 @@ data class AppConfig(
             autoLogin = savedObj.autoLogin
             rememberPassword = savedObj.rememberPassword
         }catch (e :Exception){
-            Logger.getLogger("AppConfig").warning("Error occurs in readFromFile: $e. Use dummy one")
+            Logger.getLogger("AppConfig").warning("Error occurs in readFromFile: $e. Using dummy one")
         }
 
     }

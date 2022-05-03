@@ -24,10 +24,12 @@
 package io.github.winterreisender.jkdrcom.core
 
 import io.github.winterreisender.jkdrcom.core.util.*
+import io.github.winterreisender.jkdrcom.core.util.Constants.RETRY_INTERVAL
 import java.io.IOException
 import java.net.*
 import java.util.logging.Level
 import java.util.logging.Logger
+import kotlin.math.pow
 
 /**
  * Created by lin on 2017-01-11-011.
@@ -38,7 +40,7 @@ class JKDrcomTask(
     private val username: String,
     private val password: String,
     private val hostInfo: HostInfo,
-    private val maxRetry :Int = Constants.MAX_RETRY,
+    private val maxRetry :Int = Constants.DEFAULT_MAX_RETRY,
     val onSignalEmit :(JKDNotification)->(Unit) = {}
 ) : Runnable {
     /**
@@ -76,6 +78,7 @@ class JKDrcomTask(
     private lateinit var client: DatagramSocket
     private lateinit var serverAddress: InetAddress
 
+
     // Modified
     override fun run() {
         log.level = Level.ALL
@@ -87,7 +90,8 @@ class JKDrcomTask(
         Retry.retry(maxRetry, cleanup = {timesRemain, exception ->
             client.close();
             onSignalEmit(JKDNotification.RETRYING(timesRemain,exception))
-            Thread.sleep(3000L)
+            // 指数等待间隔
+            Thread.sleep(RETRY_INTERVAL * 2f.pow(maxRetry - timesRemain).toLong())
         }) {
             onSignalEmit(JKDNotification.CHALLENGING)
             if (!challenge(challengeTimes++)) {

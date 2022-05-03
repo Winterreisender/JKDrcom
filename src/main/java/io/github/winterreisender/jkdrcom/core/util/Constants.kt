@@ -23,8 +23,6 @@
 
 package io.github.winterreisender.jkdrcom.core.util
 
-import java.io.File
-
 /**
  * Created by lin on 2017-01-09-009.
  * Modified on 2022-4-29
@@ -34,5 +32,6 @@ object Constants {
     const val AUTH_SERVER = "auth.jlu.edu.cn" //10.100.61.3
     const val PORT = 61440
     const val TIMEOUT = 10000 //10s
-    const val MAX_RETRY = 8 //最大重试次数
+    const val DEFAULT_MAX_RETRY = 8 //最大重试次数
+    const val RETRY_INTERVAL = 5000L
 }
