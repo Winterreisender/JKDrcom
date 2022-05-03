@@ -31,7 +31,7 @@ plugins {
     id("org.jetbrains.compose") version "1.1.1"
 }
 
-group = "me.guest_3slo32w"
+group = "io.github.winterreisender.jkdrcom"
 version = "1.0"
 
 repositories {

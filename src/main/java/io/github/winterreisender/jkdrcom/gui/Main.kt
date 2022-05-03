@@ -278,6 +278,11 @@ fun main(args :Array<String>) {
                                     msgBox("已恢复默认配置: $appConfig","恢复默认配置")
                                 }
 
+                                MMenuItem("保存配置") {
+                                    val r = runCatching {appConfig.saveToFile()}.fold({"保存成功"},{"保存失败 $it"})
+                                    msgBox(r,"保存配置")
+                                }
+
                                 MMenuItem(Constants.MenuText.Function_HideWindow) {
                                     windowVisible = false
                                 }
