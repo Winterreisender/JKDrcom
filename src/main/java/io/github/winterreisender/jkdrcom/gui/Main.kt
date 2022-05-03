@@ -27,8 +27,6 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -56,7 +54,7 @@ import java.net.URI
 import javax.swing.JOptionPane
 import javax.swing.UIManager
 
-val appConfig = AppConfig.getDummyAppConfig()
+val appConfig = AppConfig.getDefault()
 
 lateinit var trayState :TrayState
 
@@ -137,7 +135,8 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
             Row {
                 Button(
                     onClick =  {
-                        appConfig.set(username,password,macAddress,hostName,autoLogin,rememberPassword, 8)
+                        appConfig.set(username,password,macAddress,hostName,autoLogin,rememberPassword)
+                        appConfig.saveToFile()
                         setAppStatus(AppStatus.CONNECTING)
                     },
                     enabled = macAddress.isValidMacAddress(),
@@ -250,7 +249,7 @@ fun main(args :Array<String>) {
         }
 
         MaterialTheme(colors = if (isSystemInDarkTheme()) darkColors() else lightColors()) {
-            Window({appConfig.saveToFile(); exitApplication()}, windowState,windowVisible, title = Constants.AppName,icon = painterResource("logo.png"),undecorated = true) {
+            Window({exitApplication()}, windowState,windowVisible, title = Constants.AppName,icon = painterResource("logo.png"),undecorated = true) {
                 Scaffold(
                     //modifier = Modifier.clip(RoundedCornerShape(5.dp)),
                     topBar = {
@@ -271,11 +270,12 @@ fun main(args :Array<String>) {
                                     }
                                 }
 
-                                MMenuItem("清空配置") {
-                                    with(AppConfig.getDummyAppConfig()) {
-                                        appConfig.set(username, password, macAddress, hostName, autoLogin, rememberPassword, maxRetry)
+                                MMenuItem("恢复默认配置") {
+                                    with(AppConfig.getDefault()) {
+                                        appConfig.set(username, password, macAddress, hostName, autoLogin, rememberPassword)
+                                        appConfig.maxRetry = 1
                                     }
-                                    msgBox("已清空: $appConfig","清空配置")
+                                    msgBox("已恢复默认配置: $appConfig","恢复默认配置")
                                 }
 
                                 MMenuItem(Constants.MenuText.Function_HideWindow) {

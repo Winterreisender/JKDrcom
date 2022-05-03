@@ -48,14 +48,13 @@ data class AppConfig(
 
     fun inValid() :Boolean = username.isEmpty() || password.isEmpty() || !macAddress.isValidMacAddress() || maxRetry <= 0 || hostName.isEmpty()
     fun getHostInfo() = HostInfo(hostName, macAddress)
-    fun set(username: String, password: String, macAddress: String, hostName: String, autoLogin: Boolean, rememberPassword: Boolean, maxRetry: Int){
+    fun set(username: String, password: String, macAddress: String, hostName: String, autoLogin: Boolean, rememberPassword: Boolean){
         this.username = username
         this.password = password
         this.macAddress = macAddress
         this.hostName = hostName
         this.autoLogin = autoLogin
         this.rememberPassword = rememberPassword
-        this.maxRetry = maxRetry
     }
 
 
@@ -65,7 +64,7 @@ data class AppConfig(
         with(File("$userHome/.drcom/jkdrcom.json")) {
             writeText(jsonText)
         }
-        println("Save config $jsonText")
+        Logger.getLogger("AppConfig").info("Save config $jsonText")
     }
     fun readFromFile() {
         val userHome = System.getProperty("user.home")
@@ -91,7 +90,7 @@ data class AppConfig(
 
     companion object {
         // 返回一个不能用的默认值
-        fun getDummyAppConfig() = AppConfig("", "", "","",1,false,false)
+        fun getDefault() = AppConfig("", "", "","",1,false,false)
     }
 }
 

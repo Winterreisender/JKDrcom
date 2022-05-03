@@ -10,6 +10,12 @@ JKDrcom(JLU Kotlin Drcom)是一个从YouthLin的[jlu-drcom-java](https://github.
 
 ![screenshot](screenshot.png)
 
+## Q&A
+
+**Q: 配置文件在哪里?**
+
+A: 和DrcomJava一样在`~\.drcom` 文件夹中,文件名是`jkdrcom.json`
+
 ## 版权与许可
 
 Copyright 2022 Winterreisender.
@@ -43,11 +49,13 @@ You should have received a copy of the GNU Affero General Public License along w
 | [IntelliJ IDEA Community](https://github.com/JetBrains/intellij-community)                | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                     |
 
 
+
 ---
 
 **_以下为部分原[jlu-drcom-java](https://github.com/YouthLin/jlu-drcom-client/tree/master/jlu-drcom-java)的说明,也请详细阅读并遵守相关行为准则_**
 
 > ## 鸣谢
+> 
 > - 感谢 [jlu-drcom-client](https://github.com/drcoms/jlu-drcom-client) 中
 > [newclient.py](https://github.com/drcoms/jlu-drcom-client/blob/master/newclient.py), 
 > [drcom-android](https://github.com/drcoms/jlu-drcom-client/tree/master/drcom-android) 等
@@ -55,6 +63,7 @@ You should have received a copy of the GNU Affero General Public License along w
 >   - 感谢[吉林大学 IBM 俱乐部副主席](https://hyec.me/)(2016-2017)在本项目期间提供的各种帮助。
 > 
 > ## CopyLeft
+> 
 > jar 可执行软件及本项目其他产出（如文档、wiki 等）采用 [ 署名 - 非商业性使用 - 相同方式共享 4.0 国际 (CC BY-NC-SA 4.0)](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh) 
 > 许可协议进行授权。
 > 您可以自由地使用、修改、复制、传播本作品，
@@ -68,4 +77,5 @@ You should have received a copy of the GNU Affero General Public License along w
 > 请您在不违反 校规和/或任何有效约束 的前提下使用本软件。
 > 
 > ## LICENSE
+> 
 > 此项目源代码遵循 AGPL 协议。

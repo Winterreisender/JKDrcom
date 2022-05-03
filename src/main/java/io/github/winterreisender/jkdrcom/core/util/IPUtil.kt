@@ -43,13 +43,7 @@ object IPUtil {
         return ret
     }
 
-    fun getHostInfo() = getHostInfo(object :IPUtil.OnGetHostInfoCallback {
-        override fun update(current: Int, total: Int) {
-        }
-        override fun done(hostInfoList: List<HostInfo>?) {
-        }
-    })
-    fun getHostInfo(callback: OnGetHostInfoCallback): List<HostInfo> {
+    fun getHostInfo(): List<HostInfo> {
         val hostInfoList: MutableList<HostInfo> = ArrayList()
         try {
             val networkInterfaces = NetworkInterface.getNetworkInterfaces()
@@ -59,7 +53,7 @@ object IPUtil {
             var index = 0
             for (networkInterface in networkInterfacesList) {
                 index++
-                callback.update(index, size)
+                //callback.update(index, size)
                 if (!networkInterface.isUp) {
                     continue
                 }
@@ -88,7 +82,7 @@ object IPUtil {
         } catch (e: SocketException) {
             log.severe("Socket Exception: $e")
         }
-        callback.done(hostInfoList)
+        //callback.done(hostInfoList)
         return hostInfoList
     }
 
@@ -108,7 +102,7 @@ object IPUtil {
             //int d = Integer.parseInt(split[3]);
             //A 类：1.0.0.0 到 127.255.255.255  //A 类：10.0.0.0 到 10.255.255.255
             //                              127.0.0.0 到 127.255.255.255 为系统回环地址
-            if (a > 0 && a < 128) {
+            if (a in 1..127) {
                 if (!(a == 10 || a == 127)) {
                     return true
                 }
@@ -134,8 +128,4 @@ object IPUtil {
         return false
     }
 
-    interface OnGetHostInfoCallback {
-        fun update(current: Int, total: Int)
-        fun done(hostInfoList: List<HostInfo>?)
-    }
 }
