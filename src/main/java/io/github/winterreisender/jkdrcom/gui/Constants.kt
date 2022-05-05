@@ -68,6 +68,11 @@ object Constants {
         const val Function_SetMaxRetry = "设置重试次数"
         const val Function_SetMaxRetry_NeedNum = "请输入1~128的数字"
         const val Function_HideWindow = "隐藏到托盘"
+        const val Function_ResetConfig = "恢复默认配置"
+        val Function_ResetConfig_Done = {cfg :String -> "已恢复默认配置: $cfg" }
+        const val Function_SaveConfig = "保存配置"
+        const val Function_SaveConfig_Done = "保存成功"
+        const val Function_SaveConfig_Failed = "保存失败!"
 
         const val Help = "帮助"
         const val Help_About = "关于"

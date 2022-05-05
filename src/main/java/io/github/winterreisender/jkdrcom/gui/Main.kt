@@ -49,7 +49,6 @@ import io.github.winterreisender.jkdrcom.gui.MTopMenuBar.MMenuItem
 import isValidMacAddress
 import kotlinx.coroutines.*
 import openNetWindow
-import showNetWindow
 import java.awt.Desktop
 import java.net.URI
 import javax.swing.JOptionPane
@@ -81,7 +80,7 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
 
     Card(Modifier.fillMaxSize().padding(16.dp)) {
         Column(Modifier.fillMaxSize().padding(16.dp).animateContentSize(), verticalArrangement = Arrangement.SpaceAround, horizontalAlignment = Alignment.CenterHorizontally) {
-            OutlinedTextField(username,{username = it}, label = {Text(Constants.UIText.Username)})
+            OutlinedTextField(username,{username = it}, label = {Text(Constants.UIText.Username)}, isError = !username.matches(Regex("""^\S+${'$'}""")))
             OutlinedTextField(password,{password = it}, label = {Text(Constants.UIText.Password)},visualTransformation = PasswordVisualTransformation('*'))
             OutlinedTextField(hostName,{hostName = it}, label = {Text(Constants.UIText.HostName)}, isError = hostName.isEmpty())
             OutlinedTextField(macAddress,{macAddress = it}, label = {Text(Constants.UIText.MacAddress)}, isError = !macAddress.isValidMacAddress(),
@@ -99,7 +98,7 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
                         enabled = !isLoading,
                         content = {
                             if (isLoading) {
-                                CircularProgressIndicator(Modifier.size(18.dp))
+                                CircularProgressIndicator(Modifier.size(20.dp))
                             }else{
                                 Text(Constants.UIText.DetectMac)
                             }
@@ -193,7 +192,8 @@ fun ConnectingPage(appConfig: AppConfig, setStatus: (AppStatus) -> Unit) {
 
     Card(Modifier.fillMaxSize().padding(16.dp)) {
         Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.SpaceAround, horizontalAlignment = Alignment.CenterHorizontally) {
-            CircularProgressIndicator()
+            CircularProgressIndicator() //  LinearProgressIndicator() and CircularProgressIndicator() have high cpu cost. Wait for further Compose version.
+
             Text(guiText)
             Button(
                 onClick = {
@@ -271,17 +271,17 @@ fun main(args :Array<String>) {
                                     }
                                 }
 
-                                MMenuItem("恢复默认配置") {
+                                MMenuItem(Constants.MenuText.Function_ResetConfig) {
                                     with(AppConfig.getDefault()) {
                                         appConfig.set(username, password, macAddress, hostName, autoLogin, rememberPassword)
                                         appConfig.maxRetry = 1
                                     }
-                                    msgBox("已恢复默认配置: $appConfig","恢复默认配置")
+                                    msgBox(Constants.MenuText.Function_ResetConfig_Done(appConfig.toString()),Constants.MenuText.Function_ResetConfig)
                                 }
 
-                                MMenuItem("保存配置") {
-                                    val r = runCatching {appConfig.saveToFile()}.fold({"保存成功"},{"保存失败 $it"})
-                                    msgBox(r,"保存配置")
+                                MMenuItem(Constants.MenuText.Function_SaveConfig) {
+                                    val r = runCatching {appConfig.saveToFile()}.fold({Constants.MenuText.Function_SaveConfig_Done},{"${Constants.MenuText.Function_SaveConfig_Failed} $it"})
+                                    msgBox(r,Constants.MenuText.Function_SaveConfig)
                                 }
 
                                 MMenuItem(Constants.MenuText.Function_HideWindow) {
