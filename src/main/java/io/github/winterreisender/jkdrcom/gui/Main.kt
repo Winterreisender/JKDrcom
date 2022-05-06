@@ -55,6 +55,7 @@ import java.net.URI
 import javax.swing.UIManager
 
 import Utils
+import java.util.logging.Logger
 
 val appConfig = AppConfig.getDefault()
 
@@ -226,9 +227,12 @@ fun AppPage() {
 
 }
 
-fun main(args :Array<String>) = application {
+fun main(args :Array<String>) {
+    appConfig.readFromFile()
+
+    application {
         LaunchedEffect(Unit) {
-            appConfig.readFromFile()
+            Logger.getLogger("Main").info(appConfig.toString())
             UIManager.setLookAndFeel(
                 when(currentSystemTheme){ // currentSystemTheme要在Application内运行
                     SystemTheme.LIGHT -> FlatMaterialLighterContrastIJTheme()
@@ -319,3 +323,4 @@ fun main(args :Array<String>) = application {
             }
         }
     }
+}
