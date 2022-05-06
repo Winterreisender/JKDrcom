@@ -269,7 +269,7 @@ fun main(args :Array<String>) = application {
                                 }
 
                                 MMenuItem(Constants.MenuText.Function_SetMaxRetry) {
-                                    when(val r :Int? = Utils.inputBox(Constants.MenuText.Function_SetMaxRetry,Constants.MenuText.Function_SetMaxRetry)?.toIntOrNull()) {
+                                    when(val r :Int? = Utils.inputBox(Constants.MenuText.Function_SetMaxRetry,Constants.MenuText.Function_SetMaxRetry).toIntOrNull()) {
                                         null -> {Utils.msgBox(Constants.MenuText.Function_SetMaxRetry_NeedNum,Constants.MenuText.Function_SetMaxRetry)}
                                         in 1..128 -> {appConfig.maxRetry = r}
                                         else -> {Utils.msgBox(Constants.MenuText.Function_SetMaxRetry_NeedNum,Constants.MenuText.Function_SetMaxRetry)}
