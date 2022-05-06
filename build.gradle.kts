@@ -44,6 +44,9 @@ dependencies {
     implementation(compose.desktop.currentOs)
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines:0.19.2")
+    //implementation("io.github.vincenzopalazzo:material-ui-swing:1.1.2")
+    implementation("com.formdev:flatlaf:2.2")
+    implementation("com.formdev:flatlaf-intellij-themes:2.2")
 }
 
 tasks.withType<KotlinCompile>().all {
@@ -89,7 +92,6 @@ compose.desktop {
                 dmgPackageVersion = "1.0.4"
                 iconFile.set(project.file("asset/logo.icns"))
             }
-
 
         }
     }

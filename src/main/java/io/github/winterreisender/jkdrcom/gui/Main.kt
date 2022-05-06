@@ -31,7 +31,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.awt.ComposeWindow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
@@ -39,6 +38,8 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.window.*
+import com.formdev.flatlaf.intellijthemes.FlatMaterialDesignDarkIJTheme
+import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialLighterContrastIJTheme
 import io.github.winterreisender.jkdrcom.core.JKDrcomTask
 import io.github.winterreisender.jkdrcom.core.util.HostInfo
 import io.github.winterreisender.jkdrcom.core.util.IPUtil
@@ -46,13 +47,14 @@ import io.github.winterreisender.jkdrcom.core.util.JKDNotification
 import io.github.winterreisender.jkdrcom.gui.MTopMenuBar.MMenu
 import io.github.winterreisender.jkdrcom.gui.MTopMenuBar.MMenuBar
 import io.github.winterreisender.jkdrcom.gui.MTopMenuBar.MMenuItem
-import isValidMacAddress
 import kotlinx.coroutines.*
-import openNetWindow
+import org.jetbrains.skiko.SystemTheme
+import org.jetbrains.skiko.currentSystemTheme
 import java.awt.Desktop
 import java.net.URI
-import javax.swing.JOptionPane
 import javax.swing.UIManager
+
+import Utils
 
 val appConfig = AppConfig.getDefault()
 
@@ -80,10 +82,10 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
 
     Card(Modifier.fillMaxSize().padding(16.dp)) {
         Column(Modifier.fillMaxSize().padding(16.dp).animateContentSize(), verticalArrangement = Arrangement.SpaceAround, horizontalAlignment = Alignment.CenterHorizontally) {
-            OutlinedTextField(username,{username = it}, label = {Text(Constants.UIText.Username)}, isError = !username.matches(Regex("""^\S+${'$'}""")))
+            OutlinedTextField(username,{username = it}, label = {Text(Constants.UIText.Username)}, isError = !username.matches("""^\S+${'$'}""".toRegex()))
             OutlinedTextField(password,{password = it}, label = {Text(Constants.UIText.Password)},visualTransformation = PasswordVisualTransformation('*'))
             OutlinedTextField(hostName,{hostName = it}, label = {Text(Constants.UIText.HostName)}, isError = hostName.isEmpty())
-            OutlinedTextField(macAddress,{macAddress = it}, label = {Text(Constants.UIText.MacAddress)}, isError = !macAddress.isValidMacAddress(),
+            OutlinedTextField(macAddress,{macAddress = it}, label = {Text(Constants.UIText.MacAddress)}, isError = !macAddress.matches("""([A-E,\d]{2}-?){5}([A-E,\d]{2})""".toRegex(RegexOption.IGNORE_CASE)),
                 trailingIcon = {
                     var isLoading by remember { mutableStateOf(false) }
                     Button(onClick = {
@@ -139,7 +141,7 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
                         appConfig.saveToFile()
                         setAppStatus(AppStatus.CONNECTING)
                     },
-                    enabled = macAddress.isValidMacAddress(),
+                    enabled = macAddress.matches("""([A-E,\d]{2}-?){5}([A-E,\d]{2})""".toRegex(RegexOption.IGNORE_CASE)),
                     content = {
                         Text(Constants.UIText.Login)
                     }
@@ -170,7 +172,7 @@ fun ConnectingPage(appConfig: AppConfig, setStatus: (AppStatus) -> Unit) {
             }
             JKDNotification.KEEPING_ALIVE -> {
                 trayState.sendNotification(Notification(Constants.AppName,Constants.UIText.Connected,Notification.Type.Info))
-                openNetWindow()
+                Utils.openNetWindow()
             }
             else -> {}
         }
@@ -224,12 +226,18 @@ fun AppPage() {
 
 }
 
-fun main(args :Array<String>) {
-    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
-    appConfig.readFromFile()
-    println(appConfig)
+fun main(args :Array<String>) = application {
+        LaunchedEffect(Unit) {
+            appConfig.readFromFile()
+            UIManager.setLookAndFeel(
+                when(currentSystemTheme){ // currentSystemTheme要在Application内运行
+                    SystemTheme.LIGHT -> FlatMaterialLighterContrastIJTheme()
+                    SystemTheme.DARK -> FlatMaterialDesignDarkIJTheme()
+                    else -> FlatMaterialLighterContrastIJTheme()
+                }
+            )
+        }
 
-    application {
         val windowState = rememberWindowState(size = DpSize(600.dp,500.dp))
         var windowVisible by remember { mutableStateOf(true) }
 
@@ -255,19 +263,16 @@ fun main(args :Array<String>) {
                     //modifier = Modifier.clip(RoundedCornerShape(5.dp)),
                     topBar = {
                         MMenuBar(Constants.AppName,windowState, onExitClicked = { appConfig.saveToFile(); exitApplication() }) {
-                            val msgBox = { text :String, title :String -> JOptionPane.showMessageDialog(ComposeWindow(),text,title,JOptionPane.INFORMATION_MESSAGE) }
-                            val inputBox = {text :String, title :String -> JOptionPane.showInputDialog(ComposeWindow(),text,title,JOptionPane.INFORMATION_MESSAGE)}
-
                             MMenu(Constants.MenuText.Function) {
                                 MMenuItem(Constants.MenuText.Function_SchoolNetWindow) {
-                                    openNetWindow()
+                                    Utils.openNetWindow()
                                 }
 
                                 MMenuItem(Constants.MenuText.Function_SetMaxRetry) {
-                                    when(val r :Int? = inputBox(Constants.MenuText.Function_SetMaxRetry,Constants.MenuText.Function_SetMaxRetry)?.toIntOrNull()) {
-                                        null -> {msgBox(Constants.MenuText.Function_SetMaxRetry_NeedNum,Constants.MenuText.Function_SetMaxRetry)}
+                                    when(val r :Int? = Utils.inputBox(Constants.MenuText.Function_SetMaxRetry,Constants.MenuText.Function_SetMaxRetry)?.toIntOrNull()) {
+                                        null -> {Utils.msgBox(Constants.MenuText.Function_SetMaxRetry_NeedNum,Constants.MenuText.Function_SetMaxRetry)}
                                         in 1..128 -> {appConfig.maxRetry = r}
-                                        else -> {msgBox(Constants.MenuText.Function_SetMaxRetry_NeedNum,Constants.MenuText.Function_SetMaxRetry)}
+                                        else -> {Utils.msgBox(Constants.MenuText.Function_SetMaxRetry_NeedNum,Constants.MenuText.Function_SetMaxRetry)}
                                     }
                                 }
 
@@ -276,12 +281,12 @@ fun main(args :Array<String>) {
                                         appConfig.set(username, password, macAddress, hostName, autoLogin, rememberPassword)
                                         appConfig.maxRetry = 1
                                     }
-                                    msgBox(Constants.MenuText.Function_ResetConfig_Done(appConfig.toString()),Constants.MenuText.Function_ResetConfig)
+                                    Utils.msgBox(Constants.MenuText.Function_ResetConfig_Done(appConfig.toString()),Constants.MenuText.Function_ResetConfig)
                                 }
 
                                 MMenuItem(Constants.MenuText.Function_SaveConfig) {
                                     val r = runCatching {appConfig.saveToFile()}.fold({Constants.MenuText.Function_SaveConfig_Done},{"${Constants.MenuText.Function_SaveConfig_Failed} $it"})
-                                    msgBox(r,Constants.MenuText.Function_SaveConfig)
+                                    Utils.msgBox(r,Constants.MenuText.Function_SaveConfig)
                                 }
 
                                 MMenuItem(Constants.MenuText.Function_HideWindow) {
@@ -297,7 +302,7 @@ fun main(args :Array<String>) {
                                 }
                                 Divider()
                                 MMenuItem(Constants.MenuText.Help_About) {
-                                    JOptionPane.showMessageDialog(ComposeWindow(),Constants.AppAbout.trimIndent())
+                                    Utils.msgBox(Constants.AppAbout.trimIndent(), Constants.MenuText.Help_About)
                                 }
                             }
                         }
@@ -314,4 +319,3 @@ fun main(args :Array<String>) {
             }
         }
     }
-}

@@ -26,7 +26,6 @@
 package io.github.winterreisender.jkdrcom.gui
 
 import io.github.winterreisender.jkdrcom.core.util.HostInfo
-import isValidMacAddress
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -46,7 +45,6 @@ data class AppConfig(
     var rememberPassword :Boolean
 ) {
 
-    fun inValid() :Boolean = username.isEmpty() || password.isEmpty() || !macAddress.isValidMacAddress() || maxRetry <= 0 || hostName.isEmpty()
     fun getHostInfo() = HostInfo(hostName, macAddress)
     fun set(username: String, password: String, macAddress: String, hostName: String, autoLogin: Boolean, rememberPassword: Boolean){
         this.username = username
