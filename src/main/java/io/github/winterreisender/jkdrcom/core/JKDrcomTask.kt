@@ -24,7 +24,6 @@
 package io.github.winterreisender.jkdrcom.core
 
 import io.github.winterreisender.jkdrcom.core.util.*
-import io.github.winterreisender.jkdrcom.core.util.Constants.RETRY_INTERVAL
 import java.io.IOException
 import java.net.*
 import java.util.logging.Level
@@ -35,14 +34,14 @@ import kotlin.math.pow
 /**
  * Created by lin on 2017-01-11-011.
  * Modified by Winterreisender on 2022-04-23
- * challenge, login, keep_alive, logout
+ * challenge, login, keep_alive, notifyLogout
  */
 class JKDrcomTask(
     private val username: String,
     private val password: String,
     private val hostInfo: HostInfo,
     private val maxRetry :Int = Constants.DEFAULT_MAX_RETRY,
-    val onSignalEmit :(JKDNotification)->(Unit) = {}
+    private val communication :JKDCommunication,
 ) : Runnable {
     /**
      * 在 challenge 的回复报文中获得 [4:8]
@@ -75,9 +74,8 @@ class JKDrcomTask(
      */
     private var count = 0
     private var keep38Count = 0 //仅用于日志计数
-    private var notifyLogout = false
+    private val serverAddress: InetAddress = InetAddress.getByName(Constants.AUTH_SERVER)!!
     private lateinit var client: DatagramSocket
-    private lateinit var serverAddress: InetAddress
 
 
     // Modified
@@ -87,33 +85,36 @@ class JKDrcomTask(
         Thread.currentThread().name = "JKDrcom DrcomJava Thread"
 
         Retry.retry(maxRetry, cleanup = {timesRemain, exception ->
-            client.close();
-            onSignalEmit(JKDNotification.RETRYING(timesRemain,exception))
+            if(!client.isClosed)  client.close()
+            communication.emitNotification(JKDNotification.RETRYING(timesRemain,exception))
             // 指数等待间隔,60s封顶
             Thread.sleep(1000L * min(1.6f.pow(maxRetry - timesRemain), 60f).toLong())
         }) {
-            onSignalEmit(JKDNotification.INITIALIZING)
+            communication.emitNotification(JKDNotification.INITIALIZING)
             init()
-            onSignalEmit(JKDNotification.CHALLENGING)
+            communication.emitNotification(JKDNotification.CHALLENGING)
             if (!challenge(challengeTimes++)) {
                 log.warning("challenge failed...")
                 throw DrcomException("Server refused the request.{0}" + DrcomException.CODE.ex_challenge)
             }
 
-            onSignalEmit(JKDNotification.LOGGING)
+            communication.emitNotification(JKDNotification.LOGGING)
             if (!login()) {
                 log.warning("login failed...")
                 throw DrcomException("Failed to send authentication information.{0}" + DrcomException.CODE.ex_login)
             }
             log.info("登录成功!")
-            //showWebPage(Constants.NOTICE_URL, Constants.NOTICE_W, Constants.NOTICE_H)
 
             //keep alive
-            onSignalEmit(JKDNotification.KEEPING_ALIVE)
+            communication.emitNotification(JKDNotification.KEEPING_ALIVE)
             count = 0
-            while (!notifyLogout && alive()) { //收到注销通知则停止
+            while (!communication.notifyLogout && alive()) { //收到注销通知则停止
                 Thread.sleep(20000) //每 20s 一次
             }
+
+            challenge(challengeTimes++)
+            logout()
+            communication.emitNotification(JKDNotification.LOGOUT)
         }.fold(
             { log.info("正常停止") },
             {
@@ -136,11 +137,11 @@ class JKDrcomTask(
      */
     @Throws(DrcomException::class)
     private fun init() {
+        communication.notifyLogout = false
         try{
             //每次使用同一个端口 若有多个客户端运行这里会抛出异常
             client = DatagramSocket(Constants.PORT)
             client.soTimeout = Constants.TIMEOUT
-            serverAddress = InetAddress.getByName(Constants.AUTH_SERVER)
         }
         catch (e: SocketException) {
             throw DrcomException("The port ${Constants.PORT} may be occupied, do you have any other clients not exited?", e, DrcomException.CODE.ex_init)
@@ -487,39 +488,15 @@ class JKDrcomTask(
         return data
     }
 
-    fun notifyLogout() {
-        notifyLogout = true //终止 keep 线程
-        //logout
-        log.info("收到注销指令")
-        if (true) { //已登录才注销
-            var succ = true
-            try {
-                challenge(challengeTimes++)
-                logout()
-            } catch (t: Throwable) {
-                succ = false
-                log.severe("注销异常$t")
-            } finally {
-                //不管怎样重新登录
-                if (succ) {
-                    log.info("Logout success.")
-                }
-                if (!client.isClosed) {
-                    client.close()
-                }
-            }
-        }
-    }
-
     @Throws(IOException::class)
     private fun logout(): Boolean {
         val buf = makeLogoutPacket()
         val packet = DatagramPacket(buf, buf.size, serverAddress, Constants.PORT)
         client.send(packet)
-        log.fine("send logout packet.【{}】" + ByteUtil.toHexString(buf))
+        log.fine("send notifyLogout packet.【{}】" + ByteUtil.toHexString(buf))
         val recv = ByteArray(512) //25
         client.receive(DatagramPacket(recv, recv.size))
-        log.fine("recv logout packet response.【{}】" + ByteUtil.toHexString(recv))
+        log.fine("recv notifyLogout packet response.【{}】" + ByteUtil.toHexString(recv))
         if (recv[0].toInt() == 0x04) {
             log.info("注销成功")
         } else {

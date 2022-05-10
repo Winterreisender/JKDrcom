@@ -28,7 +28,7 @@ object Constants {
     const val AppHomepage = "https://github.com/Winterreisender/JKDrcom"
     const val AppFeedback = "https://github.com/Winterreisender/JKDrcom/discussions"
     const val AppName = "JKDrcom"
-    const val AppVersion = "v0.4.0-dev"
+    const val AppVersion = "v0.5.0-dev"
     const val AppDescription = "使用Kotlin的Drcom开源实现."
     const val AppCopyright = """
         JKDrcom 是自由软件：你可以再分发之和/或依照由自由软件基金会发布的 GNU Affero 通用公共许可证修改之，仅版本 3 许可证。
@@ -48,6 +48,7 @@ object Constants {
 
     object UIText{
         const val Logout = "注销"
+        const val LoggingOut = "注销中"
         const val Login = "登录"
         const val Username = "用户名"
         const val Password = "密码"

@@ -21,8 +21,9 @@
  * 你应该随程序获得一份 GNU Affero 通用公共许可证的复本。如果没有，请看 <https://www.gnu.org/licenses/>。
  */
 
-package io.github.winterreisender.jkdrcom.cli
 
+package io.github.winterreisender.jkdrcom.cli
+/*
 import io.github.winterreisender.jkdrcom.core.JKDrcomTask
 import io.github.winterreisender.jkdrcom.core.util.HostInfo
 import io.github.winterreisender.jkdrcom.core.util.JKDNotification
@@ -51,3 +52,4 @@ fun main(args :Array<String>) {
     jkDrcomThread.join()
 
 }
+ */

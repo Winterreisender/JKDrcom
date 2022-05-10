@@ -46,3 +46,15 @@ sealed class JKDNotification {
         EXITED -> "已退出"
     }
 }
+
+// 线程共享对象(内存)
+open class JKDCommunication {
+    @set:Synchronized
+    @get:Synchronized
+    var notifyLogout = false
+
+    @Synchronized
+    open fun emitNotification(notification :JKDNotification) {
+        println(notification)
+    }
+}

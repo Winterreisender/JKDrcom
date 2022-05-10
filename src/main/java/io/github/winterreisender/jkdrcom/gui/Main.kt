@@ -55,6 +55,7 @@ import java.net.URI
 import javax.swing.UIManager
 
 import Utils
+import io.github.winterreisender.jkdrcom.core.util.JKDCommunication
 import java.util.logging.Logger
 
 val appConfig = AppConfig.getDefault()
@@ -131,7 +132,7 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
                     Text(Constants.UIText.AutoLogin)
                 }
                 Row(verticalAlignment = Alignment.CenterVertically)  {
-                    //Checkbox(rememberPassword,{rememberPassword = it})
+                    //Checkbox(rememberPassword,{rememberPassword = it}) TODO: 恢复密码选择保存
                     Checkbox(true,{}, enabled = false)
                     Text(Constants.UIText.SavePassword)
                 }
@@ -155,12 +156,21 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
 
 @Composable
 fun ConnectingPage(appConfig: AppConfig, setStatus: (AppStatus) -> Unit) {
-    var task :JKDrcomTask? = null
     val scope = rememberCoroutineScope()
 
     // 处理线程的副作用
     var threadNotification :JKDNotification by remember { mutableStateOf(JKDNotification.NOTHING) } // 线程返回的通知,如CHALLENGING
     var guiText by remember { mutableStateOf("") }
+
+    val jkdcomm = remember {
+        object :JKDCommunication() {
+            override fun emitNotification(notification: JKDNotification) {
+                super.emitNotification(notification)
+                threadNotification = notification
+            }
+        }
+    }
+
     LaunchedEffect(threadNotification) {
         guiText = threadNotification.toString()
 
@@ -176,6 +186,9 @@ fun ConnectingPage(appConfig: AppConfig, setStatus: (AppStatus) -> Unit) {
                 trayState.sendNotification(Notification(Constants.AppName,Constants.UIText.Connected,Notification.Type.Info))
                 Utils.openNetWindow() // TODO：如果是在Retry中重试成功则不打开校园网窗
             }
+            JKDNotification.LOGOUT -> {
+                setStatus(AppStatus.IDLE)
+            }
             else -> {}
         }
 
@@ -184,7 +197,8 @@ fun ConnectingPage(appConfig: AppConfig, setStatus: (AppStatus) -> Unit) {
     // 页面首次渲染时启动网络线程
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
-            task = JKDrcomTask(appConfig.username, appConfig.password, appConfig.getHostInfo(), maxRetry = appConfig.maxRetry ,{threadNotification = it})
+            val task = JKDrcomTask(appConfig.username, appConfig.password, appConfig.getHostInfo(), maxRetry = appConfig.maxRetry ,jkdcomm)
+
             val thread = Thread(task)
             thread.start()
             thread.join()
@@ -199,16 +213,20 @@ fun ConnectingPage(appConfig: AppConfig, setStatus: (AppStatus) -> Unit) {
             CircularProgressIndicator() //  LinearProgressIndicator() and CircularProgressIndicator() have high cpu cost. Wait for further Compose version.
 
             Text(guiText)
+
+            var buttonEnabled by remember { mutableStateOf(true) }
             Button(
                 onClick = {
                     scope.launch{
-                        task?.notifyLogout()
+                        jkdcomm.notifyLogout = true
+                        buttonEnabled = false
+                        guiText = Constants.UIText.LoggingOut
                     }
-                    setStatus(AppStatus.IDLE)
                 },
                 content = {
                     Text(Constants.UIText.Logout)
-                }
+                },
+                enabled = buttonEnabled
             )
         }
     }
