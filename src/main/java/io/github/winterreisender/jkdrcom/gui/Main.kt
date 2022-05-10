@@ -131,7 +131,8 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
                     Text(Constants.UIText.AutoLogin)
                 }
                 Row(verticalAlignment = Alignment.CenterVertically)  {
-                    Checkbox(rememberPassword,{rememberPassword = it})
+                    //Checkbox(rememberPassword,{rememberPassword = it})
+                    Checkbox(true,{}, enabled = false)
                     Text(Constants.UIText.SavePassword)
                 }
             }
@@ -173,7 +174,7 @@ fun ConnectingPage(appConfig: AppConfig, setStatus: (AppStatus) -> Unit) {
             }
             JKDNotification.KEEPING_ALIVE -> {
                 trayState.sendNotification(Notification(Constants.AppName,Constants.UIText.Connected,Notification.Type.Info))
-                Utils.openNetWindow()
+                Utils.openNetWindow() // TODO：如果是在Retry中重试成功则不打开校园网窗
             }
             else -> {}
         }

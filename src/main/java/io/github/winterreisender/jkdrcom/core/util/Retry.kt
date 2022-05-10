@@ -36,7 +36,6 @@ object Retry {
      * @return Result(body()) if success finally and Result(last exception) if all failed
      */
     fun<R> retry(maxTimes: Int, cleanup :(Int,Throwable?)->Unit ,body :()->R) :Result<R> {
-
         var timesRemain = maxTimes-1;
         var r = runCatching { body() }
 

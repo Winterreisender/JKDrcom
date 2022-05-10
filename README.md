@@ -18,11 +18,12 @@ JKDrcom(JLU Kotlin Drcom)是一个从YouthLin的[jlu-drcom-java](https://github.
 
 ![screenshot](screenshot.png)
 
-## Q&A
+## 说明
 
-**Q: 配置文件在哪里?**
+**请仔细后使用阅读:**
 
-A: 和DrcomJava一样在`~\.drcom` 文件夹中,文件名是`jkdrcom.json`
+1. **记住密码目前是强制开启而且密码是明文保存的,不喜勿用。**
+2. 和DrcomJava一样配置文件在在`~\.drcom` 文件夹中,文件名是`jkdrcom.json`
 
 ## 版权与许可
 
