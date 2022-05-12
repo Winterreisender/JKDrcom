@@ -189,7 +189,7 @@ fun ConnectingPage(appConfig: AppConfig, setStatus: (AppStatus) -> Unit) {
             }
             JKDNotification.KEEPING_ALIVE -> {
                 trayState.sendNotification(Notification(Constants.AppName,Constants.UIText.Connected,Notification.Type.Info))
-                Utils.showNetWindow() // TODO：如果是在Retry中重试成功则不打开校园网窗
+                Utils.openNetWindow() // TODO：如果是在Retry中重试成功则不打开校园网窗
             }
             JKDNotification.LOGOUT -> {
                 setStatus(AppStatus.IDLE)
@@ -299,7 +299,7 @@ fun main(args :Array<String>) {
                         MMenuBar(Constants.AppName,windowState, onExitClicked = { appConfig.saveToFile(); exitApplication() }) {
                             MMenu(Constants.MenuText.Function) {
                                 MMenuItem(Constants.MenuText.Function_SchoolNetWindow) {
-                                    Utils.showNetWindow()
+                                    Utils.openNetWindow()
                                 }
 
                                 MMenuItem(Constants.MenuText.Function_SetMaxRetry) {

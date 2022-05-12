@@ -29,10 +29,14 @@ import ca.weblite.webview.WebView
 
 
 object Utils {
-    // 用WebViewJar在新窗口中打开校园窗
+    // 用WebViewJar在新窗口中打开校园窗。废弃,存在内存泄漏问题导致0xC0000409闪退
+    /*
+    @Deprecated("Memory Leak!", ReplaceWith("openNetWindow"))
     fun showNetWindow() {
         Thread {
             val url = "http://login.jlu.edu.cn/notice_win.php"
+            Thread.currentThread().name = "JKDrcom Net Window"
+
             WebView().apply {
                 size(592, 450) // 这个size也有BUG, 592*450是图片尺寸
                 title("Welcome") //有中文支持问题
@@ -45,6 +49,7 @@ object Utils {
             }
         }.start()
     }
+    */
 
     // 在浏览器中打开校园窗
     fun openNetWindow() {

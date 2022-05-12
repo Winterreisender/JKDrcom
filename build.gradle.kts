@@ -49,10 +49,13 @@ dependencies {
     implementation("com.formdev:flatlaf:2.2")
     implementation("com.formdev:flatlaf-intellij-themes:2.2")
 
+    /*
+    废弃,WebViewJar存在内存泄漏问题导致0xC0000409闪退
     implementation(fileTree(mapOf(
         "dir" to "libs",
         "include" to listOf("*.jar")
     )))
+    */
 }
 
 tasks.withType<KotlinCompile>().all {
