@@ -25,42 +25,25 @@ import androidx.compose.ui.awt.ComposeWindow
 import java.awt.*
 import java.net.URI
 import javax.swing.*
+import ca.weblite.webview.WebView
 
 
 object Utils {
-    // Bug: not work after jpackage
-// 在新窗口中打开校园窗
-    @Deprecated("JEditorPane is pretty buggy", ReplaceWith("openNetWindow"))
+    // 用WebViewJar在新窗口中打开校园窗
     fun showNetWindow() {
         Thread {
             val url = "http://login.jlu.edu.cn/notice_win.php"
+            WebView().apply {
+                size(592, 450) // 这个size也有BUG, 592*450是图片尺寸
+                title("Welcome") //有中文支持问题
+                resizable(true)
+                url(url)
+                //addOnBeforeLoad(js :String)
+                //addJavascriptCallback(String->Unit) //Handle a message sent via window.external.invoke(message)
 
-            JFrame("校园网之窗").apply {
-                size = Dimension(600, 540)
-                location = GraphicsEnvironment.getLocalGraphicsEnvironment().centerPoint
-
-                JPanel().apply {
-                    layout = FlowLayout()
-                    alignmentX = Component.CENTER_ALIGNMENT
-                    size = Dimension(640, 510)
-
-                    JEditorPane(url).apply {
-                        size = Dimension(640, 465)
-                        isEditable = false
-                    }.also(::add)
-
-                    JButton("在浏览器中打开").apply {
-                        addActionListener {
-                            openNetWindow()
-                        }
-                    }.also(::add)
-
-                }.also(::add)
-
-                isVisible = true
+                show()
             }
         }.start()
-
     }
 
     // 在浏览器中打开校园窗
@@ -68,6 +51,8 @@ object Utils {
         val url = "http://login.jlu.edu.cn/notice_win.php"
         Desktop.getDesktop().browse(URI(url))
     }
+
+    // 用JSOUP匹配HTML取背景图
 
     fun msgBox(text :String, title :String) :Unit = JOptionPane.showMessageDialog(ComposeWindow(),text,title,JOptionPane.INFORMATION_MESSAGE)
     fun inputBox(text :String, title :String) :String = JOptionPane.showInputDialog(ComposeWindow(),text,title,JOptionPane.INFORMATION_MESSAGE) ?: ""

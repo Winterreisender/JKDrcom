@@ -38,6 +38,7 @@ repositories {
     google()
     mavenCentral()
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+
 }
 
 dependencies {
@@ -47,6 +48,11 @@ dependencies {
     //implementation("io.github.vincenzopalazzo:material-ui-swing:1.1.2")
     implementation("com.formdev:flatlaf:2.2")
     implementation("com.formdev:flatlaf-intellij-themes:2.2")
+
+    implementation(fileTree(mapOf(
+        "dir" to "libs",
+        "include" to listOf("*.jar")
+    )))
 }
 
 tasks.withType<KotlinCompile>().all {
