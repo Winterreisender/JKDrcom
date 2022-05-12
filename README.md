@@ -52,7 +52,8 @@ You should have received a copy of the GNU Affero General Public License along w
 | 软件                                                                                        | 许可                                                                                 |
 |-------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------|
 | [jlu-drcom-java](https://github.com/YouthLin/jlu-drcom-client/tree/master/jlu-drcom-java) | AGPL-3.0-only                                                                      |
-| [Kotlin及其标准库和扩展库](https://kotlinlang.org/)                                                | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                     |
+| [WebviewJar](https://github.com/shannah/webviewjar)                                       | [MIT](https://github.com/shannah/webviewjar/blob/master/LICENSE)                   |
+| [Kotlin](https://kotlinlang.org/)                                                         | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                     |
 | Java ([GraalVM](https://www.graalvm.org/),[Eclipse Adoptium](https://adoptium.net/))      | [GPLv2 with the classpath exception](https://openjdk.java.net/legal/gplv2+ce.html) |
 | [Jetpack Compose Desktop](https://github.com/JetBrains/compose-jb/)                       | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                     |
 | [IntelliJ IDEA Community](https://github.com/JetBrains/intellij-community)                | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                     |
