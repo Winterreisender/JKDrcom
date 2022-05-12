@@ -30,6 +30,8 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
+import java.nio.file.Files
+import java.nio.file.Paths
 import java.util.logging.Logger
 
 // 匹配合法MAC地址 AA-AA-AA-AA-AA-AA, `-`是可选的
@@ -59,7 +61,12 @@ data class AppConfig(
     fun saveToFile() {
         val userHome = System.getProperty("user.home")
         val jsonText = Json.encodeToString(this)
-        with(File("$userHome/.drcom/jkdrcom.json")) {
+        val configDirectory = "$userHome/.drcom/"
+        val configFilename = "jkdrcom.json"
+
+        Files.createDirectories(Paths.get(configDirectory)) // `路径`已存在也不会报错
+
+        with(File("$configDirectory/$configFilename")) {
             writeText(jsonText)
         }
         Logger.getLogger("AppConfig").info("Save config $jsonText")
@@ -81,14 +88,14 @@ data class AppConfig(
             autoLogin = savedObj.autoLogin
             rememberPassword = savedObj.rememberPassword
         }catch (e :Exception){
-            Logger.getLogger("AppConfig").warning("Error occurs in readFromFile: $e. Using dummy one")
+            Logger.getLogger("AppConfig").warning("Error occurs in readFromFile: $e. Using default one")
         }
 
     }
 
     companion object {
         // 返回一个不能用的默认值
-        fun getDefault() = AppConfig("", "", "","",1,false,false)
+        fun getDefault() = AppConfig("", "", "","",5,false,true)
     }
 }
 
