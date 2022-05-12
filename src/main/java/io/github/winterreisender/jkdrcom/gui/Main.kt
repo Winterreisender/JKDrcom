@@ -55,6 +55,9 @@ import java.net.URI
 import javax.swing.UIManager
 
 import Utils
+import androidx.compose.foundation.clickable
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
 import io.github.winterreisender.jkdrcom.core.util.JKDCommunication
 import java.util.logging.Logger
 
@@ -162,15 +165,16 @@ fun ConnectingPage(appConfig: AppConfig, setStatus: (AppStatus) -> Unit) {
     var threadNotification :JKDNotification by remember { mutableStateOf(JKDNotification.NOTHING) } // 线程返回的通知,如CHALLENGING
     var guiText by remember { mutableStateOf("") }
 
-    val jkdcomm = remember {
+    val jkdCommunication = remember {
         object :JKDCommunication() {
             override fun emitNotification(notification: JKDNotification) {
-                super.emitNotification(notification)
+                //super.emitNotification(notification)
                 threadNotification = notification
             }
         }
     }
 
+    // 响应线程传出的通知
     LaunchedEffect(threadNotification) {
         guiText = threadNotification.toString()
 
@@ -197,7 +201,7 @@ fun ConnectingPage(appConfig: AppConfig, setStatus: (AppStatus) -> Unit) {
     // 页面首次渲染时启动网络线程
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
-            val task = JKDrcomTask(appConfig.username, appConfig.password, appConfig.getHostInfo(), maxRetry = appConfig.maxRetry ,jkdcomm)
+            val task = JKDrcomTask(appConfig.username, appConfig.password, appConfig.getHostInfo(), maxRetry = appConfig.maxRetry ,jkdCommunication)
 
             val thread = Thread(task)
             thread.start()
@@ -210,7 +214,13 @@ fun ConnectingPage(appConfig: AppConfig, setStatus: (AppStatus) -> Unit) {
 
     Card(Modifier.fillMaxSize().padding(16.dp)) {
         Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.SpaceAround, horizontalAlignment = Alignment.CenterHorizontally) {
-            CircularProgressIndicator() //  LinearProgressIndicator() and CircularProgressIndicator() have high cpu cost. Wait for further Compose version.
+
+            // 进度提示
+            when(threadNotification) {
+                JKDNotification.KEEPING_ALIVE -> {Icon(Icons.Default.CheckCircle, null, Modifier.size(50.dp))}
+                else -> {CircularProgressIndicator(Modifier.size(50.dp))}
+            }
+
 
             Text(guiText)
 
@@ -218,7 +228,7 @@ fun ConnectingPage(appConfig: AppConfig, setStatus: (AppStatus) -> Unit) {
             Button(
                 onClick = {
                     scope.launch{
-                        jkdcomm.notifyLogout = true
+                        jkdCommunication.notifyLogout = true
                         buttonEnabled = false
                         guiText = Constants.UIText.LoggingOut
                     }

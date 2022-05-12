@@ -54,7 +54,5 @@ open class JKDCommunication {
     var notifyLogout = false
 
     @Synchronized
-    open fun emitNotification(notification :JKDNotification) {
-        println(notification)
-    }
+    open fun emitNotification(notification :JKDNotification) {}
 }
