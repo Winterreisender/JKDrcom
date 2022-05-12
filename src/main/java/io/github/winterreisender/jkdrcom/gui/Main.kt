@@ -64,6 +64,7 @@ import java.util.logging.Logger
 val appConfig = AppConfig.getDefault()
 
 lateinit var trayState :TrayState
+var setWindowVisiable :(Boolean)->Unit = {}
 
 enum class AppStatus {
     IDLE,
@@ -190,6 +191,11 @@ fun ConnectingPage(appConfig: AppConfig, setStatus: (AppStatus) -> Unit) {
             JKDNotification.KEEPING_ALIVE -> {
                 trayState.sendNotification(Notification(Constants.AppName,Constants.UIText.Connected,Notification.Type.Info))
                 Utils.openNetWindow() // TODO：如果是在Retry中重试成功则不打开校园网窗
+                scope.launch {
+                    // 三秒后自动隐藏窗口
+                    delay(3000L)
+                    setWindowVisiable(false)
+                }
             }
             JKDNotification.LOGOUT -> {
                 setStatus(AppStatus.IDLE)
@@ -274,6 +280,7 @@ fun main(args :Array<String>) {
 
         val windowState = rememberWindowState(size = DpSize(600.dp,500.dp))
         var windowVisible by remember { mutableStateOf(true) }
+        setWindowVisiable = {windowVisible = it}  //状态提升到全局
 
         trayState = rememberTrayState()
         Tray(painterResource("logo.png"), trayState, onAction = {windowVisible=true}) {

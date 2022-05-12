@@ -25,7 +25,6 @@ import androidx.compose.ui.awt.ComposeWindow
 import java.awt.*
 import java.net.URI
 import javax.swing.*
-import ca.weblite.webview.WebView
 
 
 object Utils {
