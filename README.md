@@ -32,7 +32,9 @@ JKDrcom(JLU Kotlin Drcom)是一个从YouthLin的[jlu-drcom-java](https://github.
 
 Copyright 2022 Winterreisender.
 
-Licensed under GNU Affero General Public License Version 3 (AGPL-3.0-only)
+Licensed under GNU Affero General Public License Version 3 
+
+(SPDX-License-Identifier: **AGPL-3.0-only**)
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, only version 3 of the License.
 
@@ -52,14 +54,14 @@ You should have received a copy of the GNU Affero General Public License along w
 
 本项目使用了以下开源软件:
 
-| 软件                                                                                        | 许可                                                                                 |
-|-------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------|
-| [jlu-drcom-java](https://github.com/YouthLin/jlu-drcom-client/tree/master/jlu-drcom-java) | AGPL-3.0-only                                                                      |
-| [WebviewJar](https://github.com/shannah/webviewjar)                                       | [MIT](https://github.com/shannah/webviewjar/blob/master/LICENSE)                   |
-| [Kotlin](https://kotlinlang.org/)                                                         | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                     |
-| Java ([GraalVM](https://www.graalvm.org/),[Eclipse Adoptium](https://adoptium.net/))      | [GPLv2 with the classpath exception](https://openjdk.java.net/legal/gplv2+ce.html) |
-| [Jetpack Compose Desktop](https://github.com/JetBrains/compose-jb/)                       | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                     |
-| [IntelliJ IDEA Community](https://github.com/JetBrains/intellij-community)                | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                     |
+| 软件                                                                                        | 许可                                                                                               |
+|-------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
+| [jlu-drcom-java](https://github.com/YouthLin/jlu-drcom-client/tree/master/jlu-drcom-java) | [AGPL-3.0-only](https://github.com/youthlin/jlu-drcom-client/blob/master/jlu-drcom-java/LICENSE) |
+| [Kotlin](https://kotlinlang.org/)                                                         | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                                   |
+| Java ([GraalVM](https://www.graalvm.org/),[Eclipse Adoptium](https://adoptium.net/))      | [GPL-2.0-only WITH Classpath-exception-2.0](https://openjdk.java.net/legal/gplv2+ce.html)        |
+| [Jetpack Compose Desktop](https://github.com/JetBrains/compose-jb/)                       | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                                   |
+| [IntelliJ IDEA Community](https://github.com/JetBrains/intellij-community)                | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                                   |
+| [WebviewJar(不再使用)](https://github.com/shannah/webviewjar)                                 | [MIT](https://github.com/shannah/webviewjar/blob/master/LICENSE)                                 |
 
 ---
 

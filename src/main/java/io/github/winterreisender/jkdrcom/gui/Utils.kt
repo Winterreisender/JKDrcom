@@ -29,6 +29,14 @@ import javax.swing.*
 
 object Utils {
     // 用WebViewJar在新窗口中打开校园窗。废弃,存在内存泄漏问题导致0xC0000409闪退
+    // 至今也没有一个跨平台、轻量、稳定的校园网之窗解决方案
+    /*
+    * Swing JEditPane: 在非MSI包下不显示 界面不正常渲染
+    * WebViewJar: 年久失修、内存泄漏
+    * JavaFx WebView,CEF: 体积过大
+    * HTA,额外用别的语言写个小程序: 不跨平台
+    * 可行的替代方案: 用Jsoup取出图片
+    */
     /*
     @Deprecated("Memory Leak!", ReplaceWith("openNetWindow"))
     fun showNetWindow() {
@@ -56,7 +64,10 @@ object Utils {
         Desktop.getDesktop().browse(URI(url))
     }
 
-    // 用JSOUP匹配HTML取背景图
+    // 用JSOUP匹配HTML取背景图.等待其他特性稳定后再添加
+    fun getNetWindowPictureURL(){
+
+    }
 
     fun msgBox(text :String, title :String) :Unit = JOptionPane.showMessageDialog(ComposeWindow(),text,title,JOptionPane.INFORMATION_MESSAGE)
     fun inputBox(text :String, title :String) :String = JOptionPane.showInputDialog(ComposeWindow(),text,title,JOptionPane.INFORMATION_MESSAGE) ?: ""
