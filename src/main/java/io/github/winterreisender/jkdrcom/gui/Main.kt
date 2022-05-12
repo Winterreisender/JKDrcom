@@ -167,6 +167,7 @@ fun ConnectingPage(appConfig: AppConfig, setStatus: (AppStatus) -> Unit) {
 
     val jkdCommunication = remember {
         object :JKDCommunication() {
+            @Synchronized
             override fun emitNotification(notification: JKDNotification) {
                 //super.emitNotification(notification)
                 threadNotification = notification

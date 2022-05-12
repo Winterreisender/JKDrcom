@@ -23,15 +23,13 @@
 
 
 package io.github.winterreisender.jkdrcom.cli
-/*
+
 import io.github.winterreisender.jkdrcom.core.JKDrcomTask
 import io.github.winterreisender.jkdrcom.core.util.HostInfo
+import io.github.winterreisender.jkdrcom.core.util.JKDCommunication
 import io.github.winterreisender.jkdrcom.core.util.JKDNotification
 
-fun onThreadMsgRecv(msg :JKDNotification) {
-    println(msg)
-}
-
+// 命令行版
 fun main(args :Array<String>) {
     // 辅助小函数,从args数组中取出
     val argOrInput = { arg :()->String, prompt :String ->
@@ -41,15 +39,21 @@ fun main(args :Array<String>) {
         }
     }
 
-    println("原作: YouthLin https://github.com/YouthLin/jlu-drcom-client")
     val username = argOrInput({args[0]}, "用户名:")
     val macAddress = argOrInput({args[1]}, "MAC地址:")
     val hostname = argOrInput({args[2]}, "主机名:")
     val password = argOrInput({args[3]}, "密码:")
 
-    val jkDrcomThread = Thread(JKDrcomTask(username,password, HostInfo(hostname,macAddress),1,::onThreadMsgRecv))
+    // 共享内存对象
+    val communication = object : JKDCommunication() {
+        @Synchronized
+        override fun emitNotification(notification: JKDNotification) {
+            super.emitNotification(notification)
+            println(notification)
+        }
+    }
+    val jkDrcomThread = Thread(JKDrcomTask(username,password, HostInfo(hostname,macAddress),1,communication))
     jkDrcomThread.start()
     jkDrcomThread.join()
 
 }
- */
