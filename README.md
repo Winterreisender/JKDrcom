@@ -63,6 +63,12 @@ You should have received a copy of the GNU Affero General Public License along w
 
 **_以下为部分原[jlu-drcom-java](https://github.com/YouthLin/jlu-drcom-client/tree/master/jlu-drcom-java)的说明,也请详细阅读并遵守相关行为准则_**
 
+
+
+
+<details>
+<summary>展开</summary>
+
 > ## 鸣谢
 > 
 > - 感谢 [jlu-drcom-client](https://github.com/drcoms/jlu-drcom-client) 中
@@ -88,3 +94,5 @@ You should have received a copy of the GNU Affero General Public License along w
 > ## LICENSE
 > 
 > 此项目源代码遵循 AGPL 协议。
+
+</details>
