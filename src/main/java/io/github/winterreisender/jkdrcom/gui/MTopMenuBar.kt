@@ -93,7 +93,7 @@ object MTopMenuBar {
 
                 Text(title, maxLines = 1)
 
-                // TODO: 替换最小化、最大化图标。不要引入图片文件。
+                // TODO: 替换最小化、最大化图标。用materialIcon{materialPath{}},不要引入图片文件。
                 Row(horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically) {
                     IconButton(
                         onClick = { windowState.isMinimized = true },

@@ -159,7 +159,7 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
 }
 
 @Composable
-fun ConnectingPage(appConfig: AppConfig, setStatus: (AppStatus) -> Unit) {
+fun ConnectingPage(setStatus: (AppStatus) -> Unit) {
     val scope = rememberCoroutineScope()
 
     // 处理线程的副作用
@@ -258,7 +258,7 @@ fun AppPage() {
 
     when(status) {
         AppStatus.IDLE -> IdlePage(setStatus)
-        AppStatus.CONNECTING -> ConnectingPage(appConfig, setStatus)
+        AppStatus.CONNECTING -> ConnectingPage(setStatus)
     }
 
 }

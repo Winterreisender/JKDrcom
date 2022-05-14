@@ -30,7 +30,7 @@ import java.util.Timer
  * Modified by winterreisender 2022-04-27
  * 机器的IP、HostName、MAC等
  */
-class HostInfo(var hostname: String, macHex: String,displayName :String = "") {
+class HostInfo(var hostname: String, macHex: String,displayName :String = "") { //TODO: 删除displayName
     val macBytes = ByteArray(6)
     var macHexDash: String = ""
         private set
