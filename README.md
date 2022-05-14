@@ -50,6 +50,13 @@ You should have received a copy of the GNU Affero General Public License along w
 
 ![GNU AGPL Logo](https://www.gnu.org/graphics/agplv3-155x51.png)
 
+## 贡献者指南
+
+本项目实行[No Code of Conduct](CODE_OF_CONDUCT.md): 我们接受任何贡献,别的都不重要。详见[Code of Conduct](CODE_OF_CONDUCT.md)
+
+请保证您的代码符合本项目的开源协议,详见[Developer Certificate of Origin](CODE_OF_CONDUCT.md#Developer Certificate of Origin)。
+
+
 ## 引用
 
 本项目使用了以下开源软件:
