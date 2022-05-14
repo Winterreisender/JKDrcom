@@ -28,31 +28,9 @@ JKDrcom(JLU Kotlin Drcom)是一个从YouthLin的[jlu-drcom-java](https://github.
 1. **记住密码目前是强制开启而且密码是明文保存的,不喜勿用。**
 2. 和DrcomJava一样配置文件在在`~\.drcom` 文件夹中,文件名是`jkdrcom.json`
 
-## 版权与许可
-
-Copyright 2022 Winterreisender.
-
-Licensed under GNU Affero General Public License Version 3 
-
-(SPDX-License-Identifier: **AGPL-3.0-only**)
-
-This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, only version 3 of the License.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
-
-本程序是自由软件：你可以再分发之和/或依照由自由软件基金会发布的 GNU Affero通用公共许可证修改之，仅版本 3 许可证。
-
-发布该程序是希望它能有用，但是并无保障;甚至连可销售和符合某个特定的目的都不保证。请参看 GNU Affero通用公共许可证，了解详情。
-
-你应该随程序获得一份 GNU Affero通用公共许可证的复本。如果没有，请看 <https://www.gnu.org/licenses/>。
-
-![GNU AGPL Logo](https://www.gnu.org/graphics/agplv3-155x51.png)
-
 ## 贡献者指南
 
-本项目实行[No Code of Conduct](CODE_OF_CONDUCT.md): 我们接受任何贡献,别的都不重要。详见[Code of Conduct](CODE_OF_CONDUCT.md)
+本项目实行[No Code of Conduct](CODE_OF_CONDUCT.md): 我们欢迎任何贡献,别的都不重要。详见[Code of Conduct](CODE_OF_CONDUCT.md)
 
 请保证您的代码符合本项目的开源协议,详见[Developer Certificate of Origin](CODE_OF_CONDUCT.md)。
 
@@ -73,9 +51,6 @@ You should have received a copy of the GNU Affero General Public License along w
 ---
 
 **_以下为部分原[jlu-drcom-java](https://github.com/YouthLin/jlu-drcom-client/tree/master/jlu-drcom-java)的说明,也请详细阅读并遵守相关行为准则_**
-
-
-
 
 <details>
 <summary>展开</summary>
@@ -107,3 +82,26 @@ You should have received a copy of the GNU Affero General Public License along w
 > 此项目源代码遵循 AGPL 协议。
 
 </details>
+
+
+## 版权与许可
+
+Copyright 2022 Winterreisender.
+
+Licensed under GNU Affero General Public License Version 3
+
+(SPDX-License-Identifier: **AGPL-3.0-only**)
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, only version 3 of the License.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+本程序是自由软件：你可以再分发之和/或依照由自由软件基金会发布的 GNU Affero通用公共许可证修改之，仅版本 3 许可证。
+
+发布该程序是希望它能有用，但是并无保障;甚至连可销售和符合某个特定的目的都不保证。请参看 GNU Affero通用公共许可证，了解详情。
+
+你应该随程序获得一份 GNU Affero通用公共许可证的复本。如果没有，请看 <https://www.gnu.org/licenses/>。
+
+![GNU AGPL Logo](https://www.gnu.org/graphics/agplv3-155x51.png)
