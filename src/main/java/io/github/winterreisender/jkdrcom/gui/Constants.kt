@@ -24,6 +24,7 @@
 package io.github.winterreisender.jkdrcom.gui
 
 //用来存放常量。这种程度的项目其实用不着写个Constants,然后把所有的文本等等写在一个文件这种Over-Engineering设计.
+// TODO: i18n方案: 1. Java内置的ResourceBundle(XML,Properties) 2. JSON 3. GNU GetText
 object Constants {
     const val AppHomepage = "https://github.com/Winterreisender/JKDrcom"
     const val AppFeedback = "https://github.com/Winterreisender/JKDrcom/discussions"

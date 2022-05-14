@@ -66,6 +66,7 @@ import kotlin.system.exitProcess
  * @version 0.1.0
  */
 
+// TODO: 用Compose(或Swing)写一份托盘菜单,避免GBK乱码问题, 仿照https://blog.csdn.net/GOGO_912/article/details/115712634
 
 object MTopMenuBar {
     @Composable
@@ -92,6 +93,7 @@ object MTopMenuBar {
 
                 Text(title, maxLines = 1)
 
+                // TODO: 替换最小化、最大化图标。不要引入图片文件。
                 Row(horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically) {
                     IconButton(
                         onClick = { windowState.isMinimized = true },

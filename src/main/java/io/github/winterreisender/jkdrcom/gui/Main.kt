@@ -136,7 +136,7 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
                     Text(Constants.UIText.AutoLogin)
                 }
                 Row(verticalAlignment = Alignment.CenterVertically)  {
-                    //Checkbox(rememberPassword,{rememberPassword = it}) TODO: 恢复密码选择保存
+                    //Checkbox(rememberPassword,{rememberPassword = it}) TODO: 选择密码保存
                     Checkbox(true,{}, enabled = false)
                     Text(Constants.UIText.SavePassword)
                 }
@@ -348,11 +348,11 @@ fun main(args :Array<String>) {
                             }
                         }
                     },
-                    bottomBar = {
+                    /*bottomBar = {
                         BottomAppBar(modifier = Modifier.height(18.dp)) {
                             Text("${Constants.AppName} ${Constants.AppVersion}")
                         }
-                    },
+                    },*/
                     content = {
                         AppPage()
                     }

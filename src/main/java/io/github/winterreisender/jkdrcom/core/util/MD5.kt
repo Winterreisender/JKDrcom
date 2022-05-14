@@ -32,6 +32,7 @@ import javax.crypto.Cipher
 import javax.crypto.NoSuchPaddingException
 import javax.crypto.SecretKey
 import javax.crypto.spec.SecretKeySpec
+import kotlin.system.exitProcess
 
 /**
  * Created by lin on 2017-01-10-010.
@@ -45,7 +46,8 @@ object MD5 {
             val instance = MessageDigest.getInstance("MD5")
             instance.update(bytes)
             return instance.digest()
-        } catch (ignore: NoSuchAlgorithmException) {
+        } catch (ignore: NoSuchAlgorithmException) { // TODO: 删除这个不必要的catch
+
         }
         return zero16 //容错
     }
@@ -83,6 +85,7 @@ object MD5 {
      * security/local_policy.jar
      * ext/sunjce_provider.jar
      */
+    // TODO: 抽出来放到GUI中
     private const val Algorithm = "DESede" //定义加密算法,可用 DES,DESede,Blowfish
     private val none = byteArrayOf()
     const val DES_KEY_LEN = 24
@@ -119,7 +122,7 @@ object MD5 {
         println("解密后的字符串:" + String(srcBytes) + " | " + toHexString(srcBytes))
     } /*
      * 加密前的字符串:123456 | 31 32 33 34 35 36
-     * 加密后的字符串:ǋ�Y�_l� | C7 8B C1 59 94 5F 6C AE
+     * 加密后的字符串: C7 8B C1 59 94 5F 6C AE
      * 解密后的字符串:123456 | 31 32 33 34 35 36
      */
 }
