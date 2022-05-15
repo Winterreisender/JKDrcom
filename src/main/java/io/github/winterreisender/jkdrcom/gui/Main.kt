@@ -193,7 +193,7 @@ fun ConnectingPage(setStatus: (AppStatus) -> Unit) {
                 Utils.openNetWindow() // TODO：如果是在Retry中重试成功则不打开校园网窗
                 scope.launch {
                     // 三秒后自动隐藏窗口
-                    delay(3000L)
+                    delay(3000L) // TODO: 自定义等待时间
                     setWindowVisiable(false)
                 }
             }
@@ -320,7 +320,7 @@ fun main(args :Array<String>) {
                                 MMenuItem(Constants.MenuText.Function_ResetConfig) {
                                     with(AppConfig.getDefault()) {
                                         appConfig.set(username, password, macAddress, hostName, autoLogin, rememberPassword)
-                                        appConfig.maxRetry = 1
+                                        appConfig.maxRetry = 1 // TODO: maxRetry也用getDefault的值
                                     }
                                     Utils.msgBox(Constants.MenuText.Function_ResetConfig_Done(appConfig.toString()),Constants.MenuText.Function_ResetConfig)
                                 }
