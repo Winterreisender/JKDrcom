@@ -94,7 +94,7 @@ data class AppConfig(
     }
 
     companion object {
-        // 返回一个不能用的默认值
+        // 返回一个默认值
         fun getDefault() = AppConfig("", "", "","",5,false,true)
     }
 }
