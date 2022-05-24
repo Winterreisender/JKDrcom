@@ -4,7 +4,7 @@
 ![GitHub top language](https://img.shields.io/github/languages/top/Winterreisender/JKDrcom?color=b99bf8&logo=kotlin)
 ![Java](https://img.shields.io/badge/Java-17-orange?logo=java)
 ![Jetpack Compose](https://img.shields.io/badge/compose-desktop-blue?logo=jetpackcompose)
-![platforms](https://img.shields.io/badge/platform-windows%20%7C%20linux%20%7C%20macos-blue)
+![platforms](https://img.shields.io/badge/platform-windows10%2B%20%7C%20linux%20%7C%20macos-blue)
 ![language](https://img.shields.io/badge/languages-%E4%B8%AD%E6%96%87-red)
 ![license](https://img.shields.io/github/license/Winterreisender/JKDrcom?color=663366)
 

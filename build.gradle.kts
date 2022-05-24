@@ -63,7 +63,7 @@ tasks.withType<KotlinCompile>().all {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "11"
+    kotlinOptions.jvmTarget = "17"
     // "Kotlin source files are always UTF-8 by design."  THAT'S GOOD!
 }
 
