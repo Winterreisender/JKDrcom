@@ -1,4 +1,4 @@
-name: Gradle CI MacOS
+name: Gradle CI Windows 7-8.1
 
 on:
     push:
@@ -7,13 +7,13 @@ on:
 
 jobs:
     build:
-        runs-on: macos-latest
+        runs-on: windows-2016
         steps:
             - uses: actions/checkout@v3
-            - name: Setup Java JDK 17
+            - name: Setup Java JDK 11
               uses: actions/setup-java@v3
               with:
-                  java-version: '17'
+                  java-version: '11'
                   distribution: 'temurin'
 
             - name: Make gradlew executable
@@ -29,16 +29,16 @@ jobs:
               with:
                   arguments: packageUberJarForCurrentOS
 
-            - name: packageDmg with Gradle
+            - name: packageMsi with Gradle
               uses: gradle/gradle-build-action@v2
               with:
-                  arguments: packageDmg
+                  arguments: packageMsi
 
             - name: Copy Jars to Staging
               run: mkdir staging && cp -r build/compose/jars/*.jar staging/
 
-            - name: Copy Dmgs to Staging
-              run: cp -r build/compose/binaries/main/dmg/*.dmg staging/
+            - name: Copy Msi to Staging
+              run: cp -r build/compose/binaries/main/msi/*.msi staging/
 
             - name: Upload
               uses: actions/upload-artifact@v2

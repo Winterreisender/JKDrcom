@@ -63,7 +63,7 @@ tasks.withType<KotlinCompile>().all {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "17"
+    kotlinOptions.jvmTarget = "11"
     // "Kotlin source files are always UTF-8 by design."  THAT'S GOOD!
 }
 
@@ -82,7 +82,7 @@ compose.desktop {
             //includeAllModules = true
             targetFormats(TargetFormat.Msi, TargetFormat.Deb, TargetFormat.Dmg)
             packageName = "JKDrcom"
-            packageVersion = "1.0.4" // MAC OS一遇到低于1.0的packageVersion就无法打包
+            packageVersion = "1.0.5" // MAC OS一遇到低于1.0的packageVersion就无法打包
             copyright = "Copyright 2022 Winterreisender. License under AGPL-3.0-only."
             vendor = "Winterreisender"
             licenseFile.set(project.file("LICENSE"))
@@ -98,7 +98,7 @@ compose.desktop {
                 iconFile.set(project.file("asset/logo.png"))
             }
             macOS {
-                dmgPackageVersion = "1.0.4"
+                dmgPackageVersion = "1.0.5"
                 iconFile.set(project.file("asset/logo.icns"))
             }
 
