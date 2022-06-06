@@ -135,68 +135,7 @@ class JKDrcomTask(
         }
     }
 
-    // Modified
-    @Deprecated("",ReplaceWith("run"))
-     fun run1() {
-        // TODO: Remove `run1` and Retry.kt in next commit
-        //Result<T,E>虽然很炫酷,但是还是try-catch好用
-        log.level = Level.ALL
 
-        Thread.currentThread().name = "JKDrcom Core Thread"
-
-        // DONE: 这个Retry已经力不从心了,需要重写
-        // DONE: 在非keep_alive阶段无法注销
-        Retry.retry(
-            maxRetry,
-            cleanup = { timesRemain, exception ->
-                if(!client.isClosed)  client.close()
-                communication.emitNotification(JKDNotification.RETRYING(timesRemain,exception))
-                // 指数等待间隔,60s封顶
-                Thread.sleep(1000L * min(1.6f.pow(maxRetry - timesRemain), 60f).toLong())
-            }
-        ) {
-            communication.emitNotification(JKDNotification.INITIALIZING)
-            init()
-            communication.emitNotification(JKDNotification.CHALLENGING)
-            if (!challenge(challengeTimes++)) {
-                log.warning("challenge failed...")
-                throw DrcomException("Server refused the request.{0}" + DrcomException.CODE.ex_challenge)
-            }
-
-            communication.emitNotification(JKDNotification.LOGGING)
-            if (!login()) {
-                log.warning("login failed...")
-                throw DrcomException("Failed to send authentication information.{0}" + DrcomException.CODE.ex_login)
-            }
-            log.info("登录成功!")
-
-            //keep alive
-            communication.emitNotification(JKDNotification.KEEPING_ALIVE)
-            count = 0
-            while (!communication.notifyLogout && alive()) { //收到注销通知则停止
-                Thread.sleep(20000) //每 20s 一次
-            }
-
-            challenge(challengeTimes++)
-            logout()
-            communication.emitNotification(JKDNotification.LOGOUT)
-        }.fold(
-            { log.info("正常停止") },
-            {
-                log.severe(when(it) {
-                    is SocketTimeoutException -> "通信超时: $it"
-                    is DrcomException -> "登录异常: $it"
-                    is InterruptedException -> "线程异常: $it"
-                    else -> "其他异常: $it"
-                })
-            }
-        )
-
-        if (!client.isClosed) {
-            client.close()
-        }
-
-    }
     /**
      * 初始化套接字、设置超时时间、设置服务器地址
      */
