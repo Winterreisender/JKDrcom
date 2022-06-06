@@ -77,15 +77,75 @@ class JKDrcomTask(
     private val serverAddress: InetAddress = InetAddress.getByName(Constants.AUTH_SERVER)!!
     private lateinit var client: DatagramSocket
 
+    override fun run() {
+        Thread.currentThread().name = "JKDrcom Core Thread"
+        log.level = Level.ALL
+
+        var timesRemain = maxRetry
+
+        while (timesRemain != 0)
+        try {
+            communication.emitNotification(JKDNotification.INITIALIZING)
+            init()
+            communication.emitNotification(JKDNotification.CHALLENGING)
+            if (!challenge(challengeTimes++)) {
+                log.warning("challenge failed...")
+                throw DrcomException("Server refused the request.{0}" + DrcomException.CODE.ex_challenge)
+            }
+
+            communication.emitNotification(JKDNotification.LOGGING)
+            if (!login()) {
+                log.warning("login failed...")
+                throw DrcomException("Failed to send authentication information.{0}" + DrcomException.CODE.ex_login)
+            }
+            log.info("login successfully")
+
+            //keep alive
+            communication.emitNotification(JKDNotification.KEEPING_ALIVE)
+            count = 0
+            while (!communication.notifyLogout && alive()) { //收到注销通知则停止
+                Thread.sleep(20000) //每 20s 一次
+            }
+
+            challenge(challengeTimes++)
+            logout()
+            communication.emitNotification(JKDNotification.LOGOUT)
+
+        }catch (it :SocketTimeoutException) {
+            log.severe("通信超时: $it")
+            communication.emitNotification(JKDNotification.RETRYING(timesRemain,it))
+        }catch (it :DrcomException) {
+            log.severe("登录异常: $it")
+            communication.emitNotification(JKDNotification.RETRYING(timesRemain,it))
+        }catch (it :InterruptedException) {
+            log.severe("线程异常: $it")
+            communication.emitNotification(JKDNotification.RETRYING(timesRemain,it))
+        }catch (it :Throwable) {
+            log.severe("其他异常: $it")
+            communication.emitNotification(JKDNotification.RETRYING(timesRemain,it))
+        }finally {
+            client.close()
+            if (communication.notifyLogout) //如果已通知注销则退出
+            {
+                timesRemain=0
+            } else { //否则重试
+                Thread.sleep(1000L * min(1.6f.pow(maxRetry - timesRemain), 60f).toLong())
+                timesRemain--
+            }
+        }
+    }
 
     // Modified
-    override fun run() {
+    @Deprecated("",ReplaceWith("run"))
+     fun run1() {
+        // TODO: Remove `run1` and Retry.kt in next commit
+        //Result<T,E>虽然很炫酷,但是还是try-catch好用
         log.level = Level.ALL
 
         Thread.currentThread().name = "JKDrcom Core Thread"
 
-        // TODO: 这个Retry已经力不从心了,需要重写
-        // FIXME: 在非keep_alive阶段无法注销
+        // DONE: 这个Retry已经力不从心了,需要重写
+        // DONE: 在非keep_alive阶段无法注销
         Retry.retry(
             maxRetry,
             cleanup = { timesRemain, exception ->

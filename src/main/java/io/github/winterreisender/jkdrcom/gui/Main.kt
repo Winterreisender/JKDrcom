@@ -57,9 +57,9 @@ import javax.swing.UIManager
 import Utils
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.ui.graphics.Color
 import io.github.winterreisender.jkdrcom.core.util.JKDCommunication
 import java.util.logging.Logger
 
