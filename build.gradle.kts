@@ -43,11 +43,11 @@ repositories {
 
 dependencies {
     implementation(compose.desktop.currentOs)
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines:0.19.2")
+    implementation("com.formdev:flatlaf:2.3")
+    implementation("com.formdev:flatlaf-intellij-themes:2.3")
     //implementation("io.github.vincenzopalazzo:material-ui-swing:1.1.2")
-    implementation("com.formdev:flatlaf:2.2")
-    implementation("com.formdev:flatlaf-intellij-themes:2.2")
 
     /*
     废弃,WebViewJar存在内存泄漏问题导致0xC0000409闪退

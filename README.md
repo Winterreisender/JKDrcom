@@ -48,6 +48,7 @@ JKDrcom(JLU Kotlin Drcom)是一个从YouthLin的[jlu-drcom-java](https://github.
 | Java ([GraalVM](https://www.graalvm.org/),[Eclipse Adoptium](https://adoptium.net/))      | [GPL-2.0-only WITH Classpath-exception-2.0](https://openjdk.java.net/legal/gplv2+ce.html)        |
 | [Jetpack Compose Desktop](https://github.com/JetBrains/compose-jb/)                       | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                                   |
 | [IntelliJ IDEA Community](https://github.com/JetBrains/intellij-community)                | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                                   |
+| [flatlaf](https://www.formdev.com/flatlaf/)                                               | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                                   |
 | [WebviewJar(不再使用)](https://github.com/shannah/webviewjar)                                 | [MIT](https://github.com/shannah/webviewjar/blob/master/LICENSE)                                 |
 
 ---
