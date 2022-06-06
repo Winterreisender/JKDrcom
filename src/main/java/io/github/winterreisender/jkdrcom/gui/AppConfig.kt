@@ -60,16 +60,20 @@ data class AppConfig(
     // TODO: 密码加密存储。 由于协议中传输的是随机加盐md5,不可能只存储密码的md5,程序必须能够获取明文密码,所以只能用双向加密。DrcomJava也是用的DES对称加密。
     fun saveToFile() {
         val userHome = System.getProperty("user.home")
-        val jsonText = Json.encodeToString(this)
         val configDirectory = "$userHome/.drcom/"
         val configFilename = "jkdrcom.json"
 
-        Files.createDirectories(Paths.get(configDirectory)) // `路径`已存在也不会报错
+        // JSON序列化
+        val jsonText = Json.encodeToString(
+            if(rememberPassword) this else this.copy(password = "")  //判断是否需要存储密码
+        )
 
+        // 写入路径
+        Files.createDirectories(Paths.get(configDirectory)) // `路径`已存在也不会报错
         with(File("$configDirectory/$configFilename")) {
             writeText(jsonText)
         }
-        Logger.getLogger("AppConfig").info("Save config $jsonText")
+        Logger.getLogger("AppConfig").info("Saved config: $jsonText")
     }
     fun readFromFile() {
         val userHome = System.getProperty("user.home")
@@ -79,7 +83,7 @@ data class AppConfig(
                 savedObj = Json.decodeFromString(readText())
             }
 
-            // This is Engineering!
+            // This IS Engineering!
             username = savedObj.username
             password = savedObj.password
             macAddress = savedObj.macAddress

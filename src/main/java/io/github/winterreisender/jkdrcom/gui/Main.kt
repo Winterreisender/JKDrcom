@@ -55,18 +55,15 @@ import java.net.URI
 import javax.swing.UIManager
 
 import Utils
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.ui.graphics.Color
 import io.github.winterreisender.jkdrcom.core.util.JKDCommunication
 import java.util.logging.Logger
 
 val appConfig = AppConfig.getDefault()
 
 lateinit var trayState :TrayState
-var setWindowVisiable :(Boolean)->Unit = {}
+var setWindowVisible :(Boolean)->Unit = {}
 
 enum class AppStatus {
     IDLE,
@@ -138,8 +135,7 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
                     Text(Constants.UIText.AutoLogin)
                 }
                 Row(verticalAlignment = Alignment.CenterVertically)  {
-                    //Checkbox(rememberPassword,{rememberPassword = it}) TODO: 选择密码保存
-                    Checkbox(true,{}, enabled = false)
+                    Checkbox(rememberPassword,{rememberPassword = it})
                     Text(Constants.UIText.SavePassword)
                 }
             }
@@ -197,7 +193,7 @@ fun ConnectingPage(setStatus: (AppStatus) -> Unit) {
                 scope.launch {
                     // 三秒后自动隐藏窗口
                     delay(3000L) // TODO: 自定义等待时间
-                    setWindowVisiable(false)
+                    setWindowVisible(false)
                 }
             }
             else -> {}
@@ -273,7 +269,7 @@ fun main(args :Array<String>) {
 
         val windowState = rememberWindowState(size = DpSize(600.dp,500.dp))
         var windowVisible by remember { mutableStateOf(true) }
-        setWindowVisiable = {windowVisible = it}  //状态提升到全局
+        setWindowVisible = {windowVisible = it}  //状态提升到全局
 
         trayState = rememberTrayState()
         Tray(painterResource("logo.png"), trayState, onAction = {windowVisible=true}) {

@@ -21,14 +21,9 @@ JKDrcom(JLU Kotlin Drcom)是一个从YouthLin的[jlu-drcom-java](https://github.
 
 ![screenshot](screenshot.png)
 
-## 说明
+## 帮助
 
-**请仔细后使用阅读:**
-
-1. `记住密码`目前是**强制开启**而且密码是**明文保存**的,不喜勿用。
-2. 配置文件和DrcomJava一样在`~\.drcom` 文件夹中,文件名是`jkdrcom.json`。
-3. 如果使用jar运行,需安装Java 17运行环境,推荐 [Liberica JRE 17 Full](https://bell-sw.com/pages/downloads/) 或 [Eclipse Adoptium JRE 17](https://adoptium.net/archive.html)。
-4. 更多说明请见[WIKI](https://github.com/Winterreisender/JKDrcom/wiki)
+请见[Github Wiki](https://github.com/Winterreisender/JKDrcom/wiki)
 
 ## 贡献者指南
 
