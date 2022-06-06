@@ -75,18 +75,19 @@ class JKDrcomTask(
     private var count = 0
     private var keep38Count = 0 //仅用于日志计数
     private val serverAddress: InetAddress = InetAddress.getByName(Constants.AUTH_SERVER)!!
-    private lateinit var client: DatagramSocket
+    private val client: DatagramSocket = DatagramSocket(Constants.PORT)
 
     override fun run() {
         Thread.currentThread().name = "JKDrcom Core Thread"
         log.level = Level.ALL
 
-        var timesRemain = maxRetry
+        init()
 
+        var timesRemain = maxRetry
         while (timesRemain != 0)
         try {
             communication.emitNotification(JKDNotification.INITIALIZING)
-            init()
+
             communication.emitNotification(JKDNotification.CHALLENGING)
             if (!challenge(challengeTimes++)) {
                 log.warning("challenge failed...")
@@ -124,15 +125,18 @@ class JKDrcomTask(
             log.severe("其他异常: $it")
             communication.emitNotification(JKDNotification.RETRYING(timesRemain,it))
         }finally {
-            client.close()
             if (communication.notifyLogout) //如果已通知注销则退出
             {
-                timesRemain=0
+                client.close()
+                log.severe("关闭端口并退出")
+                break
             } else { //否则重试
                 Thread.sleep(1000L * min(1.6f.pow(maxRetry - timesRemain), 60f).toLong())
                 timesRemain--
             }
         }
+
+        communication.emitNotification(JKDNotification.EXITED)
     }
 
 
@@ -141,10 +145,9 @@ class JKDrcomTask(
      */
     @Throws(DrcomException::class)
     private fun init() {
-        communication.notifyLogout = false
         try{
             //每次使用同一个端口 若有多个客户端运行这里会抛出异常
-            client = DatagramSocket(Constants.PORT)
+            // client = DatagramSocket(Constants.PORT)
             client.soTimeout = Constants.TIMEOUT
         }
         catch (e: SocketException) {
@@ -153,6 +156,8 @@ class JKDrcomTask(
         catch (e: UnknownHostException) {
             throw DrcomException("The server could not be found. (check DNS settings)", DrcomException.CODE.ex_init)
         }
+
+
     }
 
     /**

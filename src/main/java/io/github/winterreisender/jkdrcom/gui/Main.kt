@@ -189,6 +189,7 @@ fun ConnectingPage(setStatus: (AppStatus) -> Unit) {
             }
             JKDNotification.EXITED -> {
                 trayState.sendNotification(Notification(Constants.AppName,Constants.UIText.Disconnected,Notification.Type.Error))
+                setStatus(AppStatus.IDLE)
             }
             JKDNotification.KEEPING_ALIVE -> {
                 trayState.sendNotification(Notification(Constants.AppName,Constants.UIText.Connected,Notification.Type.Info))
@@ -199,9 +200,6 @@ fun ConnectingPage(setStatus: (AppStatus) -> Unit) {
                     setWindowVisiable(false)
                 }
             }
-            JKDNotification.LOGOUT -> {
-                setStatus(AppStatus.IDLE)
-            }
             else -> {}
         }
 
@@ -209,16 +207,10 @@ fun ConnectingPage(setStatus: (AppStatus) -> Unit) {
 
     // 页面首次渲染时启动网络线程
     LaunchedEffect(Unit) {
-        withContext(Dispatchers.IO) {
-            val task = JKDrcomTask(appConfig.username, appConfig.password, appConfig.getHostInfo(), maxRetry = appConfig.maxRetry ,jkdCommunication)
-
-            val thread = Thread(task)
-            thread.start()
-            thread.join()
-            threadNotification = JKDNotification.EXITED
-            delay(2000L)
-            setStatus(AppStatus.IDLE)
-        }
+        println("Creating thread")
+        val task = JKDrcomTask(appConfig.username, appConfig.password, appConfig.getHostInfo(), maxRetry = appConfig.maxRetry ,jkdCommunication)
+        val thread = Thread(task)
+        thread.start()
     }
 
     Card(Modifier.fillMaxSize().padding(16.dp)) {
@@ -229,7 +221,6 @@ fun ConnectingPage(setStatus: (AppStatus) -> Unit) {
                 JKDNotification.KEEPING_ALIVE -> {Icon(Icons.Default.CheckCircle, null, Modifier.size(50.dp))}
                 else -> {CircularProgressIndicator(Modifier.size(50.dp))}
             }
-
 
             Text(guiText)
 
@@ -252,18 +243,17 @@ fun ConnectingPage(setStatus: (AppStatus) -> Unit) {
 
 
 }
-@OptIn(ExperimentalAnimationApi::class)
 @Preview
 @Composable
 // AppPage层往下面的都要保持跨平台
 fun AppPage() {
     val (status,setStatus) = remember { mutableStateOf(if (appConfig.autoLogin) AppStatus.CONNECTING else AppStatus.IDLE) }
-    AnimatedContent(status) {
+    //AnimatedContent(status) { ///使用动画会导致LaunchedEffect(Unit执行两次)
         when(status) {
             AppStatus.IDLE -> IdlePage(setStatus)
             AppStatus.CONNECTING -> ConnectingPage(setStatus)
         }
-    }
+    //}
 }
 
 fun main(args :Array<String>) {
