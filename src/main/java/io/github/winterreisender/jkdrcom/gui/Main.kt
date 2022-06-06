@@ -55,6 +55,8 @@ import java.net.URI
 import javax.swing.UIManager
 
 import Utils
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
@@ -250,17 +252,18 @@ fun ConnectingPage(setStatus: (AppStatus) -> Unit) {
 
 
 }
+@OptIn(ExperimentalAnimationApi::class)
 @Preview
 @Composable
 // AppPage层往下面的都要保持跨平台
 fun AppPage() {
     val (status,setStatus) = remember { mutableStateOf(if (appConfig.autoLogin) AppStatus.CONNECTING else AppStatus.IDLE) }
-
-    when(status) {
-        AppStatus.IDLE -> IdlePage(setStatus)
-        AppStatus.CONNECTING -> ConnectingPage(setStatus)
+    AnimatedContent(status) {
+        when(status) {
+            AppStatus.IDLE -> IdlePage(setStatus)
+            AppStatus.CONNECTING -> ConnectingPage(setStatus)
+        }
     }
-
 }
 
 fun main(args :Array<String>) {

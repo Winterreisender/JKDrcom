@@ -82,14 +82,19 @@ class JKDrcomTask(
     override fun run() {
         log.level = Level.ALL
 
-        Thread.currentThread().name = "JKDrcom DrcomJava Thread"
+        Thread.currentThread().name = "JKDrcom Core Thread"
 
-        Retry.retry(maxRetry, cleanup = {timesRemain, exception ->
-            if(!client.isClosed)  client.close()
-            communication.emitNotification(JKDNotification.RETRYING(timesRemain,exception))
-            // 指数等待间隔,60s封顶
-            Thread.sleep(1000L * min(1.6f.pow(maxRetry - timesRemain), 60f).toLong())
-        }) {
+        // TODO: 这个Retry已经力不从心了,需要重写
+        // FIXME: 在非keep_alive阶段无法注销
+        Retry.retry(
+            maxRetry,
+            cleanup = { timesRemain, exception ->
+                if(!client.isClosed)  client.close()
+                communication.emitNotification(JKDNotification.RETRYING(timesRemain,exception))
+                // 指数等待间隔,60s封顶
+                Thread.sleep(1000L * min(1.6f.pow(maxRetry - timesRemain), 60f).toLong())
+            }
+        ) {
             communication.emitNotification(JKDNotification.INITIALIZING)
             init()
             communication.emitNotification(JKDNotification.CHALLENGING)
