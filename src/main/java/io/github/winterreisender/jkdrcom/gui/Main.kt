@@ -87,10 +87,10 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
 
     Card(Modifier.fillMaxSize().padding(16.dp)) {
         Column(Modifier.fillMaxSize().padding(16.dp).animateContentSize(), verticalArrangement = Arrangement.SpaceAround, horizontalAlignment = Alignment.CenterHorizontally) {
-            OutlinedTextField(username,{username = it}, label = {Text(Constants.UIText.Username)}, isError = !username.matches("""^\S+${'$'}""".toRegex()))
-            OutlinedTextField(password,{password = it}, label = {Text(Constants.UIText.Password)},visualTransformation = PasswordVisualTransformation('*'))
+            OutlinedTextField(username,{username = it}, label = {Text(Constants.UIText.Username)}, isError = !username.matches(Regex("""^\S+${'$'}""")))
+            OutlinedTextField(password,{password = it}, label = {Text(Constants.UIText.Password)},visualTransformation = PasswordVisualTransformation('*'), isError=password.isEmpty())
             OutlinedTextField(hostName,{hostName = it}, label = {Text(Constants.UIText.HostName)}, isError = hostName.isEmpty())
-            OutlinedTextField(macAddress,{macAddress = it}, label = {Text(Constants.UIText.MacAddress)}, isError = !macAddress.matches("""([A-E,\d]{2}-?){5}([A-E,\d]{2})""".toRegex(RegexOption.IGNORE_CASE)),
+            OutlinedTextField(macAddress,{macAddress = it}, label = {Text(Constants.UIText.MacAddress)}, isError = !macAddress.matches(Regex("""([A-E,\d]{2}-?){5}([A-E,\d]{2})""",RegexOption.IGNORE_CASE)),
                 trailingIcon = {
                     var isLoading by remember { mutableStateOf(false) }
                     Button(onClick = {
@@ -146,7 +146,7 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
                         appConfig.saveToFile()
                         setAppStatus(AppStatus.CONNECTING)
                     },
-                    enabled = macAddress.matches("""([A-E,\d]{2}-?){5}([A-E,\d]{2})""".toRegex(RegexOption.IGNORE_CASE)),
+                    //enabled = macAddress.matches("""([A-E,\d]{2}-?){5}([A-E,\d]{2})""".toRegex(RegexOption.IGNORE_CASE)),
                     content = {
                         Text(Constants.UIText.Login)
                     }
