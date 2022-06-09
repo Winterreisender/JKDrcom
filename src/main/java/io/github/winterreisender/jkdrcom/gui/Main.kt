@@ -163,6 +163,7 @@ fun ConnectingPage(setStatus: (AppStatus) -> Unit) {
     // 处理线程的副作用
     var threadNotification :JKDNotification by remember { mutableStateOf(JKDNotification.NOTHING) } // 线程返回的通知,如CHALLENGING
     var guiText by remember { mutableStateOf("") }
+    var timesRemain :Int? by remember { mutableStateOf(null) } // 剩余重试次数
 
     val jkdCommunication = remember {
         object :JKDCommunication() {
@@ -180,8 +181,8 @@ fun ConnectingPage(setStatus: (AppStatus) -> Unit) {
 
         when(threadNotification) {
             is JKDNotification.RETRYING -> {
-                val (timesRemain, _) = (threadNotification as JKDNotification.RETRYING)
-                trayState.sendNotification(Notification(Constants.AppName,Constants.UIText.Retrying(timesRemain),Notification.Type.Warning))
+                timesRemain = (threadNotification as JKDNotification.RETRYING).timesRemain
+                trayState.sendNotification(Notification(Constants.AppName,Constants.UIText.Retrying(timesRemain!!),Notification.Type.Warning))
             }
             JKDNotification.EXITED -> {
                 trayState.sendNotification(Notification(Constants.AppName,Constants.UIText.Disconnected,Notification.Type.Error))
@@ -189,7 +190,7 @@ fun ConnectingPage(setStatus: (AppStatus) -> Unit) {
             }
             JKDNotification.KEEPING_ALIVE -> {
                 trayState.sendNotification(Notification(Constants.AppName,Constants.UIText.Connected,Notification.Type.Info))
-                Utils.openNetWindow() // TODO：如果是在Retry中重试成功则不打开校园网窗
+                timesRemain ?: Utils.openNetWindow() // TESTING：如果是在Retry中重试成功则不打开校园网窗
                 scope.launch {
                     // 三秒后自动隐藏窗口
                     delay(3000L) // TODO: 自定义等待时间
@@ -244,7 +245,7 @@ fun ConnectingPage(setStatus: (AppStatus) -> Unit) {
 // AppPage层往下面的都要保持跨平台
 fun AppPage() {
     val (status,setStatus) = remember { mutableStateOf(if (appConfig.autoLogin) AppStatus.CONNECTING else AppStatus.IDLE) }
-    //AnimatedContent(status) { ///使用动画会导致LaunchedEffect(Unit执行两次)
+    //AnimatedContent(status) { // 使用动画会导致LaunchedEffect(Unit)执行两次,貌似是BUG
         when(status) {
             AppStatus.IDLE -> IdlePage(setStatus)
             AppStatus.CONNECTING -> ConnectingPage(setStatus)
