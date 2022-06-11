@@ -30,7 +30,7 @@ object Constants {
     const val AppFeedback = "https://github.com/Winterreisender/JKDrcom/discussions"
     const val AppName = "JKDrcom"
     const val AppVersion = "v0.6.0-dev"
-    const val CodeName = "" // COOL: Debian等软件中,每个版本都有一个更为特色的名字
+    const val AppCodeName = "Dijkstra" // COOL: Debian等软件中,每个版本都有一个更为特色的名字
     const val AppDescription = "使用Kotlin的Drcom开源实现."
     const val AppCopyright = """
         JKDrcom 是自由软件：你可以再分发之和/或依照由自由软件基金会发布的 GNU Affero 通用公共许可证修改之，仅版本 3 许可证。
@@ -41,7 +41,7 @@ object Constants {
 
     // 解决空格的最佳实践: 用const val定义,用AppAbout.trimIndent()调用
     const val AppAbout = """
-        $AppName $AppVersion
+        $AppName $AppVersion "$AppCodeName"
         $AppDescription
         $AppCopyright
         $AppCredits
