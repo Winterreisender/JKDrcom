@@ -57,7 +57,7 @@ data class AppConfig(
         this.rememberPassword = rememberPassword
     }
 
-    // TODO: 密码加密存储。 由于协议中传输的是随机加盐md5,不可能只存储密码的md5,程序必须能够获取明文密码,所以只能用双向加密。DrcomJava也是用的DES对称加密。
+    // DONE: 密码加密存储。 由于协议中传输的是随机加盐md5,不可能只存储密码的md5,程序必须能够获取明文密码,所以只能用双向加密。DrcomJava也是用的DES对称加密。
     fun saveToFile() {
         val userHome = System.getProperty("user.home")
         val configDirectory = "$userHome/.drcom/"
