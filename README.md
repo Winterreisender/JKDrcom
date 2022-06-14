@@ -27,10 +27,7 @@ JKDrcom(JLU Kotlin Drcom)是一个从YouthLin的[jlu-drcom-java](https://github.
 
 ## 贡献者指南
 
-本项目实行[No Code of Conduct](CODE_OF_CONDUCT.md): 我们欢迎任何贡献,别的都不重要。详见[Code of Conduct](CODE_OF_CONDUCT.md)
-
-请保证您的代码符合本项目的开源协议,详见[Developer Certificate of Origin](CODE_OF_CONDUCT.md)。
-
+我们欢迎任何贡献、反馈和建议,别的都不重要。详见[Code of Conduct](CODE_OF_CONDUCT.md)
 
 ## 引用
 

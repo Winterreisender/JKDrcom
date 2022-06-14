@@ -39,7 +39,7 @@ object Constants {
     """
     const val AppCredits = "JKDrcom离不开DrcomJava以及其他开源软件."
 
-    // 解决空格的最佳实践: 用const val定义,用AppAbout.trimIndent()调用
+    // 解决空格的(最佳?)实践: 用const val定义,用AppAbout.trimIndent()调用
     const val AppAbout = """
         $AppName $AppVersion "$AppCodeName"
         $AppDescription
