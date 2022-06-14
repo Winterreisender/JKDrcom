@@ -1,4 +1,4 @@
-/*
+package io.github.winterreisender.jkdrcom.gui/*
  * Copyright (C) 2022  Winterreisender
  *
  * This file is part of JKDrcom.
@@ -24,7 +24,11 @@
 import androidx.compose.ui.awt.ComposeWindow
 import java.awt.*
 import java.net.URI
+import java.util.Base64
+import javax.crypto.Cipher
+import javax.crypto.spec.SecretKeySpec
 import javax.swing.*
+
 
 
 object Utils {
@@ -80,5 +84,51 @@ object Utils {
 
     fun msgBox(text :String, title :String) :Unit = JOptionPane.showMessageDialog(ComposeWindow(),text,title,JOptionPane.INFORMATION_MESSAGE)
     fun inputBox(text :String, title :String) :String = JOptionPane.showInputDialog(ComposeWindow(),text,title,JOptionPane.INFORMATION_MESSAGE) ?: ""
+
+
+    /**
+     * 用户密码加密
+     *
+     * @param password 用户明文密码
+     * @return cipherURI RFC 2397 格式的byteArray (data:application/octet-stream;base64,)
+     *
+     */
+    fun pwdEncrypt(password :String, key :ByteArray = Constants.PwdCryptoKey) :String {
+        val cipher :ByteArray = with(Cipher.getInstance("AES")) {
+            init(
+                Cipher.ENCRYPT_MODE,
+                SecretKeySpec(key, "AES")
+            )
+            doFinal(password.toByteArray())
+        }
+        val b64 = Base64.getEncoder().encodeToString(cipher)
+        return "data:application/octet-stream;base64,$b64" // use RFC 2397: Data URL Scheme
+    }
+
+    /**
+     * 用户密码解密
+     *
+     * 全局变量依赖: Constants.PwdCryptoKey
+     *
+     * @param cipherURI RFC 2397 格式的byteArray (data:application/octet-stream;base64,)
+     * @return 明文密码
+     *
+     */
+    fun pwdDecrypt(cipherURI :String, key :ByteArray = Constants.PwdCryptoKey) :String {
+
+        val pattern = Regex("""^data:application/octet-stream;base64,([A-Za-z0-9+/=]+)${'$'}""")
+        val b64 = pattern.find(cipherURI)?.groupValues?.get(1)!!
+        val cipher = Base64.getDecoder().decode(b64)!!
+
+        return with(Cipher.getInstance("AES")) {
+            init(
+                Cipher.DECRYPT_MODE,
+                SecretKeySpec(key, "AES")
+            )
+            String(doFinal(cipher))
+        }
+
+    }
+
 }
 

@@ -47,6 +47,9 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines:0.19.2")
     implementation("com.formdev:flatlaf:2.3")
     implementation("com.formdev:flatlaf-intellij-themes:2.3")
+
+    implementation(kotlin("test"))
+    implementation("org.junit.jupiter:junit-jupiter:5.8.2")
     //implementation("io.github.vincenzopalazzo:material-ui-swing:1.1.2")
 
     /*

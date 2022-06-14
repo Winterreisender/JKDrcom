@@ -27,6 +27,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -54,9 +55,11 @@ import java.awt.Desktop
 import java.net.URI
 import javax.swing.UIManager
 
-import Utils
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.VisualTransformation
 import io.github.winterreisender.jkdrcom.core.util.JKDCommunication
 import java.util.logging.Logger
 
@@ -88,7 +91,17 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
     Card(Modifier.fillMaxSize().padding(16.dp)) {
         Column(Modifier.fillMaxSize().padding(16.dp).animateContentSize(), verticalArrangement = Arrangement.SpaceAround, horizontalAlignment = Alignment.CenterHorizontally) {
             OutlinedTextField(username,{username = it}, label = {Text(Constants.UIText.Username)}, isError = !username.matches(Regex("""^\S+${'$'}""")))
-            OutlinedTextField(password,{password = it}, label = {Text(Constants.UIText.Password)},visualTransformation = PasswordVisualTransformation('*'), isError=password.isEmpty())
+
+            var isPasswordVisible by remember { mutableStateOf(false) }
+            OutlinedTextField(password,{password = it}, label = {Text(Constants.UIText.Password)}, isError=password.isEmpty(),keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                visualTransformation = if(!isPasswordVisible) PasswordVisualTransformation() else VisualTransformation.None,
+                trailingIcon = {
+                    IconButton({isPasswordVisible = !isPasswordVisible}) {
+                        Icon(Icons.Default.Edit,"Show Password")
+                    }
+                }
+            )
+
             OutlinedTextField(hostName,{hostName = it}, label = {Text(Constants.UIText.HostName)}, isError = hostName.isEmpty())
             OutlinedTextField(macAddress,{macAddress = it}, label = {Text(Constants.UIText.MacAddress)}, isError = !macAddress.matches(Regex("""([A-E,\d]{2}-?){5}([A-E,\d]{2})""",RegexOption.IGNORE_CASE)),
                 trailingIcon = {
@@ -130,13 +143,14 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
 
 
             Row(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Checkbox(autoLogin,{autoLogin = it})
-                    Text(Constants.UIText.AutoLogin)
-                }
                 Row(verticalAlignment = Alignment.CenterVertically)  {
-                    Checkbox(rememberPassword,{rememberPassword = it})
+                    Checkbox(rememberPassword, {rememberPassword = it; autoLogin = autoLogin and rememberPassword;})
                     Text(Constants.UIText.SavePassword)
+                }
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Checkbox(autoLogin, {autoLogin = it}, enabled = rememberPassword) // 必须记住密码才能自动登录
+                    Text(Constants.UIText.AutoLogin)
                 }
             }
             Row {
@@ -301,9 +315,11 @@ fun main(args :Array<String>) {
 
                                 MMenuItem(Constants.MenuText.Function_SetMaxRetry) {
                                     when(val r :Int? = Utils.inputBox(Constants.MenuText.Function_SetMaxRetry,Constants.MenuText.Function_SetMaxRetry).toIntOrNull()) {
-                                        null -> {Utils.msgBox(Constants.MenuText.Function_SetMaxRetry_NeedNum,Constants.MenuText.Function_SetMaxRetry)}
+                                        null -> {
+                                            Utils.msgBox(Constants.MenuText.Function_SetMaxRetry_NeedNum,Constants.MenuText.Function_SetMaxRetry)}
                                         in 1..128 -> {appConfig.maxRetry = r}
-                                        else -> {Utils.msgBox(Constants.MenuText.Function_SetMaxRetry_NeedNum,Constants.MenuText.Function_SetMaxRetry)}
+                                        else -> {
+                                            Utils.msgBox(Constants.MenuText.Function_SetMaxRetry_NeedNum,Constants.MenuText.Function_SetMaxRetry)}
                                     }
                                 }
 

@@ -65,7 +65,9 @@ data class AppConfig(
 
         // JSON序列化
         val jsonText = Json.encodeToString(
-            if(rememberPassword) this else this.copy(password = "")  //判断是否需要存储密码
+            this.copy(
+                password = if(rememberPassword) Utils.pwdEncrypt(password) else ""            //判断是否需要存储密码 TODO: 可选明文/密文保存密码
+            )
         )
 
         // 写入路径
@@ -85,7 +87,7 @@ data class AppConfig(
 
             // This IS Engineering!
             username = savedObj.username
-            password = savedObj.password
+            password = if(savedObj.password.isEmpty()) "" else kotlin.runCatching { Utils.pwdDecrypt(savedObj.password) }.getOrDefault("") // TODO: 可选明文/密文保存密码
             macAddress = savedObj.macAddress
             hostName = savedObj.hostName
             maxRetry = savedObj.maxRetry
