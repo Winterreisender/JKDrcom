@@ -18,18 +18,38 @@
 
 JKDrcom(JLU Kotlin Drcom)是一个从YouthLin的[jlu-drcom-java](https://github.com/YouthLin/jlu-drcom-client/tree/master/jlu-drcom-java)修改而来的第三方开源Drcom客户端实现,抽出了核心的联网功能并用Kotlin重写GUI。
 
-
 ![screenshot](screenshot.png)
 
 ## 帮助
 
-请见[Github Wiki](https://github.com/Winterreisender/JKDrcom/wiki)
+详见[Github Wiki](https://github.com/Winterreisender/JKDrcom/wiki)
 
 ## 贡献者指南
 
-我们欢迎任何贡献、反馈和建议,别的都不重要。详见[Code of Conduct](CODE_OF_CONDUCT.md)
+本项目欢迎并感谢任何贡献、建议和反馈。
 
-## 引用
+### 贡献方式
+
+有很多方式可以为开源项目的发展做贡献：
+
+- 在源码中搜索 `FIXME` 和 `TODO` 注释，尝试修复或完成它们并提交Pull Request。
+- 编写帮助文档(WIKI)。提供文字翻译、图片素材等UI/UX改进方案。
+- 反馈问题(Issue)或验证问题是否得到完全修复。提供使用案例和体验, 帮助我们测试软件兼容性。
+- 任何其他有益于项目发展的行为
+
+### 行为准则
+
+本项目实行[No Code of Conduct](https://nocodeofconduct.com/): 我们欢迎任何贡献,别的都不重要。  
+详见[Code of Conduct](CODE_OF_CONDUCT.md)
+
+### 贡献者列表
+
+[![Contributors](https://contrib.rocks/image?repo=Winterreisender/JKDrcom)](https://github.com/Winterreisender/JKDrcom/graphs/contributors)
+
+使用[contrib.rocks](https://contrib.rocks)制作. 详见[Github Contributors]((https://github.com/Winterreisender/JKDrcom/graphs/contributors)).
+
+
+## 引用与参考
 
 本项目使用了以下开源软件:
 
@@ -82,22 +102,17 @@ JKDrcom(JLU Kotlin Drcom)是一个从YouthLin的[jlu-drcom-java](https://github.
 
 ## 版权与许可
 
-Copyright 2022 Winterreisender.
+Copyright 2022 Winterreisender.  
+Licensed under GNU Affero General Public License Version 3 (**AGPL-3.0-only**).
 
-Licensed under GNU Affero General Public License Version 3
 
-(SPDX-License-Identifier: **AGPL-3.0-only**)
 
-This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, only version 3 of the License.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
-
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, only version 3 of the License.  
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.  
 You should have received a copy of the GNU Affero General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-本程序是自由软件：你可以再分发之和/或依照由自由软件基金会发布的 GNU Affero通用公共许可证修改之，仅版本 3 许可证。
-
-发布该程序是希望它能有用，但是并无保障;甚至连可销售和符合某个特定的目的都不保证。请参看 GNU Affero通用公共许可证，了解详情。
-
+本程序是自由软件：你可以再分发之和/或依照由自由软件基金会发布的 GNU Affero通用公共许可证修改之，仅版本 3 许可证。  
+发布该程序是希望它能有用，但是并无保障;甚至连可销售和符合某个特定的目的都不保证。请参看 GNU Affero通用公共许可证，了解详情。  
 你应该随程序获得一份 GNU Affero通用公共许可证的复本。如果没有，请看 <https://www.gnu.org/licenses/>。
 
 ![GNU AGPL Logo](https://www.gnu.org/graphics/agplv3-155x51.png)
