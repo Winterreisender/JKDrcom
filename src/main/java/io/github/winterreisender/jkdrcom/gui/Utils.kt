@@ -29,7 +29,7 @@ import java.util.Base64
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 import javax.swing.*
-import io.github.winterreisender.webviewko.WebviewKo
+import com.github.winterreisender.webviewko.WebviewKo
 
 
 object Utils {
