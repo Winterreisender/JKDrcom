@@ -1,4 +1,5 @@
-package io.github.winterreisender.jkdrcom.gui/*
+package io.github.winterreisender.jkdrcom.gui
+/*
  * Copyright (C) 2022  Winterreisender
  *
  * This file is part of JKDrcom.
@@ -28,48 +29,25 @@ import java.util.Base64
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 import javax.swing.*
-
+import io.github.winterreisender.webviewko.WebviewKo
 
 
 object Utils {
     /*
-    * TODO: 在窗口中打开校园网之窗
-    * 用WebViewJar在新窗口中打开校园窗。废弃,存在内存泄漏问题导致0xC0000409闪退
-    * 至今也没有一个跨平台、轻量、稳定的校园网之窗解决方案:
-    * 1. Swing JEditPane: 界面不完善,在非MSI包下不显示 界面不正常渲染
-    * 2. WebViewJar: 年久失修、内存泄漏
-    * 3. JavaFx WebView: 要么体积过大,要么用JavaFx8 WebView和Compose的Java11+不兼容,要么需要用内置JavaFx的的JDK 17
-    * 4. jCef: 体积过大
-    * 5. 额外用别的语言写个小程序(Tauri): 跨平台困难
-    * 6. SWT: 不支持Gradle,文档少
-    * 7. 用Jsoup取出图片: 功能不完善,不稳定
-    * 8. 用QtJambi Webview: 需要用Qt方式打包,体积过大
-    * 9. selenium: 需要手动安装驱动
-    * 10.DJ Native Swing,Lobo: 年久失修. DJ Native Swing好像在22年出了个1.0.2preview
-    * 11.Desktop.getDesktop().browse(URI(url)): 反而是最靠谱的,但不能调整窗口大小
-    * 救一下啊Java,别老整你那后端了,UI都快寄了
+    * TODO: NEED TESTING 在窗口中打开校园网之窗
     */
 
-    /*
-    @Deprecated("Memory Leak!", ReplaceWith("openNetWindow"))
-    fun showNetWindow() {
+    fun showNetWindow() =
         Thread {
             val url = "http://login.jlu.edu.cn/notice_win.php"
             Thread.currentThread().name = "JKDrcom Net Window"
 
-            WebView().apply {
-                size(592, 450) // 这个size也有BUG, 592*450是图片尺寸
-                title("Welcome") //有中文支持问题
-                resizable(true)
-                url(url)
-                //addOnBeforeLoad(js :String)
-                //addJavascriptCallback(String->Unit) //Handle a message sent via window.external.invoke(message)
+            WebviewKo("JKDrcom Net Window", url, 600,500).show()
+        }.apply {
+            start()
+        }
 
-                show()
-            }
-        }.start()
-    }
-    */
+
 
     // 在浏览器中打开校园窗
     fun openNetWindow() {

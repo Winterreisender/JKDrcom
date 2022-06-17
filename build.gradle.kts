@@ -47,18 +47,16 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines:0.19.2")
     implementation("com.formdev:flatlaf:2.3")
     implementation("com.formdev:flatlaf-intellij-themes:2.3")
-
-    implementation(kotlin("test"))
-    implementation("org.junit.jupiter:junit-jupiter:5.8.2")
-    //implementation("io.github.vincenzopalazzo:material-ui-swing:1.1.2")
-
-    /*
-    废弃,WebViewJar存在内存泄漏问题导致0xC0000409闪退
     implementation(fileTree(mapOf(
-        "dir" to "libs",
+        "dir" to "src/libs",
         "include" to listOf("*.jar")
     )))
-    */
+
+    testImplementation(kotlin("test"))
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 tasks.withType<KotlinCompile>().all {
