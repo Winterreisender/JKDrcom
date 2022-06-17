@@ -37,11 +37,9 @@ object Utils {
     * TODO: NEED TESTING 在窗口中打开校园网之窗
     */
 
-    fun showNetWindow() =
+    fun showNetWindow(url :String = Constants.SchoolNetWindowURL) =
         Thread {
-            val url = "http://login.jlu.edu.cn/notice_win.php"
             Thread.currentThread().name = "JKDrcom Net Window"
-
             WebviewKo("JKDrcom Net Window", url, 600,500).show()
         }.apply {
             start()
@@ -50,10 +48,8 @@ object Utils {
 
 
     // 在浏览器中打开校园窗
-    fun openNetWindow() {
-        val url = "http://login.jlu.edu.cn/notice_win.php"
+    fun openNetWindow(url :String = Constants.SchoolNetWindowURL) =
         Desktop.getDesktop().browse(URI(url))
-    }
 
     // 用JSOUP匹配HTML取背景图.等待其他特性稳定后再添加
     fun getNetWindowPictureURL(){
