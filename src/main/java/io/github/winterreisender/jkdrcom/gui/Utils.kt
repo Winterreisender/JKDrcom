@@ -29,6 +29,7 @@ import java.util.Base64
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 import javax.swing.*
+
 import com.github.winterreisender.webviewko.WebviewKo
 
 
@@ -40,7 +41,12 @@ object Utils {
     fun showNetWindow(url :String = Constants.SchoolNetWindowURL) =
         Thread {
             Thread.currentThread().name = "JKDrcom Net Window"
-            WebviewKo("JKDrcom Net Window", url, 600,500).show()
+            with(WebviewKo()) {
+                title("JKDrcom Net Window")
+                size(600,500)
+                url(url)
+                show()
+            }
         }.apply {
             start()
         }
