@@ -354,11 +354,6 @@ fun main(args :Array<String>) {
                             }
                         }
                     },
-                    /*bottomBar = {
-                        BottomAppBar(modifier = Modifier.height(18.dp)) {
-                            Text("${Constants.AppName} ${Constants.AppVersion}")
-                        }
-                    },*/
                     content = {
                         AppPage()
                     }

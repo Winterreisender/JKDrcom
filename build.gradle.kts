@@ -37,11 +37,11 @@ version = "1.0"
 repositories {
     google()
     mavenCentral()
+    mavenLocal()
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     maven {
         url = uri("https://jitpack.io")
         content {
-            // this repository *only* contains artifacts with group "my.company"
             includeGroup("com.github.Winterreisender")
         }
     }
@@ -55,7 +55,9 @@ dependencies {
     implementation("com.formdev:flatlaf:2.3")
     implementation("com.formdev:flatlaf-intellij-themes:2.3")
 
-    implementation("com.github.Winterreisender:webviewko:v0.0.1-experimental.11")
+    implementation("com.github.Winterreisender:webviewko:v0.0.1-experimental.14")
+
+
     /*
     implementation(fileTree(mapOf(
         "dir" to "src/libs",

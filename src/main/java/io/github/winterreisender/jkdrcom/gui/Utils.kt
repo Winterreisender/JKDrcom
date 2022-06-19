@@ -32,7 +32,6 @@ import javax.swing.*
 
 import com.github.winterreisender.webviewko.WebviewKo
 
-
 object Utils {
     /*
     * TODO: NEED TESTING 在窗口中打开校园网之窗
@@ -57,10 +56,6 @@ object Utils {
     fun openNetWindow(url :String = Constants.SchoolNetWindowURL) =
         Desktop.getDesktop().browse(URI(url))
 
-    // 用JSOUP匹配HTML取背景图.等待其他特性稳定后再添加
-    fun getNetWindowPictureURL(){
-
-    }
 
     fun msgBox(text :String, title :String) :Unit = JOptionPane.showMessageDialog(ComposeWindow(),text,title,JOptionPane.INFORMATION_MESSAGE)
     fun inputBox(text :String, title :String) :String = JOptionPane.showInputDialog(ComposeWindow(),text,title,JOptionPane.INFORMATION_MESSAGE) ?: ""
