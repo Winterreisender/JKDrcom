@@ -37,10 +37,22 @@ object Utils {
     * TODO: NEED TESTING 在窗口中打开校园网之窗
     */
 
-    fun showNetWindow(url :String = Constants.SchoolNetWindowURL) =
-        Thread {
+    fun showNetWindow(url :String = Constants.SchoolNetWindowURL, closeAfterSecs :Int = 0): Thread {
+        var netWindow :WebviewKo? = null
+
+        if (closeAfterSecs > 0) {
+            Thread {
+                Thread.sleep(1000L * closeAfterSecs)
+                netWindow?.dispatch {
+                    terminate()
+                }
+            }.start()
+        }
+
+        return Thread {
             Thread.currentThread().name = "JKDrcom Net Window"
-            with(WebviewKo()) {
+            netWindow = WebviewKo()
+            with(netWindow!!) {
                 title("JKDrcom Net Window")
                 size(600,500)
                 url(url)
@@ -49,6 +61,7 @@ object Utils {
         }.apply {
             start()
         }
+    }
 
 
 

@@ -55,7 +55,7 @@ dependencies {
     implementation("com.formdev:flatlaf:2.3")
     implementation("com.formdev:flatlaf-intellij-themes:2.3")
 
-    implementation("com.github.Winterreisender:webviewko:v0.0.1-experimental.14")
+    implementation("com.github.Winterreisender:webviewko:0.1.0-dev.3")
 
 
     /*

@@ -204,7 +204,7 @@ fun ConnectingPage(setStatus: (AppStatus) -> Unit) {
             }
             JKDNotification.KEEPING_ALIVE -> {
                 trayState.sendNotification(Notification(Constants.AppName,Constants.UIText.Connected,Notification.Type.Info))
-                timesRemain ?: Utils.showNetWindow() // TESTING：如果是在Retry中重试成功则不打开校园网窗
+                timesRemain ?: Utils.showNetWindow(closeAfterSecs = 5) // TESTING：如果是在Retry中重试成功则不打开校园网窗
                 scope.launch {
                     // 三秒后自动隐藏窗口
                     delay(3000L) // TODO: 自定义等待时间
