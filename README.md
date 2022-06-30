@@ -42,13 +42,6 @@ JKDrcom(JLU Kotlin Drcom)是一个从YouthLin的[jlu-drcom-java](https://github.
 本项目实行[No Code of Conduct](https://nocodeofconduct.com/): 我们欢迎任何贡献,别的都不重要。  
 详见[Code of Conduct](CODE_OF_CONDUCT.md)
 
-### 贡献者列表
-
-[![Contributors](https://contrib.rocks/image?repo=Winterreisender/JKDrcom)](https://github.com/Winterreisender/JKDrcom/graphs/contributors)
-
-使用[contrib.rocks](https://contrib.rocks)制作. 详见[Github Contributors]((https://github.com/Winterreisender/JKDrcom/graphs/contributors)).
-
-
 ## 引用与参考
 
 本项目使用了以下开源软件:
@@ -107,9 +100,9 @@ Licensed under GNU Affero General Public License Version 3 (**AGPL-3.0-only**).
 
 
 
-This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, only version 3 of the License.  
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, version 3.  
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.  
-You should have received a copy of the GNU Affero General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
+You should have received a copy of the GNU Affero General Public License along with this program. If not, see <https://www.gnu.org/licenses/>
 
 本程序是自由软件：你可以再分发之和/或依照由自由软件基金会发布的 GNU Affero通用公共许可证修改之，仅版本 3 许可证。  
 发布该程序是希望它能有用，但是并无保障;甚至连可销售和符合某个特定的目的都不保证。请参看 GNU Affero通用公共许可证，了解详情。  
