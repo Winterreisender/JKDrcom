@@ -1,9 +1,7 @@
 name: Gradle CI Windows
 
 on:
-    push:
-        branches:
-            - master
+    workflow_dispatch:
 
 jobs:
     build:
