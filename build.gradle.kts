@@ -26,10 +26,12 @@ repositories {
     mavenCentral()
     mavenLocal()
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+
     maven {
-        url = uri("https://jitpack.io")
-        content {
-            includeGroup("com.github.Winterreisender")
+        url = uri("https://maven.pkg.github.com/Winterreisender/webviewko")
+        credentials {
+            username = System.getenv("USERNAME")// ?: error("no USERNAME")
+            password = System.getenv("TOKEN")// ?: error("no TOKEN")
         }
     }
 
@@ -42,7 +44,8 @@ dependencies {
     implementation("com.formdev:flatlaf:2.3")
     implementation("com.formdev:flatlaf-intellij-themes:2.3")
 
-    implementation("com.github.Winterreisender:webviewko:0.1.1")
+    implementation("com.github.winterreisender:webviewko:0.2.0")
+    implementation("com.github.winterreisender:webviewko-jvm:0.2.0")
 
 
     /*

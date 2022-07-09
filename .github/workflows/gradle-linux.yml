@@ -28,11 +28,17 @@ jobs:
               uses: gradle/gradle-build-action@v2
               with:
                   arguments: packageUberJarForCurrentOS
+              env:
+                  USERNAME: ${{ secrets.USERNAME }}
+                  TOKEN: ${{ secrets.TOKEN }}
 
             - name: packageDeb with Gradle
               uses: gradle/gradle-build-action@v2
               with:
                   arguments: packageDeb
+              env:
+                  USERNAME: ${{ secrets.USERNAME }}
+                  TOKEN: ${{ secrets.TOKEN }}
 
             - name: Copy Jars to Staging
               run: mkdir staging && cp -r build/compose/jars/*.jar staging/
