@@ -34,9 +34,9 @@ jobs:
               uses: gradle/gradle-build-action@v2
               with:
                   arguments: packageDmg
-              env:
-                  USERNAME: ${{ secrets.USERNAME }}
-                  TOKEN: ${{ secrets.TOKEN }}
+                #env:
+                #    USERNAME: ${{ secrets.USERNAME }}
+                #    TOKEN: ${{ secrets.TOKEN }}
 
             - name: Copy Jars to Staging
               run: mkdir staging && cp -r build/compose/jars/*.jar staging/
@@ -47,5 +47,5 @@ jobs:
             - name: Upload
               uses: actions/upload-artifact@v2
               with:
-                  name: Package
+                  name: Package-macOS64
                   path: staging

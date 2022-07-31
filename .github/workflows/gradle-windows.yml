@@ -26,9 +26,9 @@ jobs:
               uses: gradle/gradle-build-action@v2
               with:
                   arguments: packageUberJarForCurrentOS
-              env:
-                  USERNAME: ${{ secrets.USERNAME }}
-                  TOKEN: ${{ secrets.TOKEN }}
+              #env:
+              #    USERNAME: ${{ secrets.USERNAME }}
+              #    TOKEN: ${{ secrets.TOKEN }}
 
             - name: packageMsi with Gradle
               uses: gradle/gradle-build-action@v2
@@ -47,5 +47,5 @@ jobs:
             - name: Upload
               uses: actions/upload-artifact@v2
               with:
-                  name: Package
+                  name: Package-windows64
                   path: staging
