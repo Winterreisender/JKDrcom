@@ -64,7 +64,7 @@ object Utils {
             netWindow = WebviewKo()
             with(netWindow!!) {
                 title("JKDrcom Net Window")
-                size(600,500)
+                size(592,450)
                 url(url)
                 show()
             }
