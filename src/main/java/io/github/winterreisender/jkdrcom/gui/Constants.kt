@@ -63,6 +63,11 @@ object Constants {
         const val Function_SaveConfig = "保存配置"
         const val Function_SaveConfig_Done = "保存成功"
         const val Function_SaveConfig_Failed = "保存失败!"
+        const val Function_EditConfig = "打开配置文件"
+        const val Function_NetWindowType = "校园网之窗打开方式"
+        const val Function_CloseAfterSecs = "自动隐藏时间"
+        const val Function_CloseAfterSecs_Text = "设置自动隐藏时间(秒). -1表示不设置"
+        const val Function_CloseAfterSecs_NeedNum = "请输入1~128的数字"
 
         const val Help = "帮助"
         const val Help_About = "关于"

@@ -24,10 +24,11 @@ JKDrcom(JLU Kotlin Drcom)是一个从YouthLin的[jlu-drcom-java](https://github.
 
 详见[Github Wiki](https://github.com/Winterreisender/JKDrcom/wiki)
 
-## 贡献者指南
+## 参与进来
 
 本项目欢迎并感谢任何贡献、建议和反馈。
 
+<!--
 ### 贡献方式
 
 有很多方式可以为开源项目的发展做贡献：
@@ -41,6 +42,8 @@ JKDrcom(JLU Kotlin Drcom)是一个从YouthLin的[jlu-drcom-java](https://github.
 
 本项目实行[No Code of Conduct](https://nocodeofconduct.com/): 我们欢迎任何贡献,别的都不重要。  
 详见[Code of Conduct](CODE_OF_CONDUCT.md)
+
+-->
 
 ## 引用与参考
 
