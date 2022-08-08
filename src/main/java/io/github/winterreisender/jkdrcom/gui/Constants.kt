@@ -55,7 +55,7 @@ object Constants {
     object MenuText {
         const val Function = "功能"
         const val Function_SchoolNetWindow = "校园网之窗"
-        const val Function_SetMaxRetry = "设置重试次数"
+        const val Function_SetMaxRetry = "重试次数"
         const val Function_SetMaxRetry_NeedNum = "请输入1~128的数字"
         const val Function_HideWindow = "隐藏到托盘"
         const val Function_ResetConfig = "恢复默认配置"
@@ -68,6 +68,8 @@ object Constants {
         const val Function_CloseAfterSecs = "自动隐藏时间"
         const val Function_CloseAfterSecs_Text = "设置自动隐藏时间(秒). -1表示不设置"
         const val Function_CloseAfterSecs_NeedNum = "请输入1~128的数字"
+
+        const val Settings = "设置"
 
         const val Help = "帮助"
         const val Help_About = "关于"

@@ -16,11 +16,17 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.awt.ComposeWindow
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -31,27 +37,21 @@ import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialLighte
 import io.github.winterreisender.jkdrcom.core.JKDrcomTask
 import io.github.winterreisender.jkdrcom.core.util.HostInfo
 import io.github.winterreisender.jkdrcom.core.util.IPUtil
+import io.github.winterreisender.jkdrcom.core.util.JKDCommunication
 import io.github.winterreisender.jkdrcom.core.util.JKDNotification
 import io.github.winterreisender.jkdrcom.gui.MTopMenuBar.MMenu
 import io.github.winterreisender.jkdrcom.gui.MTopMenuBar.MMenuBar
 import io.github.winterreisender.jkdrcom.gui.MTopMenuBar.MMenuItem
-import kotlinx.coroutines.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.jetbrains.skiko.SystemTheme
 import org.jetbrains.skiko.currentSystemTheme
 import java.awt.Desktop
-import java.net.URI
-import javax.swing.UIManager
-
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.ui.awt.ComposeWindow
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.VisualTransformation
-import io.github.winterreisender.jkdrcom.core.util.JKDCommunication
 import java.io.File
+import java.net.URI
 import java.util.logging.Logger
 import javax.swing.JOptionPane
+import javax.swing.UIManager
 
 var appConfig = AppConfig.loadFromFile()
 
@@ -312,6 +312,12 @@ fun main(args :Array<String>) {
                                     }
                                 }
 
+                                MMenuItem(Constants.MenuText.Function_HideWindow) {
+                                    windowVisible = false
+                                }
+                            }
+
+                            MMenu(Constants.MenuText.Settings) {
                                 MMenuItem(Constants.MenuText.Function_CloseAfterSecs) {
                                     when(val r :Int? = Utils.inputBox(Constants.MenuText.Function_CloseAfterSecs_Text,Constants.MenuText.Function_CloseAfterSecs).toIntOrNull()) {
                                         in -1..3600 -> {appConfig.closeAfterSecs = r!!}
@@ -320,18 +326,7 @@ fun main(args :Array<String>) {
                                     }
                                 }
 
-                                MMenuItem(Constants.MenuText.Function_EditConfig) {
-                                    try {
-                                        Desktop.getDesktop().edit(File(AppConfig.getConfigFile()))
-                                    } catch (e :UnsupportedOperationException) {
-                                        Utils.msgBox("""
-                                            UnsupportedOperationException: ${e.localizedMessage}
-                                            ${AppConfig.getConfigFile()}
-                                            """.trimIndent(),
-                                            "Warning"
-                                        )
-                                    }
-                                }
+
 
                                 MMenuItem(Constants.MenuText.Function_NetWindowType) {
                                     val windowTypes = AppConfig.NetWindowType.values()
@@ -355,6 +350,21 @@ fun main(args :Array<String>) {
                                     }
                                 }
 
+                                Divider()
+
+                                MMenuItem(Constants.MenuText.Function_EditConfig) {
+                                    try {
+                                        Desktop.getDesktop().open(File(AppConfig.getConfigFile()))
+                                    } catch (e :Exception) {
+                                        Utils.msgBox("""
+                                            UnsupportedOperationException: ${e.localizedMessage}
+                                            ${AppConfig.getConfigFile()}
+                                            """.trimIndent(),
+                                            "Warning"
+                                        )
+                                    }
+                                }
+
                                 MMenuItem(Constants.MenuText.Function_ResetConfig) {
                                     appConfig = AppConfig()
                                     Utils.msgBox(Constants.MenuText.Function_ResetConfig_Done(appConfig.toString()),Constants.MenuText.Function_ResetConfig)
@@ -364,11 +374,8 @@ fun main(args :Array<String>) {
                                     val r = runCatching {appConfig.saveToFile()}.fold({Constants.MenuText.Function_SaveConfig_Done},{"${Constants.MenuText.Function_SaveConfig_Failed} $it"})
                                     Utils.msgBox(r,Constants.MenuText.Function_SaveConfig)
                                 }
-
-                                MMenuItem(Constants.MenuText.Function_HideWindow) {
-                                    windowVisible = false
-                                }
                             }
+
                             MMenu(Constants.MenuText.Help) {
                                 MMenuItem(Constants.MenuText.Help_HomePage) {
                                     Desktop.getDesktop().browse(URI(Constants.AppHomepage))
