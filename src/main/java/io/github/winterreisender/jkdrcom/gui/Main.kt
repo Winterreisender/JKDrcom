@@ -45,12 +45,15 @@ import javax.swing.UIManager
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.ui.awt.ComposeWindow
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import io.github.winterreisender.jkdrcom.core.util.JKDCommunication
+import java.io.File
 import java.util.logging.Logger
+import javax.swing.JOptionPane
 
-val appConfig = AppConfig.getDefault()
+var appConfig = AppConfig.loadFromFile()
 
 lateinit var trayState :TrayState
 var setWindowVisible :(Boolean)->Unit = {}
@@ -191,10 +194,16 @@ fun ConnectingPage(setStatus: (AppStatus) -> Unit) {
             }
             JKDNotification.KEEPING_ALIVE -> {
                 trayState.sendNotification(Notification(Constants.AppName,Constants.UIText.Connected,Notification.Type.Info))
-                timesRemain ?: Utils.showNetWindow(closeAfterSecs = 5) // TESTING：如果是在Retry中重试成功则不打开校园网窗
+
                 scope.launch {
-                    // 三秒后自动隐藏窗口
-                    delay(3000L) // TODO: 自定义等待时间
+                    if(timesRemain == null)
+                        when(appConfig.netWindow) {
+                            AppConfig.NetWindowType.NONE -> {}
+                            AppConfig.NetWindowType.WINDOWED -> { Utils.showNetWindow(closeAfterSecs = appConfig.closeAfterSecs) }
+                            AppConfig.NetWindowType.BROWSER -> { Utils.openNetWindow() }
+                        }
+                    // 自动隐藏窗口
+                    delay(appConfig.closeAfterSecs * 1000L) // TODO: 自定义等待时间
                     setWindowVisible(false)
                 }
             }
@@ -255,7 +264,6 @@ fun AppPage() {
 }
 
 fun main(args :Array<String>) {
-    appConfig.readFromFile()
 
     application {
         LaunchedEffect(Unit) {
@@ -297,7 +305,44 @@ fun main(args :Array<String>) {
                         MMenuBar(Constants.AppName,windowState, onExitClicked = { appConfig.saveToFile(); exitApplication() }) {
                             MMenu(Constants.MenuText.Function) {
                                 MMenuItem(Constants.MenuText.Function_SchoolNetWindow) {
-                                    Utils.showNetWindow()
+                                    when(appConfig.netWindow) {
+                                        AppConfig.NetWindowType.WINDOWED -> {Utils.showNetWindow()}
+                                        AppConfig.NetWindowType.NONE -> {Utils.showNetWindow()}
+                                        AppConfig.NetWindowType.BROWSER -> {Utils.openNetWindow()}
+                                    }
+                                }
+
+                                MMenuItem(Constants.MenuText.Function_CloseAfterSecs) {
+                                    when(val r :Int? = Utils.inputBox(Constants.MenuText.Function_CloseAfterSecs_Text,Constants.MenuText.Function_CloseAfterSecs).toIntOrNull()) {
+                                        in -1..3600 -> {appConfig.closeAfterSecs = r!!}
+                                        else -> {
+                                            Utils.msgBox(Constants.MenuText.Function_CloseAfterSecs_NeedNum,Constants.MenuText.Function_CloseAfterSecs)}
+                                    }
+                                }
+
+                                MMenuItem(Constants.MenuText.Function_EditConfig) {
+                                    try {
+                                        Desktop.getDesktop().edit(File(AppConfig.getConfigFile()))
+                                    } catch (e :UnsupportedOperationException) {
+                                        Utils.msgBox("""
+                                            UnsupportedOperationException: ${e.localizedMessage}
+                                            ${AppConfig.getConfigFile()}
+                                            """.trimIndent(),
+                                            "Warning"
+                                        )
+                                    }
+                                }
+
+                                MMenuItem(Constants.MenuText.Function_NetWindowType) {
+                                    val windowTypes = AppConfig.NetWindowType.values()
+                                    val choiceIndex = JOptionPane.showOptionDialog(
+                                        ComposeWindow(),Constants.MenuText.Function_NetWindowType,Constants.MenuText.Function_NetWindowType,
+                                        JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE,null,
+                                        windowTypes,
+                                        appConfig.netWindow
+                                    )
+                                    if(choiceIndex in windowTypes.indices)
+                                        appConfig.netWindow = AppConfig.NetWindowType.values()[choiceIndex]
                                 }
 
                                 MMenuItem(Constants.MenuText.Function_SetMaxRetry) {
@@ -311,10 +356,7 @@ fun main(args :Array<String>) {
                                 }
 
                                 MMenuItem(Constants.MenuText.Function_ResetConfig) {
-                                    with(AppConfig.getDefault()) {
-                                        appConfig.set(username, password, macAddress, hostName, autoLogin, rememberPassword)
-                                        appConfig.maxRetry = 1 // TODO: maxRetry也用getDefault的值
-                                    }
+                                    appConfig = AppConfig()
                                     Utils.msgBox(Constants.MenuText.Function_ResetConfig_Done(appConfig.toString()),Constants.MenuText.Function_ResetConfig)
                                 }
 
