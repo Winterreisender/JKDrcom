@@ -10,8 +10,6 @@
 
 package io.github.winterreisender.jkdrcom.core.util
 
-import java.util.Timer
-
 /**
  * Created by lin on 2017-01-10-010.
  * Modified by winterreisender 2022-04-27
@@ -69,8 +67,4 @@ class HostInfo(var hostname: String, macHex: String,displayName :String = "") { 
     fun setMacNoDash(macNoDash: String) {
         checkHexToDashMac(macNoDash)
     }
-}
-
-fun main() {
-    IPUtil.getHostInfo().forEach(::println)
 }

@@ -47,7 +47,6 @@ import kotlinx.coroutines.launch
 import org.jetbrains.skiko.SystemTheme
 import org.jetbrains.skiko.currentSystemTheme
 import java.awt.Desktop
-import java.io.File
 import java.net.URI
 import java.util.logging.Logger
 import javax.swing.JOptionPane
@@ -146,8 +145,14 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
             Row {
                 Button(
                     onClick =  {
-                        appConfig.set(username,password,macAddress,hostName,autoLogin,rememberPassword)
-                        appConfig.saveToFile()
+                        appConfig.let {
+                            it.username = username
+                            it.macAddress = macAddress
+                            it.hostName = hostName
+                            it.autoLogin = autoLogin
+                            it.rememberPassword = rememberPassword
+                            it.saveToFile()
+                        }
                         setAppStatus(AppStatus.CONNECTING)
                     },
                     //enabled = macAddress.matches("""([A-E,\d]{2}-?){5}([A-E,\d]{2})""".toRegex(RegexOption.IGNORE_CASE)),
@@ -354,11 +359,11 @@ fun main(args :Array<String>) {
 
                                 MMenuItem(Constants.MenuText.Function_EditConfig) {
                                     try {
-                                        Desktop.getDesktop().open(File(AppConfig.getConfigFile()))
+                                        Desktop.getDesktop().open(AppConfig.configFile)
                                     } catch (e :Exception) {
                                         Utils.msgBox("""
-                                            UnsupportedOperationException: ${e.localizedMessage}
-                                            ${AppConfig.getConfigFile()}
+                                            ${e.localizedMessage}
+                                            ${AppConfig.configFile.absolutePath}
                                             """.trimIndent(),
                                             "Warning"
                                         )

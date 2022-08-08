@@ -36,22 +36,12 @@ data class AppConfig(
 ) {
 
     enum class NetWindowType {
-        NONE, // DO NOT open school net window
+        NONE,     // DO NOT open school net window
         WINDOWED, // Open in webview
-        BROWSER // Open in browser
+        BROWSER   // Open in browser
     }
 
     fun getHostInfo() = HostInfo(hostName, macAddress)
-
-    @Deprecated("Use T.apply")
-    fun set(username: String, password: String, macAddress: String, hostName: String, autoLogin: Boolean, rememberPassword: Boolean){
-        this.username = username
-        this.password = password
-        this.macAddress = macAddress
-        this.hostName = hostName
-        this.autoLogin = autoLogin
-        this.rememberPassword = rememberPassword
-    }
 
     fun saveToFile() {
         val jsonText = Json.encodeToString(
@@ -59,38 +49,25 @@ data class AppConfig(
                 password = if(rememberPassword) Utils.pwdEncrypt(password) else ""            //判断是否需要存储密码 TODO: 可选明文/密文保存密码
             )
         )
-        File(getConfigFile()).run {
-            writeText(jsonText)
-        }
+        configFile.writeText(jsonText)
         Logger.getLogger("AppConfig").info("Saved config: $jsonText")
     }
 
 
     companion object {
-        // 返回配置文件路径
-        fun getConfigFile() :String {
+        // 配置文件
+        val configFile :File by lazy {
             val configDirectory = "${System.getProperty("user.home")}/.drcom/"
             val configFilename = "jkdrcom.json"
-
             Files.createDirectories(Paths.get(configDirectory))
-            return configDirectory + configFilename
+            File(configDirectory + configFilename)
         }
 
-        fun loadFromFile() :AppConfig {
-            var cfg :AppConfig? = null
-            try {
-                File(getConfigFile()).run {
-                    cfg = Json.decodeFromString<AppConfig>(readText())
-                }
-
-                cfg!!.password = if(cfg!!.password.isEmpty()) "" else kotlin.runCatching { Utils.pwdDecrypt(cfg!!.password) }.getOrDefault("") // TODO: 可选明文/密文保存密码
-
-            }catch (e :Exception){
-                Logger.getLogger("AppConfig").warning("Error occurs in readFromFile: $e. Using default one")
-            }
-
-            return cfg ?: AppConfig()
-        }
+        // 从配置文件中加载配置
+        fun loadFromFile() :AppConfig = kotlin.runCatching {
+            Json.decodeFromString<AppConfig>(configFile.readText()).apply {
+                password = if(password.isEmpty()) "" else kotlin.runCatching { Utils.pwdDecrypt(password) }.getOrDefault("") // TODO: 可选明文/密文保存密码
+            }}.getOrDefault(AppConfig().also{Logger.getLogger("AppConfig").warning("Error occurs in loadFromFile: $it. Using default one")})
     }
 }
 

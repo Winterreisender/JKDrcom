@@ -51,18 +51,6 @@ object ByteUtil {
         return sb.toString().substring(0, len * 3 - 1).uppercase(Locale.getDefault())
     }
 
-    @JvmStatic
-    @JvmOverloads
-    fun fromHex(hexStr: String, split: Char = ' '): ByteArray {
-        // hexStr = 00 01 AB str len = 8 length = (8+1)/3=3
-        val length = (hexStr.length + 1) / 3
-        val ret = ByteArray(length)
-        for (i in 0 until length) {
-            ret[i] = hexStr.substring(i * 3, i * 3 + 2).toInt(16).toByte()
-        }
-        return ret
-    }
-
     @JvmOverloads
     fun ljust(src: ByteArray, count: Int, fill: Byte = 0x00.toByte()): ByteArray {
         val srcLen = src.size

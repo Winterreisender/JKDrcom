@@ -8,11 +8,16 @@
  * You should have received a copy of the GNU Affero General Public License along with this program. If not, see <https://www.gnu.org/licenses/>
  */
 
+import io.github.winterreisender.jkdrcom.core.util.IPUtil
 import io.github.winterreisender.jkdrcom.gui.Utils
 import kotlin.test.Test
 
 internal class Test {
-    @Test fun `Test showNetWindow`() {
-        Utils.showNetWindow(closeAfterSecs = 5).join()
+    @Test fun netWindow() {
+        Utils.showNetWindow(closeAfterSecs = 5)
+    }
+
+    @Test fun hostInfo() {
+        IPUtil.getHostInfo().forEach(::println)
     }
 }
