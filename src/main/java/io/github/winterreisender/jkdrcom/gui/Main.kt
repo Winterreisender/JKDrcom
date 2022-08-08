@@ -50,7 +50,7 @@ import org.jetbrains.skiko.currentSystemTheme
 import java.awt.Desktop
 import java.net.URI
 import java.util.logging.Logger
-import javax.swing.JOptionPane
+import javax.swing.JColorChooser
 import javax.swing.UIManager
 
 var appConfig = AppConfig.loadFromFile()
@@ -148,6 +148,7 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
                     onClick =  {
                         appConfig.let {
                             it.username = username
+                            it.password = password
                             it.macAddress = macAddress
                             it.hostName = hostName
                             it.autoLogin = autoLogin
@@ -156,7 +157,7 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
                         }
                         setAppStatus(AppStatus.CONNECTING)
                     },
-                    //enabled = macAddress.matches("""([A-E,\d]{2}-?){5}([A-E,\d]{2})""".toRegex(RegexOption.IGNORE_CASE)),
+                    enabled = macAddress.matches("""([A-E,\d]{2}-?){5}([A-E,\d]{2})""".toRegex(RegexOption.IGNORE_CASE)) && password.isNotEmpty(),
                     content = {
                         Text(Constants.UIText.Login)
                     }
@@ -221,6 +222,7 @@ fun ConnectingPage(setStatus: (AppStatus) -> Unit) {
     // 页面首次渲染时启动网络线程
     LaunchedEffect(Unit) {
         println("Creating thread")
+        println(appConfig)
         val task = JKDrcomTask(appConfig.username, appConfig.password, appConfig.getHostInfo(), maxRetry = appConfig.maxRetry ,jkdCommunication)
         val thread = Thread(task)
         thread.start()
@@ -260,7 +262,7 @@ fun ConnectingPage(setStatus: (AppStatus) -> Unit) {
 @Composable
 // AppPage层往下面的都要保持跨平台
 fun AppPage() {
-    val (status,setStatus) = remember { mutableStateOf(if (appConfig.autoLogin) AppStatus.CONNECTING else AppStatus.IDLE) }
+    val (status,setStatus) = remember { mutableStateOf(if (appConfig.autoLogin && appConfig.password.isNotEmpty()) AppStatus.CONNECTING else AppStatus.IDLE) }
     //AnimatedContent(status) { // 使用动画会导致LaunchedEffect(Unit)执行两次,貌似是BUG
         when(status) {
             AppStatus.IDLE -> IdlePage(setStatus)
@@ -303,7 +305,7 @@ fun main(args :Array<String>) {
             }
         }
 
-        MaterialTheme(colors = if (isSystemInDarkTheme()) darkColors() else lightColors()) {
+        MaterialTheme(colors = if (isSystemInDarkTheme()) darkColors(appConfig.getPrimaryColor()) else lightColors(appConfig.getPrimaryColor())) {
             Window({exitApplication()}, windowState,windowVisible, title = Constants.AppName,icon = painterResource("logo.png"),undecorated = true) {
                 Scaffold(
                     //modifier = Modifier.clip(RoundedCornerShape(5.dp)),
@@ -333,10 +335,13 @@ fun main(args :Array<String>) {
                                     }
                                 }
 
-                                MMenuItem(Constants.MenuText.Function_NetWindowType) {
-                                    val windowTypes = AppConfig.NetWindowType.values()
-                                    val chosen = Utils.chooseBox(Constants.MenuText.Function_NetWindowType,windowTypes, appConfig.netWindow, title = "输入")
-                                    appConfig.netWindow = chosen
+                                MMenuItem("主题色") {
+                                    val defaultJColor = appConfig.getPrimaryColor().run {
+                                        java.awt.Color(red,green,blue,alpha)
+                                    }
+                                    val jcolor :java.awt.Color? = JColorChooser.showDialog(ComposeWindow(),"选取颜色",defaultJColor)
+                                    if(jcolor!=null)
+                                        appConfig.mainColor = String.format("%02x%02x%02x%02x",jcolor.alpha,jcolor.red,jcolor.green,jcolor.blue)
                                 }
 
                                 MMenuItem(Constants.MenuText.Function_SetMaxRetry) {
