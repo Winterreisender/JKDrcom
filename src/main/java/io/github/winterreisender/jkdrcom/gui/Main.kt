@@ -12,6 +12,7 @@ package io.github.winterreisender.jkdrcom.gui
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.desktop.ui.tooling.preview.Preview
+import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -306,6 +307,7 @@ fun main(args :Array<String>) {
             Window({exitApplication()}, windowState,windowVisible, title = Constants.AppName,icon = painterResource("logo.png"),undecorated = true) {
                 Scaffold(
                     //modifier = Modifier.clip(RoundedCornerShape(5.dp)),
+                    modifier = Modifier.border(1.dp, color = MaterialTheme.colors.primary),
                     topBar = {
                         MMenuBar(Constants.AppName,windowState, onExitClicked = { appConfig.saveToFile(); exitApplication() }) {
                             MMenu(Constants.MenuText.Function) {
@@ -324,29 +326,21 @@ fun main(args :Array<String>) {
 
                             MMenu(Constants.MenuText.Settings) {
                                 MMenuItem(Constants.MenuText.Function_CloseAfterSecs) {
-                                    when(val r :Int? = Utils.inputBox(Constants.MenuText.Function_CloseAfterSecs_Text,Constants.MenuText.Function_CloseAfterSecs).toIntOrNull()) {
+                                    when(val r :Int? = Utils.inputBox(Constants.MenuText.Function_CloseAfterSecs_Text,appConfig.closeAfterSecs.toString()).toIntOrNull()) {
                                         in -1..3600 -> {appConfig.closeAfterSecs = r!!}
                                         else -> {
                                             Utils.msgBox(Constants.MenuText.Function_CloseAfterSecs_NeedNum,Constants.MenuText.Function_CloseAfterSecs)}
                                     }
                                 }
 
-
-
                                 MMenuItem(Constants.MenuText.Function_NetWindowType) {
                                     val windowTypes = AppConfig.NetWindowType.values()
-                                    val choiceIndex = JOptionPane.showOptionDialog(
-                                        ComposeWindow(),Constants.MenuText.Function_NetWindowType,Constants.MenuText.Function_NetWindowType,
-                                        JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE,null,
-                                        windowTypes,
-                                        appConfig.netWindow
-                                    )
-                                    if(choiceIndex in windowTypes.indices)
-                                        appConfig.netWindow = AppConfig.NetWindowType.values()[choiceIndex]
+                                    val chosen = Utils.chooseBox(Constants.MenuText.Function_NetWindowType,windowTypes, appConfig.netWindow, title = "输入")
+                                    appConfig.netWindow = chosen
                                 }
 
                                 MMenuItem(Constants.MenuText.Function_SetMaxRetry) {
-                                    when(val r :Int? = Utils.inputBox(Constants.MenuText.Function_SetMaxRetry,Constants.MenuText.Function_SetMaxRetry).toIntOrNull()) {
+                                    when(val r :Int? = Utils.inputBox(Constants.MenuText.Function_SetMaxRetry, appConfig.maxRetry.toString()).toIntOrNull()) {
                                         null -> {
                                             Utils.msgBox(Constants.MenuText.Function_SetMaxRetry_NeedNum,Constants.MenuText.Function_SetMaxRetry)}
                                         in 1..128 -> {appConfig.maxRetry = r}

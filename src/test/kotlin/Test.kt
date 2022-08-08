@@ -10,6 +10,7 @@
 
 import io.github.winterreisender.jkdrcom.core.util.IPUtil
 import io.github.winterreisender.jkdrcom.gui.Utils
+import javax.swing.JOptionPane
 import kotlin.test.Test
 
 internal class Test {
@@ -19,5 +20,9 @@ internal class Test {
 
     @Test fun hostInfo() {
         IPUtil.getHostInfo().forEach(::println)
+    }
+
+    @Test fun choiceBox() {
+        JOptionPane.showInputDialog(null,"Test",null,JOptionPane.INFORMATION_MESSAGE,null, arrayOf(5,6,7),5).let { println(it) }
     }
 }

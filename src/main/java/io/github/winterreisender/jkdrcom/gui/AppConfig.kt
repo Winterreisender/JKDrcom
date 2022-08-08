@@ -32,13 +32,21 @@ data class AppConfig(
     var autoLogin        :Boolean = false,
     var rememberPassword :Boolean = false,
     var closeAfterSecs   :Int     = -1,
-    var netWindow        :NetWindowType  = NetWindowType.NONE  // Use @EncodeDefault to write to json when it's default value
+    var netWindow        :NetWindowType  = NetWindowType.NONE,  // Use @EncodeDefault to write to json when it's default value
+    //var mainColor        :
 ) {
 
     enum class NetWindowType {
         NONE,     // DO NOT open school net window
         WINDOWED, // Open in webview
-        BROWSER   // Open in browser
+        BROWSER;  // Open in browser
+
+        override fun toString() =
+            when(this) {
+                NONE     -> "无"
+                WINDOWED -> "窗口"
+                BROWSER  -> "浏览器"
+            }
     }
 
     fun getHostInfo() = HostInfo(hostName, macAddress)
