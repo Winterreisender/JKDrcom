@@ -18,7 +18,7 @@
 
 JKDrcom(JLU Kotlin Drcom)是一个从YouthLin的[jlu-drcom-java](https://github.com/YouthLin/jlu-drcom-client/tree/master/jlu-drcom-java)修改而来的第三方开源Drcom客户端实现,抽出了核心的联网功能并用Kotlin重写GUI。
 
-![screenshot](screenshot.png)
+![screenshot](screenshot.jpg)
 
 ## 帮助
 

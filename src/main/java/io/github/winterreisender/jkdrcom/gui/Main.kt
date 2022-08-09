@@ -335,6 +335,12 @@ fun main(args :Array<String>) {
                                     }
                                 }
 
+                                MMenuItem(Constants.MenuText.Function_NetWindowType) {
+                                    val windowTypes = AppConfig.NetWindowType.values()
+                                    val chosen = Utils.chooseBox(Constants.MenuText.Function_NetWindowType,windowTypes, appConfig.netWindow, title = "输入")
+                                    appConfig.netWindow = chosen
+                                }
+
                                 MMenuItem("主题色") {
                                     val defaultJColor = appConfig.getPrimaryColor().run {
                                         java.awt.Color(red,green,blue,alpha)
