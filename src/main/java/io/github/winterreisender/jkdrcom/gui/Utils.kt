@@ -53,7 +53,7 @@ object Utils {
             //Thread.currentThread().name = "JKDrcom Net Window"
             WebviewKo().run {
                 title("JKDrcom Net Window")
-                size(592,450)
+                size(592,458)
 
                 if (closeAfterSecs > 0) {
                     init("""

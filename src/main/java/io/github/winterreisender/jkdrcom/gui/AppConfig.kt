@@ -68,10 +68,10 @@ data class AppConfig(
     companion object {
         // 配置文件
         val configFile :File by lazy {
-            val configDirectory = "${System.getProperty("user.home")}/.drcom/"
+            val configDirectory = System.getProperty("user.home", ".") + File.separator + ".drcom"
             val configFilename = "jkdrcom.json"
             Files.createDirectories(Paths.get(configDirectory))
-            File(configDirectory + configFilename)
+            File(configDirectory + File.separator + configFilename)
         }
 
         // 从配置文件中加载配置
