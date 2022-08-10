@@ -50,10 +50,11 @@ object Utils {
     fun showNetWindow(url :String = Constants.SchoolNetWindowURL, closeAfterSecs :Int = 0) {
 
          Thread {
+             val scales = GraphicsEnvironment.getLocalGraphicsEnvironment().defaultScreenDevice.defaultConfiguration.defaultTransform
             //Thread.currentThread().name = "JKDrcom Net Window"
             WebviewKo().run {
                 title("JKDrcom Net Window")
-                size(592,458)
+                size((592 * scales.scaleX).toInt(),(458 * scales.scaleY).toInt())
 
                 if (closeAfterSecs > 0) {
                     init("""
