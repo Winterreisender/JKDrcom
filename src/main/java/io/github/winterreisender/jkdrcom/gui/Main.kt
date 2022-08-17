@@ -47,6 +47,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.skiko.SystemTheme
 import org.jetbrains.skiko.currentSystemTheme
+import java.awt.Color
 import java.awt.Desktop
 import java.net.URI
 import java.util.logging.Logger
@@ -305,7 +306,8 @@ fun main(args :Array<String>) {
             }
         }
 
-        MaterialTheme(colors = if (isSystemInDarkTheme()) darkColors(appConfig.getPrimaryColor()) else lightColors(appConfig.getPrimaryColor())) {
+        var primaryColorState by remember { mutableStateOf(appConfig.getPrimaryColor().toCompose()) }
+        MaterialTheme(colors = if (isSystemInDarkTheme()) darkColors(primaryColorState) else lightColors(primaryColorState)) {
             Window({exitApplication()}, windowState,windowVisible, title = Constants.AppName,icon = painterResource("logo.png"),undecorated = true) {
                 Scaffold(
                     //modifier = Modifier.clip(RoundedCornerShape(5.dp)),
@@ -342,12 +344,10 @@ fun main(args :Array<String>) {
                                 }
 
                                 MMenuItem("主题色") {
-                                    val defaultJColor = appConfig.getPrimaryColor().run {
-                                        java.awt.Color(red,green,blue,alpha)
-                                    }
-                                    val jcolor :java.awt.Color? = JColorChooser.showDialog(ComposeWindow(),"选取颜色",defaultJColor)
-                                    if(jcolor!=null)
-                                        appConfig.mainColor = String.format("%02x%02x%02x%02x",jcolor.alpha,jcolor.red,jcolor.green,jcolor.blue)
+                                    val jColor : Color = JColorChooser.showDialog(ComposeWindow(),"选取颜色",Constants.DefaultPrimaryColor.toAwt()) ?: return@MMenuItem
+
+                                    appConfig.mainColor = Utils.WebColor.from(jColor).toString()
+                                    primaryColorState = appConfig.getPrimaryColor().toCompose()
                                 }
 
                                 MMenuItem(Constants.MenuText.Function_SetMaxRetry) {

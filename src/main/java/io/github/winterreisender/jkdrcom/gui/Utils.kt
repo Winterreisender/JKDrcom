@@ -33,6 +33,7 @@ package io.github.winterreisender.jkdrcom.gui
  */
 
 import androidx.compose.ui.awt.ComposeWindow
+import androidx.compose.ui.graphics.Color
 import java.awt.*
 import java.net.URI
 import java.util.Base64
@@ -127,6 +128,27 @@ object Utils {
             String(doFinal(cipher))
         }
 
+    }
+
+    // Color的工具
+    // 采用Web标准存储,即 #RRGGBB(AA), 在JSON,AWT,Compose三者之间转换
+    class WebColor(val red :Int, val green :Int, val blue  :Int, val alpha :Int = 255) {
+        init {
+            assert(red   in 0..255)
+            assert(green in 0..255)
+            assert(blue  in 0..255)
+            assert(alpha in 0..255)
+        }
+
+        override fun toString() = if(alpha==255) String.format("#%02x%02x%02x",red,green,blue) else String.format("#%02x%02x%02x%02x",red,green,blue,alpha)
+        fun toAwt() = java.awt.Color(red,green,blue,alpha)
+        fun toCompose() = Color(alpha=alpha,red=red,green=green,blue=blue)
+        companion object {
+            @Throws(NumberFormatException::class)
+            fun from(s :String) :WebColor = from(java.awt.Color.decode(s))
+            fun from(jColor :java.awt.Color) :WebColor = WebColor(jColor.red,jColor.green,jColor.blue,jColor.alpha)
+            fun from(color :Color) :WebColor = WebColor(color.red.toInt(),color.green.toInt(),color.blue.toInt(),color.alpha.toInt())
+        }
     }
 
 }

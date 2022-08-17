@@ -12,7 +12,6 @@
 
 package io.github.winterreisender.jkdrcom.gui
 
-import androidx.compose.ui.graphics.Color
 import io.github.winterreisender.jkdrcom.core.util.HostInfo
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -21,6 +20,7 @@ import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.logging.Logger
+
 
 
 @kotlinx.serialization.Serializable
@@ -34,7 +34,7 @@ data class AppConfig(
     var rememberPassword :Boolean = false,
     var closeAfterSecs   :Int     = -1,
     var netWindow        :NetWindowType  = NetWindowType.NONE,  // Use @EncodeDefault to write to json when it's default value
-    var mainColor        :String  = "0xFF39c5bb"
+    var mainColor        :String  = Constants.DefaultPrimaryColor.toString()
 ) {
 
     enum class NetWindowType {
@@ -50,7 +50,7 @@ data class AppConfig(
             }
     }
 
-    fun getPrimaryColor() = Color(mainColor.removePrefix("0x").toLong(radix = 16))
+    fun getPrimaryColor() = kotlin.runCatching { Utils.WebColor.from(mainColor) }.getOrDefault(Constants.DefaultPrimaryColor)
 
     fun getHostInfo() = HostInfo(hostName, macAddress)
 
