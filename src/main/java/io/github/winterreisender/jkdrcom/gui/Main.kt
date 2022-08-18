@@ -377,7 +377,7 @@ fun main(args :Array<String>) {
 
                                 MMenuItem(Constants.MenuText.Function_ResetConfig) {
                                     appConfig = AppConfig()
-                                    Utils.msgBox(Constants.MenuText.Function_ResetConfig_Done(appConfig.toString()),Constants.MenuText.Function_ResetConfig)
+                                    Utils.msgBox(Constants.MenuText.Function_ResetConfig_Done + ":\n" + appConfig.toString(),Constants.MenuText.Function_ResetConfig)
                                 }
 
                                 MMenuItem(Constants.MenuText.Function_SaveConfig) {

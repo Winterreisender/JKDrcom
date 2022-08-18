@@ -11,39 +11,35 @@
 
 ![current release](https://img.shields.io/github/v/release/Winterreisender/JKDrcom?label=current)
 ![dev release](https://img.shields.io/github/v/release/Winterreisender/JKDrcom?label=dev&include_prereleases)
-[![Gradle CI Windows](https://github.com/Winterreisender/JKDrcom/actions/workflows/gradle-windows.yml/badge.svg)](https://github.com/Winterreisender/JKDrcom/actions/workflows/gradle-windows.yml)
 [![Gradle CI Linux](https://github.com/Winterreisender/JKDrcom/actions/workflows/gradle-linux.yml/badge.svg)](https://github.com/Winterreisender/JKDrcom/actions/workflows/gradle-linux.yml)
-[![Gradle CI MacOS](https://github.com/Winterreisender/JKDrcom/actions/workflows/gradle-macos.yml/badge.svg)](https://github.com/Winterreisender/JKDrcom/actions/workflows/gradle-macos.yml)
 ![GitHub last commit](https://img.shields.io/github/last-commit/Winterreisender/JKDrcom)
+[![Maintenance](https://img.shields.io/maintenance/即将结束/2022?label=%E9%A1%B9%E7%9B%AE%E7%BB%B4%E6%8A%A4)](https://github.com/Winterreisender/JKDrcom/discussions/5)
 
 JKDrcom(JLU Kotlin Drcom)是一个从YouthLin的[jlu-drcom-java](https://github.com/YouthLin/jlu-drcom-client/tree/master/jlu-drcom-java)修改而来的第三方开源Drcom客户端实现,抽出了核心的联网功能并用Kotlin重写GUI。
 
 ![screenshot](screenshot.jpg)
 
+## 参与进来/接手项目
+
+本项目欢迎并感谢任何贡献、建议和反馈。
+
+JKDrcom即将停止开发,正在寻找有意接手者,详见[Discussions#5](https://github.com/Winterreisender/JKDrcom/discussions/5)
+
+
+<!--
+JKDrcom已停止活跃开发,请尝试查看以下继任项目或替代项目作为推荐
+
+| 项目                                                    | 作者              | 备注  |
+|-------------------------------------------------------|-----------------|-----|
+| [KJDrcom](https://github.com/AutumnTraveller/KJDrcom) | AutumnTraveller | 虚构的 |
+|                                                       |                 |     |
+
+-->
+
 ## 帮助
 
 详见[Github Wiki](https://github.com/Winterreisender/JKDrcom/wiki)
 
-## 参与进来
-
-本项目欢迎并感谢任何贡献、建议和反馈。
-
-<!--
-### 贡献方式
-
-有很多方式可以为开源项目的发展做贡献：
-
-- 在源码中搜索 `FIXME` 和 `TODO` 注释，尝试修复或完成它们并提交Pull Request。
-- 编写帮助文档(WIKI)。提供文字翻译、图片素材等UI/UX改进方案。
-- 反馈问题(Issue)或验证问题是否得到完全修复。提供使用案例和体验, 帮助我们测试软件兼容性。
-- 任何其他有益于项目发展的行为
-
-### 行为准则
-
-本项目实行[No Code of Conduct](https://nocodeofconduct.com/): 我们欢迎任何贡献,别的都不重要。  
-详见[Code of Conduct](CODE_OF_CONDUCT.md)
-
--->
 
 ## 引用与参考
 

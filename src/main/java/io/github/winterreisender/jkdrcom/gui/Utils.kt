@@ -140,14 +140,17 @@ object Utils {
             assert(alpha in 0..255)
         }
 
+        /**
+         * 转为Web标准格式字符串 #RRGGBB 或 #RRGGBBAA (alpha!=255时)
+         */
         override fun toString() = if(alpha==255) String.format("#%02x%02x%02x",red,green,blue) else String.format("#%02x%02x%02x%02x",red,green,blue,alpha)
         fun toAwt() = java.awt.Color(red,green,blue,alpha)
         fun toCompose() = Color(alpha=alpha,red=red,green=green,blue=blue)
         companion object {
             @Throws(NumberFormatException::class)
             fun from(s :String) :WebColor = from(java.awt.Color.decode(s))
-            fun from(jColor :java.awt.Color) :WebColor = WebColor(jColor.red,jColor.green,jColor.blue,jColor.alpha)
-            fun from(color :Color) :WebColor = WebColor(color.red.toInt(),color.green.toInt(),color.blue.toInt(),color.alpha.toInt())
+            fun from(jColor :java.awt.Color) = WebColor(jColor.red,jColor.green,jColor.blue,jColor.alpha)
+            fun from(color :Color) = WebColor(color.red.toInt(),color.green.toInt(),color.blue.toInt(),color.alpha.toInt())
         }
     }
 
