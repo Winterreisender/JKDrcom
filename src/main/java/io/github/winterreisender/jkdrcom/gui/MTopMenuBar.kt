@@ -10,6 +10,7 @@
 
 package io.github.winterreisender.jkdrcom.gui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.window.WindowDraggableArea
@@ -21,7 +22,8 @@ import androidx.compose.material.icons.materialPath
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
@@ -134,7 +136,7 @@ object MTopMenuBar {
     @Composable
     fun MMenuScope.MMenuItem(text: String, onClick: () -> Unit) =
         DropdownMenuItem(
-            onClick = { onClick(); collapseMenu() },
+            onClick = { collapseMenu(); onClick();  },
             modifier = Modifier.height(28.dp)
         ) {
             Text(text, maxLines = 1, fontSize = 0.8125.em)

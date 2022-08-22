@@ -34,53 +34,79 @@ package io.github.winterreisender.jkdrcom.gui
 
 import androidx.compose.ui.awt.ComposeWindow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.toLowerCase
 import java.awt.*
 import java.net.URI
-import java.util.Base64
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 import javax.swing.*
 
 import com.github.winterreisender.webviewko.WebviewKo
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.util.*
+import kotlin.coroutines.CoroutineContext
 
 object Utils {
     /*
     * TODO: NEED TESTING 在窗口中打开校园网之窗
     */
 
-    fun showNetWindow(url :String = Constants.SchoolNetWindowURL, closeAfterSecs :Int = 0) {
+    fun showNetWindow(url :String = Constants.SchoolNetWindowURL, closeAfterSecs :Int = 0) = Thread {
+             try {
+                 WebviewKo(1).run {
+                     val scales = GraphicsEnvironment.getLocalGraphicsEnvironment().defaultScreenDevice.defaultConfiguration.defaultTransform
+                     title("JKDrcom Net Window")
+                     size((592 * scales.scaleX).toInt(), (455 * scales.scaleY).toInt())
 
-         Thread {
-             val scales = GraphicsEnvironment.getLocalGraphicsEnvironment().defaultScreenDevice.defaultConfiguration.defaultTransform
-            //Thread.currentThread().name = "JKDrcom Net Window"
-            WebviewKo().run {
-                title("JKDrcom Net Window")
-                size((592 * scales.scaleX).toInt(),(458 * scales.scaleY).toInt())
+                     if (closeAfterSecs > 0) {
+                         init(
+                             """
+                        setTimeout( () => { window.closeWebview() }, ${closeAfterSecs * 1000}  ) 
+                     """.trimIndent()
+                         )
+                         bind("closeWebview") {
+                             terminate()
+                             ""
+                         }
+                     }
 
-                if (closeAfterSecs > 0) {
-                    init("""
-                    setTimeout( () => { window.closeWebview() }, ${closeAfterSecs*1000}  ) 
-                    """.trimIndent())
-                    bind("closeWebview") {
-                        terminate()
-                        ""
-                    }
-                }
-
-                navigate(url)
-                show()
-            }
-        }.start()
-    }
-
-
+                     navigate(url)
+                     show()
+                 }
+             } catch (e :Exception) {
+                 e.printStackTrace()
+                 SwingUtilities.invokeLater {
+                     if(e.message == "Failed to create webview" && System.getProperty("os.name").lowercase(Locale.getDefault()).contains("windows")) {
+                         optionBox(mapOf(
+                             "前往下载" to {Desktop.getDesktop().browse(URI("https://developer.microsoft.com/zh-cn/microsoft-edge/webview2"))},
+                             "在浏览器中打开" to {openNetWindow()},
+                             "取消" to {}
+                         ),"创建WebviewKo失败,无法在窗口中显示校园网之窗\r\n 一种可能是您需要安装 Microsoft Edge WebView2, 请到 https://developer.microsoft.com/zh-cn/microsoft-edge/webview2 下载","创建WebviewKo失败")
+                     }else {
+                         msgBox("${e.message}","Error",JOptionPane.WARNING_MESSAGE)
+                     }
+                 }
+             }
+        }.apply {
+             uncaughtExceptionHandler = Thread.UncaughtExceptionHandler {t,e -> println("$t ${e.stackTrace}") }
+             start()
+         }
 
     // 在浏览器中打开校园窗
     fun openNetWindow(url :String = Constants.SchoolNetWindowURL) =
         Desktop.getDesktop().browse(URI(url))
 
+    fun <R> optionBox(options :Map<Any,()->R>, message :String, title :String, messageType :Int = JOptionPane.WARNING_MESSAGE) :R =
+        JOptionPane.showOptionDialog(null,
+            message,title,
+            JOptionPane.DEFAULT_OPTION,messageType,null,
+            options.keys.toTypedArray(),options.keys.last()
+        ).let {
+            options.values.toTypedArray()[it]()
+        }
 
-    fun msgBox(text :String, title :String) :Unit = JOptionPane.showMessageDialog(ComposeWindow(),text,title,JOptionPane.INFORMATION_MESSAGE)
+    fun msgBox(text :String, title :String, type :Int = JOptionPane.INFORMATION_MESSAGE) :Unit = JOptionPane.showMessageDialog(ComposeWindow(),text,title,JOptionPane.INFORMATION_MESSAGE)
     fun inputBox(text :String, default :String) :String = JOptionPane.showInputDialog(ComposeWindow(),text,default) ?: ""
 
     fun <T> chooseBox(text: String, choices :Array<T>, default :T, title: String = text) :T =
