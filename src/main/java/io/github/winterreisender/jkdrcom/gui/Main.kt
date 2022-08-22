@@ -12,6 +12,7 @@ package io.github.winterreisender.jkdrcom.gui
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.desktop.ui.tooling.preview.Preview
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
@@ -24,6 +25,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.ComposeWindow
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -33,8 +36,8 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.window.*
-import com.formdev.flatlaf.intellijthemes.FlatMaterialDesignDarkIJTheme
-import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialLighterContrastIJTheme
+import com.formdev.flatlaf.FlatDarkLaf
+import com.formdev.flatlaf.FlatLightLaf
 import io.github.winterreisender.jkdrcom.core.JKDrcomTask
 import io.github.winterreisender.jkdrcom.core.util.HostInfo
 import io.github.winterreisender.jkdrcom.core.util.IPUtil
@@ -47,7 +50,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.skiko.SystemTheme
 import org.jetbrains.skiko.currentSystemTheme
-import java.awt.Color
+import java.awt.Color as JColor
 import java.awt.Desktop
 import java.net.URI
 import java.util.logging.Logger
@@ -279,9 +282,9 @@ fun main(args :Array<String>) {
             Logger.getLogger("Main").info(appConfig.toString())
             UIManager.setLookAndFeel(
                 when(currentSystemTheme){ // currentSystemTheme要在Application内运行
-                    SystemTheme.LIGHT -> FlatMaterialLighterContrastIJTheme()
-                    SystemTheme.DARK -> FlatMaterialDesignDarkIJTheme()
-                    else -> FlatMaterialLighterContrastIJTheme()
+                    SystemTheme.LIGHT -> FlatLightLaf()
+                    SystemTheme.DARK -> FlatDarkLaf()
+                    else -> FlatLightLaf()
                 }
             )
         }
@@ -295,6 +298,7 @@ fun main(args :Array<String>) {
             if(!windowVisible)
                 Item(Constants.MenuText.Tray_Show) {
                     windowVisible = true
+                    windowState.isMinimized = false
                 }
             else
                 Item(Constants.MenuText.Tray_Hide) {
@@ -313,7 +317,7 @@ fun main(args :Array<String>) {
                     //modifier = Modifier.clip(RoundedCornerShape(5.dp)),
                     modifier = Modifier.border(1.dp, color = MaterialTheme.colors.primary),
                     topBar = {
-                        MMenuBar(Constants.AppName,windowState, onExitClicked = { appConfig.saveToFile(); exitApplication() }) {
+                        MMenuBar(Constants.AppName,windowState, onExitClicked = { appConfig.saveToFile(); exitApplication() }) { // modifier = Modifier.height(32.dp).background(Brush.horizontalGradient(listOf(Color(0xFF00B4DB), Color(0xFF0083b0))))
                             MMenu(Constants.MenuText.Function) {
                                 MMenuItem(Constants.MenuText.Function_SchoolNetWindow) {
                                     when(appConfig.netWindow) {
@@ -344,7 +348,7 @@ fun main(args :Array<String>) {
                                 }
 
                                 MMenuItem("主题色") {
-                                    val jColor : Color = JColorChooser.showDialog(ComposeWindow(),"选取颜色",Constants.DefaultPrimaryColor.toAwt()) ?: return@MMenuItem
+                                    val jColor = JColorChooser.showDialog(ComposeWindow(),"选取颜色",Constants.DefaultPrimaryColor.toAwt()) ?: return@MMenuItem
 
                                     appConfig.mainColor = Utils.WebColor.from(jColor).toString()
                                     primaryColorState = appConfig.getPrimaryColor().toCompose()
