@@ -89,7 +89,7 @@ object Utils {
                  }
              }
         }.apply {
-             uncaughtExceptionHandler = Thread.UncaughtExceptionHandler {t,e -> println("$t ${e.stackTrace}") }
+             uncaughtExceptionHandler = Thread.UncaughtExceptionHandler {t,e -> println("$t ${e}") }
              start()
          }
 

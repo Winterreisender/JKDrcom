@@ -59,10 +59,13 @@ object Constants {
     object MenuText {
         const val Function = "功能"
         const val Function_SchoolNetWindow        = "校园网之窗"
+        const val Function_SchoolNetInfo          = "上网信息窗"
+        const val Function_JLUTestLogin           = "登录JLU.TEST"
         const val Function_SetMaxRetry            = "重试次数"
-        const val Function_SetMaxRetry_NeedNum = "请输入1~128的数字"
+        const val Function_SetMaxRetry_NeedNum    = "请输入1~128的数字"
         const val Function_HideWindow             = "隐藏到托盘"
         const val Function_ResetConfig            = "恢复默认配置"
+        const val Function_SetThemeColor          = "设置主题色"
         const val Function_ResetConfig_Done       = "已恢复默认配置" //val Function_ResetConfig_Done = {cfg :String -> "已恢复默认配置:\n $cfg" }
         const val Function_SaveConfig             = "保存配置"
         const val Function_SaveConfig_Done        = "保存成功"
@@ -88,5 +91,9 @@ object Constants {
 
     // 3.其他
     val PwdCryptoKey = byteArrayOf(0x3b, 0x79, 0x40, 0x00, 0x7c, 0x1d, 0x6C, 0x78,0x1E, 0x37,0x33, 0x58, 0x05, 0x3e, 0x11, 0x02) //淦 Java 怎么会有 byte 必须是有符号数这种zz规定啊
-    const val SchoolNetWindowURL = "http://login.jlu.edu.cn/notice.php"
+    const val SchoolNetWindowURL = "http://login.jlu.edu.cn/notice.php" // 校园网之窗URL
+    const val SchoolNetInfoURL   = "http://10.100.61.3/"                // 校园网信息流量URL
+    //JLU.TEST登录URL,第一个%s为用户名,第二个为密码
+    const val JluTestLoginURL    = "https://net.jlu.edu.cn/login?DDDDD=%s&upass=%s&R1=0&R2=&R3=0&R6=1&para=00&0MKKey=123456&buttonClicked=&redirect_url=&err_flag=&username=&password=&user=&cmd=&Login=&v6ip="
+
 }

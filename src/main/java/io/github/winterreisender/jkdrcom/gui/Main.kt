@@ -55,6 +55,8 @@ import java.awt.Desktop
 import java.net.URI
 import java.util.logging.Logger
 import javax.swing.JColorChooser
+import javax.swing.JOptionPane
+import javax.swing.JPanel
 import javax.swing.UIManager
 
 var appConfig = AppConfig.loadFromFile()
@@ -327,6 +329,17 @@ fun main(args :Array<String>) {
                                     }
                                 }
 
+                                MMenuItem(Constants.MenuText.Function_SchoolNetInfo) {
+                                    Utils.openNetWindow(Constants.SchoolNetInfoURL)
+                                }
+
+                                MMenuItem(Constants.MenuText.Function_JLUTestLogin) {
+                                    val username = JOptionPane.showInputDialog(ComposeWindow(),"输入用户名") ?: return@MMenuItem
+                                    val password = JOptionPane.showInputDialog(ComposeWindow(),"输入密码") ?: return@MMenuItem
+
+                                    Utils.openNetWindow(String.format(Constants.JluTestLoginURL,username,password))
+                                }
+
                                 MMenuItem(Constants.MenuText.Function_HideWindow) {
                                     windowVisible = false
                                 }
@@ -343,13 +356,12 @@ fun main(args :Array<String>) {
 
                                 MMenuItem(Constants.MenuText.Function_NetWindowType) {
                                     val windowTypes = AppConfig.NetWindowType.values()
-                                    val chosen = Utils.chooseBox(Constants.MenuText.Function_NetWindowType,windowTypes, appConfig.netWindow, title = "输入")
+                                    val chosen = Utils.chooseBox(Constants.MenuText.Function_NetWindowType,windowTypes, appConfig.netWindow, title = Constants.MenuText.Function_NetWindowType)
                                     appConfig.netWindow = chosen
                                 }
 
-                                MMenuItem("主题色") {
-                                    val jColor = JColorChooser.showDialog(ComposeWindow(),"选取颜色",Constants.DefaultPrimaryColor.toAwt()) ?: return@MMenuItem
-
+                                MMenuItem(Constants.MenuText.Function_SetThemeColor) {
+                                    val jColor = JColorChooser.showDialog(ComposeWindow(),Constants.MenuText.Function_SetThemeColor,Constants.DefaultPrimaryColor.toAwt()) ?: return@MMenuItem
                                     appConfig.mainColor = Utils.WebColor.from(jColor).toString()
                                     primaryColorState = appConfig.getPrimaryColor().toCompose()
                                 }
