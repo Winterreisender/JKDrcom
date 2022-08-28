@@ -33,7 +33,7 @@ data class AppConfig(
     var autoLogin        :Boolean = false,
     var rememberPassword :Boolean = false,
     var closeAfterSecs   :Int     = -1,
-    var netWindow        :NetWindowType  = NetWindowType.NONE,  // Use @EncodeDefault to write to json when it's default value
+    var netWindow        :NetWindowType  = NetWindowType.BROWSER,  // Use @EncodeDefault to write to json when it's default value
     var mainColor        :String  = Constants.DefaultPrimaryColor.toString()
 ) {
 

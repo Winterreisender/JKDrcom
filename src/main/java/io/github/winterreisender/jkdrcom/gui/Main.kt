@@ -12,7 +12,6 @@ package io.github.winterreisender.jkdrcom.gui
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
@@ -25,8 +24,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.ComposeWindow
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -50,13 +47,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.skiko.SystemTheme
 import org.jetbrains.skiko.currentSystemTheme
-import java.awt.Color as JColor
 import java.awt.Desktop
 import java.net.URI
 import java.util.logging.Logger
 import javax.swing.JColorChooser
 import javax.swing.JOptionPane
-import javax.swing.JPanel
 import javax.swing.UIManager
 
 var appConfig = AppConfig.loadFromFile()
@@ -277,8 +272,7 @@ fun AppPage() {
     //}
 }
 
-fun main(args :Array<String>) {
-
+fun main() {
     application {
         LaunchedEffect(Unit) {
             Logger.getLogger("Main").info(appConfig.toString())
@@ -292,10 +286,11 @@ fun main(args :Array<String>) {
         }
 
         val windowState = rememberWindowState(size = DpSize(600.dp,500.dp))
+
         var windowVisible by remember { mutableStateOf(true) }
         setWindowVisible = {windowVisible = it}  //状态提升到全局
-
         trayState = rememberTrayState()
+
         Tray(painterResource("logo.png"), trayState, onAction = {windowVisible=true}) {
             if(!windowVisible)
                 Item(Constants.MenuText.Tray_Show) {
@@ -410,6 +405,9 @@ fun main(args :Array<String>) {
                                     Desktop.getDesktop().browse(URI(Constants.AppFeedback))
                                 }
                                 Divider()
+                                MMenuItem(Constants.MenuText.Help_Credits) {
+                                    Desktop.getDesktop().browse(URI(Constants.MenuText.Help_Credits_URL))
+                                }
                                 MMenuItem(Constants.MenuText.Help_About) {
                                     Utils.msgBox(Constants.AppAbout.trimIndent(), Constants.MenuText.Help_About)
                                 }

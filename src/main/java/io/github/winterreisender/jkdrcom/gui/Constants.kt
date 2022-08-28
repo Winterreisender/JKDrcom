@@ -14,18 +14,18 @@ package io.github.winterreisender.jkdrcom.gui
 // TODO: i18n方案: 1. Java内置的ResourceBundle(XML,Properties) 2. **JSON** 3. GNU GetText
 object Constants {
     // 1. 应用信息
-    const val AppHomepage = "https://github.com/Winterreisender/JKDrcom"
-    const val AppFeedback = "https://github.com/Winterreisender/JKDrcom/discussions"
-    const val AppName = "JKDrcom"
-    const val AppVersion = "v1.1.0-dev"
-    const val AppCodeName = "Endless August"
+    const val AppHomepage    = "https://github.com/Winterreisender/JKDrcom"
+    const val AppFeedback    = "https://github.com/Winterreisender/JKDrcom/discussions"
+    const val AppName        = "JKDrcom"
+    const val AppVersion     = "v1.1.0-dev"
+    const val AppCodeName    = "Endless August"
     const val AppDescription = "使用Kotlin的Drcom开源实现."
     const val AppCopyright = """
         JKDrcom 是自由软件：你可以再分发之和/或依照由自由软件基金会发布的 GNU Affero 通用公共许可证修改之，仅版本 3 许可证。
         发布 JKDrcom 是希望它能有用，但是并无保障;甚至连可销售和符合某个特定的目的都不保证。请参看 GNU Affero 通用公共许可证，了解详情。
         你应该随程序获得一份 GNU Affero 通用公共许可证的复本。如果没有，请看 <https://www.gnu.org/licenses/>。
     """
-    const val AppCredits = "JKDrcom离不开jlu-drcom-java以及其他开源软件."
+    const val AppCredits     = "JKDrcom离不开jlu-drcom-java以及其他开源软件."
 
     // 解决空格的(最佳?)实践: 用const val定义,用AppAbout.trimIndent()调用
     const val AppAbout = """
@@ -57,7 +57,7 @@ object Constants {
 
 
     object MenuText {
-        const val Function = "功能"
+        const val Function                        = "功能"
         const val Function_SchoolNetWindow        = "校园网之窗"
         const val Function_SchoolNetInfo          = "上网信息窗"
         const val Function_JLUTestLogin           = "登录JLU.TEST"
@@ -72,16 +72,18 @@ object Constants {
         const val Function_SaveConfig_Failed      = "保存失败!"
         const val Function_EditConfig             = "打开配置文件"
         const val Function_NetWindowType          = "校园网之窗打开方式"
-        const val Function_CloseAfterSecs         = "自动隐藏时间"
+        const val Function_CloseAfterSecs         = "自动隐藏窗口时间"
         const val Function_CloseAfterSecs_Text    = "设置自动隐藏时间(秒). -1表示不设置"
         const val Function_CloseAfterSecs_NeedNum = "请输入1~128的数字"
 
         const val Settings = "设置"
 
-        const val Help = "帮助"
-        const val Help_About = "关于"
+        const val Help          = "帮助"
+        const val Help_About    = "关于"
         const val Help_HomePage = "主页"
         const val Help_Feedback = "讨论与反馈"
+        const val Help_Credits = "开源引用"
+        const val Help_Credits_URL = "https://github.com/Winterreisender/JKDrcom#%E5%BC%95%E7%94%A8%E4%B8%8E%E5%8F%82%E8%80%83"
 
         const val Tray_Show = "显示 (Show)"
         const val Tray_Hide = "隐藏 (Hide)"

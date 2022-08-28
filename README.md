@@ -53,7 +53,6 @@ JKDrcom已停止活跃开发,请尝试查看以下继任项目或替代项目作
 | [Jetpack Compose Desktop](https://github.com/JetBrains/compose-jb/)                       | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                                   |
 | [IntelliJ IDEA Community](https://github.com/JetBrains/intellij-community)                | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                                   |
 | [flatlaf](https://www.formdev.com/flatlaf/)                                               | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                                   |
-| [Material Theme UI Lite](https://github.com/mallowigi/material-theme-ui-lite)             | [MIT](https://github.com/mallowigi/material-theme-ui-lite/blob/master/LICENSE)                   |
 | [WebviewKo](https://github.com/Winterreisender/webviewko)                                 | [Apache-2.0](https://github.com/Winterreisender/webviewko/blob/master/LICENSE)                   |
 
 ---

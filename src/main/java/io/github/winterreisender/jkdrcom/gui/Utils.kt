@@ -62,8 +62,11 @@ object Utils {
                      if (closeAfterSecs > 0) {
                          init(
                              """
-                        setTimeout( () => { window.closeWebview() }, ${closeAfterSecs * 1000}  ) 
-                     """.trimIndent()
+                                 (function _() {
+                                    var timer = setTimeout( () => { window.closeWebview() }, ${closeAfterSecs * 1000} );
+                                    document.onclick = ()=>{clearTimeout(timer);};
+                                 })()
+                            """.trimIndent()
                          )
                          bind("closeWebview") {
                              terminate()
@@ -106,7 +109,7 @@ object Utils {
             options.values.toTypedArray()[it]()
         }
 
-    fun msgBox(text :String, title :String, type :Int = JOptionPane.INFORMATION_MESSAGE) :Unit = JOptionPane.showMessageDialog(ComposeWindow(),text,title,JOptionPane.INFORMATION_MESSAGE)
+    fun msgBox(text :String, title :String, type :Int = JOptionPane.INFORMATION_MESSAGE) :Unit = JOptionPane.showMessageDialog(ComposeWindow(),text,title,type)
     fun inputBox(text :String, default :String) :String = JOptionPane.showInputDialog(ComposeWindow(),text,default) ?: ""
 
     fun <T> chooseBox(text: String, choices :Array<T>, default :T, title: String = text) :T =
