@@ -25,7 +25,7 @@ object MD5 {
             val instance = MessageDigest.getInstance("MD5")
             instance.update(bytes)
             return instance.digest()
-        } catch (ignore: NoSuchAlgorithmException) { // TODO: 删除这个不必要的catch
+        } catch (ignore: NoSuchAlgorithmException) {
 
         }
         return zero16 //容错

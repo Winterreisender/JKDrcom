@@ -8,8 +8,6 @@
  * You should have received a copy of the GNU Affero General Public License along with this program. If not, see <https://www.gnu.org/licenses/>
  */
 
-
-
 package io.github.winterreisender.jkdrcom.gui
 
 import io.github.winterreisender.jkdrcom.core.util.HostInfo
@@ -20,8 +18,6 @@ import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.logging.Logger
-
-
 
 @kotlinx.serialization.Serializable
 data class AppConfig(
@@ -57,7 +53,7 @@ data class AppConfig(
     fun saveToFile() {
         val jsonText = Json.encodeToString(
             this.copy(
-                password = if(rememberPassword) Utils.pwdEncrypt(password) else ""            //判断是否需要存储密码 TODO: 可选明文/密文保存密码
+                password = if(rememberPassword) Utils.pwdEncrypt(password) else ""            //判断是否需要存储密码
             )
         )
         configFile.writeText(jsonText)
@@ -77,7 +73,7 @@ data class AppConfig(
         // 从配置文件中加载配置
         fun loadFromFile() :AppConfig = kotlin.runCatching {
             Json.decodeFromString<AppConfig>(configFile.readText()).apply {
-                password = if(password.isEmpty()) "" else kotlin.runCatching { Utils.pwdDecrypt(password) }.getOrDefault("") // TODO: 可选明文/密文保存密码
+                password = if(password.isEmpty()) "" else kotlin.runCatching { Utils.pwdDecrypt(password) }.getOrDefault("")
             }}.getOrDefault(AppConfig().also{Logger.getLogger("AppConfig").warning("Error occurs in loadFromFile: $it. Using default one")})
     }
 }

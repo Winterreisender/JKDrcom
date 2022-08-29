@@ -48,12 +48,11 @@ JKDrcom已停止活跃开发,请尝试查看以下继任项目或替代项目作
 | 软件                                                                                        | 许可                                                                                               |
 |-------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
 | [jlu-drcom-java](https://github.com/YouthLin/jlu-drcom-client/tree/master/jlu-drcom-java) | [AGPL-3.0-only](https://github.com/youthlin/jlu-drcom-client/blob/master/jlu-drcom-java/LICENSE) |
+| [Jetpack Compose Desktop](https://github.com/JetBrains/compose-jb/)                       | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                                   |
+| [FlatLaf](https://www.formdev.com/flatlaf/)                                               | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                                   |
+| [webviewko](https://github.com/Winterreisender/webviewko)                                 | [Apache-2.0](https://github.com/Winterreisender/webviewko/blob/master/LICENSE)                   |
 | [Kotlin](https://kotlinlang.org/)                                                         | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                                   |
 | Java ([GraalVM](https://www.graalvm.org/),[Eclipse Adoptium](https://adoptium.net/))      | [GPL-2.0-only WITH Classpath-exception-2.0](https://openjdk.java.net/legal/gplv2+ce.html)        |
-| [Jetpack Compose Desktop](https://github.com/JetBrains/compose-jb/)                       | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                                   |
-| [IntelliJ IDEA Community](https://github.com/JetBrains/intellij-community)                | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                                   |
-| [flatlaf](https://www.formdev.com/flatlaf/)                                               | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                                   |
-| [WebviewKo](https://github.com/Winterreisender/webviewko)                                 | [Apache-2.0](https://github.com/Winterreisender/webviewko/blob/master/LICENSE)                   |
 
 ---
 
@@ -95,8 +94,6 @@ JKDrcom已停止活跃开发,请尝试查看以下继任项目或替代项目作
 
 Copyright 2022 Winterreisender.  
 Licensed under GNU Affero General Public License Version 3 (**AGPL-3.0-only**).
-
-
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, version 3.  
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.  

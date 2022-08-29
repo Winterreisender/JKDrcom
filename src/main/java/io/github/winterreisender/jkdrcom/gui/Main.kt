@@ -52,7 +52,6 @@ import java.net.URI
 import java.util.logging.Logger
 import javax.swing.JColorChooser
 import javax.swing.JOptionPane
-import javax.swing.UIManager
 
 var appConfig = AppConfig.loadFromFile()
 
@@ -67,12 +66,12 @@ enum class AppStatus {
 @Composable
 fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
 
-    var username by remember { mutableStateOf(appConfig.username) }
-    var password by remember { mutableStateOf(appConfig.password) }
+    var username   by remember { mutableStateOf(appConfig.username)   }
+    var password   by remember { mutableStateOf(appConfig.password)   }
     var macAddress by remember { mutableStateOf(appConfig.macAddress) }
-    var hostName by remember { mutableStateOf(appConfig.hostName) }
+    var hostName   by remember { mutableStateOf(appConfig.hostName)   }
 
-    var autoLogin by remember { mutableStateOf(appConfig.autoLogin) }
+    var autoLogin        by remember { mutableStateOf(appConfig.autoLogin)        }
     var rememberPassword by remember { mutableStateOf(appConfig.rememberPassword) }
 
     var hostMenuExpand by remember { mutableStateOf(false) }
@@ -211,7 +210,7 @@ fun ConnectingPage(setStatus: (AppStatus) -> Unit) {
                             AppConfig.NetWindowType.BROWSER -> { Utils.openNetWindow() }
                         }
                     // 自动隐藏窗口
-                    delay(appConfig.closeAfterSecs * 1000L) // TODO: 自定义等待时间
+                    delay(appConfig.closeAfterSecs * 1000L)
                     setWindowVisible(false)
                 }
             }
@@ -276,17 +275,14 @@ fun main() {
     application {
         LaunchedEffect(Unit) {
             Logger.getLogger("Main").info(appConfig.toString())
-            UIManager.setLookAndFeel(
-                when(currentSystemTheme){ // currentSystemTheme要在Application内运行
-                    SystemTheme.LIGHT -> FlatLightLaf()
-                    SystemTheme.DARK -> FlatDarkLaf()
-                    else -> FlatLightLaf()
-                }
-            )
+            when(currentSystemTheme){       // currentSystemTheme要在Application内运行
+                SystemTheme.LIGHT -> FlatLightLaf.setup()
+                SystemTheme.DARK  -> FlatDarkLaf.setup()
+                else              -> FlatLightLaf.setup()
+            }
         }
 
         val windowState = rememberWindowState(size = DpSize(600.dp,500.dp))
-
         var windowVisible by remember { mutableStateOf(true) }
         setWindowVisible = {windowVisible = it}  //状态提升到全局
         trayState = rememberTrayState()

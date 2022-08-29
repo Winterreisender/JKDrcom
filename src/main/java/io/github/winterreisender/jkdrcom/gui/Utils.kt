@@ -9,32 +9,9 @@
  */
 
 package io.github.winterreisender.jkdrcom.gui
-/*
- * Copyright (C) 2022  Winterreisender
- *
- * This file is part of JKDrcom.
- *
- * JKDrcom is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, only version 3 of the License.
- *
- * JKDrcom is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
- *
- * 本文件是 JKDrcom 的一部分。
- * JKDrcom 是自由软件：你可以再分发之和/或依照由自由软件基金会发布的 GNU Affero 通用公共许可证修改之，仅版本 3 许可证。
- * 发布 JKDrcom 是希望它能有用，但是并无保障;甚至连可销售和符合某个特定的目的都不保证。请参看 GNU Affero 通用公共许可证，了解详情。
- * 你应该随程序获得一份 GNU Affero 通用公共许可证的复本。如果没有，请看 <https://www.gnu.org/licenses/>。
- */
 
 import androidx.compose.ui.awt.ComposeWindow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.toLowerCase
 import java.awt.*
 import java.net.URI
 import javax.crypto.Cipher
@@ -42,59 +19,52 @@ import javax.crypto.spec.SecretKeySpec
 import javax.swing.*
 
 import com.github.winterreisender.webviewko.WebviewKo
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.util.*
-import kotlin.coroutines.CoroutineContext
 
 object Utils {
-    /*
-    * TODO: NEED TESTING 在窗口中打开校园网之窗
-    */
-
     fun showNetWindow(url :String = Constants.SchoolNetWindowURL, closeAfterSecs :Int = 0) = Thread {
-             try {
-                 WebviewKo(1).run {
-                     val scales = GraphicsEnvironment.getLocalGraphicsEnvironment().defaultScreenDevice.defaultConfiguration.defaultTransform
-                     title("JKDrcom Net Window")
-                     size((592 * scales.scaleX).toInt(), (455 * scales.scaleY).toInt())
+         try {
+             WebviewKo(1).run {
+                 val scales = GraphicsEnvironment.getLocalGraphicsEnvironment().defaultScreenDevice.defaultConfiguration.defaultTransform
+                 title("JKDrcom Net Window")
+                 size((592 * scales.scaleX).toInt(), (455 * scales.scaleY).toInt())
 
-                     if (closeAfterSecs > 0) {
-                         init(
-                             """
-                                 (function _() {
-                                    var timer = setTimeout( () => { window.closeWebview() }, ${closeAfterSecs * 1000} );
-                                    document.onclick = ()=>{clearTimeout(timer);};
-                                 })()
-                            """.trimIndent()
-                         )
-                         bind("closeWebview") {
-                             terminate()
-                             ""
-                         }
+                 if (closeAfterSecs > 0) {
+                     init(
+                         """
+                             (function _() {
+                                var timer = setTimeout( () => { window.closeWebview() }, ${closeAfterSecs * 1000} );
+                                document.onclick = ()=>{clearTimeout(timer);};
+                             })()
+                        """.trimIndent()
+                     )
+                     bind("closeWebview") {
+                         terminate()
+                         ""
                      }
-
-                     navigate(url)
-                     show()
                  }
-             } catch (e :Exception) {
-                 e.printStackTrace()
-                 SwingUtilities.invokeLater {
-                     if(e.message == "Failed to create webview" && System.getProperty("os.name").lowercase(Locale.getDefault()).contains("windows")) {
-                         optionBox(mapOf(
-                             "前往下载" to {Desktop.getDesktop().browse(URI("https://developer.microsoft.com/zh-cn/microsoft-edge/webview2"))},
-                             "在浏览器中打开" to {openNetWindow()},
-                             "取消" to {}
-                         ),"创建WebviewKo失败,无法在窗口中显示校园网之窗\r\n 一种可能是您需要安装 Microsoft Edge WebView2, 请到 https://developer.microsoft.com/zh-cn/microsoft-edge/webview2 下载","创建WebviewKo失败")
-                     }else {
-                         msgBox("${e.message}","Error",JOptionPane.WARNING_MESSAGE)
-                     }
+
+                 navigate(url)
+                 show()
+             }
+         } catch (e :Exception) {
+             e.printStackTrace()
+             SwingUtilities.invokeLater {
+                 if(e.message == "Failed to create webview" && System.getProperty("os.name").lowercase(Locale.getDefault()).contains("windows")) {
+                     optionBox(mapOf(
+                         "前往下载" to {Desktop.getDesktop().browse(URI("https://developer.microsoft.com/zh-cn/microsoft-edge/webview2"))},
+                         "在浏览器中打开" to {openNetWindow()},
+                         "取消" to {}
+                     ),"创建WebviewKo失败,无法在窗口中显示校园网之窗\r\n 一种可能是您需要安装 Microsoft Edge WebView2, 请到 https://developer.microsoft.com/zh-cn/microsoft-edge/webview2 下载","创建WebviewKo失败")
+                 }else {
+                     msgBox("${e.message}","Error",JOptionPane.WARNING_MESSAGE)
                  }
              }
-        }.apply {
-             uncaughtExceptionHandler = Thread.UncaughtExceptionHandler {t,e -> println("$t ${e}") }
-             start()
          }
+    }.apply {
+         uncaughtExceptionHandler = Thread.UncaughtExceptionHandler {t,e -> println("$t ${e}") }
+         start()
+    }
 
     // 在浏览器中打开校园窗
     fun openNetWindow(url :String = Constants.SchoolNetWindowURL) =
