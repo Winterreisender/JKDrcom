@@ -22,7 +22,7 @@ import kotlin.test.Test
 
 internal class Test {
     @Test fun netWindow() {
-        Utils.showNetWindow(closeAfterSecs = 5).join()
+        Utils.showNetWindow(closeAfterSecs = 5)
     }
 
     @Test fun hostInfo() {

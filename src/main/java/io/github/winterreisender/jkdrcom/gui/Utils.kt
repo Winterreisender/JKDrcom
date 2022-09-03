@@ -22,48 +22,61 @@ import com.github.winterreisender.webviewko.WebviewKo
 import java.util.*
 
 object Utils {
-    fun showNetWindow(url :String = Constants.SchoolNetWindowURL, closeAfterSecs :Int = 0) = Thread {
-         try {
-             WebviewKo(1).run {
-                 val scales = GraphicsEnvironment.getLocalGraphicsEnvironment().defaultScreenDevice.defaultConfiguration.defaultTransform
-                 title("JKDrcom Net Window")
-                 size((592 * scales.scaleX).toInt(), (455 * scales.scaleY).toInt())
+    private val isWin32 by lazy {
+        System.getProperty("os.name").lowercase(Locale.getDefault()).contains("windows")
+    }
 
-                 if (closeAfterSecs > 0) {
-                     init(
-                         """
+    fun showNetWindow(url :String = Constants.SchoolNetWindowURL, closeAfterSecs :Int = 0) {
+        val task = {
+            try {
+                WebviewKo(1).run {
+                    val scales = GraphicsEnvironment.getLocalGraphicsEnvironment().defaultScreenDevice.defaultConfiguration.defaultTransform
+                    title("JKDrcom Net Window")
+                    size((592 * scales.scaleX).toInt(), (455 * scales.scaleY).toInt())
+
+                    if (closeAfterSecs > 0) {
+                        init(
+                            """
                              (function _() {
                                 var timer = setTimeout( () => { window.closeWebview() }, ${closeAfterSecs * 1000} );
                                 document.onclick = ()=>{clearTimeout(timer);};
                              })()
                         """.trimIndent()
-                     )
-                     bind("closeWebview") {
-                         terminate()
-                         ""
-                     }
-                 }
+                        )
+                        bind("closeWebview") {
+                            terminate()
+                            ""
+                        }
+                    }
 
-                 navigate(url)
-                 show()
-             }
-         } catch (e :Exception) {
-             e.printStackTrace()
-             SwingUtilities.invokeLater {
-                 if(e.message == "Failed to create webview" && System.getProperty("os.name").lowercase(Locale.getDefault()).contains("windows")) {
-                     optionBox(mapOf(
-                         "前往下载" to {Desktop.getDesktop().browse(URI("https://developer.microsoft.com/zh-cn/microsoft-edge/webview2"))},
-                         "在浏览器中打开" to {openNetWindow()},
-                         "取消" to {}
-                     ),"创建WebviewKo失败,无法在窗口中显示校园网之窗\r\n 一种可能是您需要安装 Microsoft Edge WebView2, 请到 https://developer.microsoft.com/zh-cn/microsoft-edge/webview2 下载","创建WebviewKo失败")
-                 }else {
-                     msgBox("${e.message}","Error",JOptionPane.WARNING_MESSAGE)
-                 }
-             }
-         }
-    }.apply {
-         uncaughtExceptionHandler = Thread.UncaughtExceptionHandler {t,e -> println("$t ${e}") }
-         start()
+                    navigate(url)
+                    show()
+                }
+            } catch (e :Exception) {
+                e.printStackTrace()
+                SwingUtilities.invokeLater {
+                    if(e.message == "Failed to create webview" && isWin32) {
+                        optionBox(mapOf(
+                            "前往下载" to {Desktop.getDesktop().browse(URI("https://developer.microsoft.com/zh-cn/microsoft-edge/webview2"))},
+                            "在浏览器中打开" to {openNetWindow()},
+                            "取消" to {}
+                        ),"创建WebviewKo失败,无法在窗口中显示校园网之窗\r\n 一种可能是您需要安装 Microsoft Edge WebView2, 请到 https://developer.microsoft.com/zh-cn/microsoft-edge/webview2 下载","创建WebviewKo失败")
+                    }else {
+                        msgBox("${e.message}","Error",JOptionPane.WARNING_MESSAGE)
+                    }
+                }
+            }
+        }
+
+        if(isWin32) {
+            Thread(task).run {
+                uncaughtExceptionHandler = Thread.UncaughtExceptionHandler {t,e -> println("$t $e") }
+                start()
+            }
+        }else{
+            task()
+        }
+
     }
 
     // 在浏览器中打开校园窗

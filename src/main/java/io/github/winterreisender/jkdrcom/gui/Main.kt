@@ -202,17 +202,15 @@ fun ConnectingPage(setStatus: (AppStatus) -> Unit) {
             JKDNotification.KEEPING_ALIVE -> {
                 trayState.sendNotification(Notification(Constants.AppName,Constants.UIText.Connected,Notification.Type.Info))
 
-                scope.launch {
-                    if(timesRemain == null)
-                        when(appConfig.netWindow) {
-                            AppConfig.NetWindowType.NONE -> {}
-                            AppConfig.NetWindowType.WINDOWED -> { Utils.showNetWindow(closeAfterSecs = appConfig.closeAfterSecs) }
-                            AppConfig.NetWindowType.BROWSER -> { Utils.openNetWindow() }
-                        }
-                    // 自动隐藏窗口
-                    delay(appConfig.closeAfterSecs * 1000L)
-                    setWindowVisible(false)
-                }
+                if(timesRemain == null)
+                    when(appConfig.netWindow) {
+                        AppConfig.NetWindowType.NONE -> {}
+                        AppConfig.NetWindowType.WINDOWED -> { Utils.showNetWindow(closeAfterSecs = appConfig.closeAfterSecs) }
+                        AppConfig.NetWindowType.BROWSER -> { Utils.openNetWindow() }
+                    }
+                // 自动隐藏窗口
+                delay(appConfig.closeAfterSecs * 1000L)
+                setWindowVisible(false)
             }
             else -> {}
         }
