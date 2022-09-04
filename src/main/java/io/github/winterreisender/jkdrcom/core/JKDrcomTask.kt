@@ -87,6 +87,7 @@ class JKDrcomTask(
                 throw DrcomException("Failed to send authentication information.{0}" + DrcomException.CODE.ex_login)
             }
             log.info("login successfully")
+            timesRemain = maxRetry // 登录成功后重置重试次数
 
             //keep alive
             communication.emitNotification(JKDNotification.KEEPING_ALIVE)
