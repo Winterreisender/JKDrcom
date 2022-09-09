@@ -53,16 +53,24 @@ import java.util.logging.Logger
 import javax.swing.JColorChooser
 import javax.swing.JOptionPane
 
+/** 用户配置类 */
 var appConfig = AppConfig.loadFromFile()
 
+/** 托盘状态,用以发送通知 */
 lateinit var trayState :TrayState
+
+/** 设置窗口可见,用于菜单栏中的隐藏窗口 */
 var setWindowVisible :(Boolean)->Unit = {}
 
+/** App状态,用以切换页面 */
 enum class AppStatus {
+    /** 空闲,属于用户名和密码等等的状态 */
     IDLE,
+    /** 连接中 */
     CONNECTING
 }
 
+/** 空闲状态的界面 */
 @Composable
 fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
 
@@ -76,6 +84,7 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
 
     var hostMenuExpand by remember { mutableStateOf(false) }
 
+    // 自动检测到的MAC地址和主机名
     var hostInfos = remember { listOf<HostInfo>() }
 
     Card(Modifier.fillMaxSize().padding(16.dp)) {
@@ -94,7 +103,7 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
 
             OutlinedTextField(hostName,{hostName = it}, label = {Text(Constants.UIText.HostName)}, isError = hostName.isEmpty())
             OutlinedTextField(macAddress,{macAddress = it}, label = {Text(Constants.UIText.MacAddress)}, isError = !macAddress.matches(Regex("""([A-E,\d]{2}-?){5}([A-E,\d]{2})""",RegexOption.IGNORE_CASE)),
-                trailingIcon = {
+                trailingIcon = { // 自动检测MAC地址和主机名的按钮
                     var isLoading by remember { mutableStateOf(false) }
                     Button(onClick = {
                         isLoading = true
@@ -115,7 +124,7 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
                         }
                     )
                 })
-
+            // 检测到的MAC地址和主机名
             DropdownMenu(hostMenuExpand, {hostMenuExpand=false}, modifier = Modifier.fillMaxWidth(0.62f)) {
                 hostInfos.forEach {
                     DropdownMenuItem(
@@ -167,6 +176,7 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
     }
 }
 
+/** 连接状态的页面 */
 @Composable
 fun ConnectingPage(setStatus: (AppStatus) -> Unit) {
     val scope = rememberCoroutineScope()
@@ -203,6 +213,7 @@ fun ConnectingPage(setStatus: (AppStatus) -> Unit) {
                 trayState.sendNotification(Notification(Constants.AppName,Constants.UIText.Connected,Notification.Type.Info))
 
                 if(timesRemain == null)
+                    // 打开校园网之窗
                     when(appConfig.netWindow) {
                         AppConfig.NetWindowType.NONE -> {}
                         AppConfig.NetWindowType.WINDOWED -> { Utils.showNetWindow(closeAfterSecs = appConfig.closeAfterSecs) }
@@ -256,6 +267,9 @@ fun ConnectingPage(setStatus: (AppStatus) -> Unit) {
 
 
 }
+
+
+/** 主页面 */
 @Preview
 @Composable
 // AppPage层往下面的都要保持跨平台
@@ -273,6 +287,7 @@ fun main() {
     application {
         LaunchedEffect(Unit) {
             Logger.getLogger("Main").info(appConfig.toString())
+            // 设置Swing的夜间模式
             when(currentSystemTheme){       // currentSystemTheme要在Application内运行
                 SystemTheme.LIGHT -> FlatLightLaf.setup()
                 SystemTheme.DARK  -> FlatDarkLaf.setup()

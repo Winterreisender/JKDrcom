@@ -18,6 +18,13 @@ plugins {
     id("org.jetbrains.compose") version "1.1.1"
 }
 
+// val stdout = org.gradle.internal.impldep.org.apache.commons.io.output.ByteArrayOutputStream()
+// exec {
+//     commandLine("git", "describe", "--tags")
+//     standardOutput = stdout
+// }
+// version = stdout.toString(Charsets.UTF_8).trim()
+
 group = "io.github.winterreisender.jkdrcom"
 version = "1.1.0"
 

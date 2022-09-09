@@ -36,10 +36,12 @@ sealed class JKDNotification {
 
 // 线程共享对象(内存)
 open class JKDCommunication {
+    /** 注销通知,由GUI向Core通知 */
     @set:Synchronized
     @get:Synchronized
     var notifyLogout = false
 
+    /** 回调函数,由Core向GUI发送JKDNotification */
     @Synchronized
     open fun emitNotification(notification :JKDNotification) {}
 }

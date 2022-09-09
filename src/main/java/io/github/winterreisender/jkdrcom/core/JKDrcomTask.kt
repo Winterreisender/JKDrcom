@@ -28,6 +28,7 @@ class JKDrcomTask(
     private val password: String,
     private val hostInfo: HostInfo,
     private val maxRetry :Int = Constants.DEFAULT_MAX_RETRY,
+    /** 线程间通信的共享对象 */
     private val communication :JKDCommunication,
 ) : Runnable {
     /**

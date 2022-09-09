@@ -31,7 +31,7 @@ fun main(args :Array<String>) {
     val hostname = argOrInput({args[2]}, "主机名:")
     val password = argOrInput({args[3]}, "密码:")
 
-    // 共享内存对象
+    /** 共享内存对象 */
     val communication = object : JKDCommunication() {
         @Synchronized
         override fun emitNotification(notification: JKDNotification) {
@@ -39,6 +39,8 @@ fun main(args :Array<String>) {
             println(notification)
         }
     }
+
+    /** 创建线程 */
     val jkDrcomThread = Thread(JKDrcomTask(username,password, HostInfo(hostname,macAddress),1,communication))
     jkDrcomThread.start()
     jkDrcomThread.join()

@@ -29,7 +29,7 @@ import kotlin.system.exitProcess
 
 
 /**
- * 一套Material菜单栏组件,包含MenuBar,Menu,MenuItem三个层次
+ * 一套Material菜单栏组件,包含MenuBar,Menu,MenuItem三个层次,封装了DropdownMenu
  *
  * example:
  * ```kt
@@ -218,7 +218,7 @@ object MTopMenuBar {
         }
 
 
-
+    /** 窗口右上角最小化按钮的图标 */
     private val MinimizeIcon by lazy { materialIcon(name = "Minimize") {
         materialPath {
             moveTo(4.0f, 12.0f)
@@ -230,6 +230,7 @@ object MTopMenuBar {
         }
     }}
 
+    /** 窗口右上角最大化按钮的图标 */
     private val MaximizeIcon  by lazy { materialIcon(name = "MaximizeIcon") {
         materialPath {
             moveTo(16.0f, 8.0f)

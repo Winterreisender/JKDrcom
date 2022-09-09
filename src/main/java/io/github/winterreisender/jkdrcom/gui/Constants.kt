@@ -10,8 +10,11 @@
 
 package io.github.winterreisender.jkdrcom.gui
 
-//用来存放常量。这种程度的项目其实用不着写个Constants,然后把所有的文本等等写在一个文件这种Over-Engineering设计.
-// TODO: i18n方案: 1. Java内置的ResourceBundle(XML,Properties) 2. **JSON** 3. GNU GetText
+/**
+ * 用来存放常量。这种程度的项目其实用不着写个Constants,然后把所有的文本等等写在一个文件这种Over-Engineering设计.实际上确定不会有i18n后一些字符串也有直接写道Main.kt里的.
+ * TODO: i18n方案: 1. Java内置的ResourceBundle(XML,Properties) 2. **JSON** 3. GNU GetText
+ */
+
 object Constants {
     // 1. 应用信息
     const val AppHomepage    = "https://github.com/Winterreisender/JKDrcom"
@@ -37,6 +40,7 @@ object Constants {
     """
 
     // 2. GUI相关
+    /** 主界面中用到的文本 */
     object UIText{
         const val Logout       = "注销"
         const val LoggingOut   = "注销中"
@@ -55,7 +59,7 @@ object Constants {
     }
     val DefaultPrimaryColor = Utils.WebColor(0x39,0xc5,0xbb)
 
-
+    /**  菜单栏中用到的文本 */
     object MenuText {
         const val Function                        = "功能"
         const val Function_SchoolNetWindow        = "校园网之窗"
@@ -92,10 +96,13 @@ object Constants {
     }
 
     // 3.其他
+    /** 加密密码时用到的固定AES密钥 */
     val PwdCryptoKey = byteArrayOf(0x3b, 0x79, 0x40, 0x00, 0x7c, 0x1d, 0x6C, 0x78,0x1E, 0x37,0x33, 0x58, 0x05, 0x3e, 0x11, 0x02) //淦 Java 怎么会有 byte 必须是有符号数这种zz规定啊
-    const val SchoolNetWindowURL = "http://login.jlu.edu.cn/notice.php" // 校园网之窗URL
-    const val SchoolNetInfoURL   = "http://10.100.61.3/"                // 校园网信息流量URL
-    //JLU.TEST登录URL,第一个%s为用户名,第二个为密码
+    /** 校园网之窗URL */
+    const val SchoolNetWindowURL = "http://login.jlu.edu.cn/notice.php"
+    /** 校园网信息流量URL */
+    const val SchoolNetInfoURL   = "http://10.100.61.3/"
+    /** JLU.TEST登录URL,第一个%s为用户名,第二个为密码 */
     const val JluTestLoginURL    = "https://net.jlu.edu.cn/login?DDDDD=%s&upass=%s&R1=0&R2=&R3=0&R6=1&para=00&0MKKey=123456&buttonClicked=&redirect_url=&err_flag=&username=&password=&user=&cmd=&Login=&v6ip="
 
 }
