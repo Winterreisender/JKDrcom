@@ -5,7 +5,6 @@
 ![Java](https://img.shields.io/badge/Java-17-orange?logo=java)
 ![Jetpack Compose](https://img.shields.io/badge/compose-desktop-blue?logo=jetpackcompose)
 ![platforms](https://img.shields.io/badge/platform-windows10%2B%20%7C%20linux%20%7C%20macos-blue)
-![language](https://img.shields.io/badge/languages-%E4%B8%AD%E6%96%87-red)
 ![license](https://img.shields.io/github/license/Winterreisender/JKDrcom?color=663366)
 
 
@@ -13,7 +12,6 @@
 ![dev release](https://img.shields.io/github/v/release/Winterreisender/JKDrcom?label=dev&include_prereleases)
 [![Gradle CI Linux](https://github.com/Winterreisender/JKDrcom/actions/workflows/gradle-linux.yml/badge.svg)](https://github.com/Winterreisender/JKDrcom/actions/workflows/gradle-linux.yml)
 ![GitHub last commit](https://img.shields.io/github/last-commit/Winterreisender/JKDrcom)
-[![Maintenance](https://img.shields.io/maintenance/即将结束/2022?label=%E9%A1%B9%E7%9B%AE%E7%BB%B4%E6%8A%A4)](https://github.com/Winterreisender/JKDrcom/discussions/5)
 
 JKDrcom(JLU Kotlin Drcom)是一个从YouthLin的[jlu-drcom-java](https://github.com/YouthLin/jlu-drcom-client/tree/master/jlu-drcom-java)修改而来的第三方开源Drcom客户端实现,抽出了核心的联网功能并用Kotlin重写GUI。
 
@@ -21,13 +19,12 @@ JKDrcom(JLU Kotlin Drcom)是一个从YouthLin的[jlu-drcom-java](https://github.
 
 ## 参与进来/接手项目
 
-本项目欢迎并感谢任何贡献、建议和反馈。
+JKDrcom已停止活跃开发,详见[Discussions#5](https://github.com/Winterreisender/JKDrcom/discussions/5)
 
-JKDrcom即将停止开发,正在寻找有意接手者,详见[Discussions#5](https://github.com/Winterreisender/JKDrcom/discussions/5)
-
+本项目仍欢迎并感谢任何代码贡献和反馈。
 
 <!--
-JKDrcom已停止活跃开发,请尝试查看以下继任项目或替代项目作为推荐
+请尝试查看以下继任项目或替代项目作为推荐
 
 | 项目                                                    | 作者              | 备注  |
 |-------------------------------------------------------|-----------------|-----|
@@ -38,8 +35,10 @@ JKDrcom已停止活跃开发,请尝试查看以下继任项目或替代项目作
 
 ## 帮助
 
-详见[Github Wiki](https://github.com/Winterreisender/JKDrcom/wiki)
+- [用户指南](https://github.com/Winterreisender/JKDrcom/wiki/%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97)
+- [开发者指南](https://github.com/Winterreisender/JKDrcom/wiki/%E5%BC%80%E5%8F%91%E8%80%85%E6%8C%87%E5%8D%97)
 
+详见[Github Wiki](https://github.com/Winterreisender/JKDrcom/wiki)
 
 ## 引用与参考
 
