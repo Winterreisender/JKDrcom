@@ -20,8 +20,8 @@ object Constants {
     const val AppHomepage    = "https://github.com/Winterreisender/JKDrcom"
     const val AppFeedback    = "https://github.com/Winterreisender/JKDrcom/discussions"
     const val AppName        = "JKDrcom"
-    const val AppVersion     = "v1.1.0-dev"
-    const val AppCodeName    = "Endless August"
+    const val AppVersion     = "v1.1.0"
+    const val AppCodeName    = "向结束的夏天说再见"
     const val AppDescription = "使用Kotlin的Drcom开源实现."
     const val AppCopyright = """
         JKDrcom 是自由软件：你可以再分发之和/或依照由自由软件基金会发布的 GNU Affero 通用公共许可证修改之，仅版本 3 许可证。

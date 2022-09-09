@@ -102,4 +102,6 @@ You should have received a copy of the GNU Affero General Public License along w
 发布该程序是希望它能有用，但是并无保障;甚至连可销售和符合某个特定的目的都不保证。请参看 GNU Affero通用公共许可证，了解详情。  
 你应该随程序获得一份 GNU Affero通用公共许可证的复本。如果没有，请看 <https://www.gnu.org/licenses/>。
 
+本项目的名称、图标与文档等非代码资源遵循[署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)](https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh)。
+
 ![GNU AGPL Logo](https://www.gnu.org/graphics/agplv3-155x51.png)
