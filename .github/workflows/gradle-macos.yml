@@ -22,18 +22,18 @@ jobs:
               with:
                   gradle-version: 7.4.2
 
-            - name: packageReleaseUberJarForCurrentOS with Gradle
+            - name: packageUberJarForCurrentOS with Gradle
               uses: gradle/gradle-build-action@v2
               with:
-                  arguments: packageReleaseUberJarForCurrentOS
+                  arguments: packageUberJarForCurrentOS
               env:
                   USERNAME: ${{ secrets.USERNAME }}
                   TOKEN: ${{ secrets.TOKEN }}
 
-            - name: packageReleaseDmg with Gradle
+            - name: packageDmg with Gradle
               uses: gradle/gradle-build-action@v2
               with:
-                  arguments: packageReleaseDmg
+                  arguments: packageDmg
                 #env:
                 #    USERNAME: ${{ secrets.USERNAME }}
                 #    TOKEN: ${{ secrets.TOKEN }}
