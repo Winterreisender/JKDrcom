@@ -13,9 +13,9 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.6.10"
-    kotlin("plugin.serialization") version "1.6.10"
-    id("org.jetbrains.compose") version "1.1.1"
+    kotlin("jvm") version "1.7.20"
+    kotlin("plugin.serialization") version "1.7.20"
+    id("org.jetbrains.compose") version "1.2.0"
 }
 
 // val stdout = org.gradle.internal.impldep.org.apache.commons.io.output.ByteArrayOutputStream()
@@ -26,7 +26,7 @@ plugins {
 // version = stdout.toString(Charsets.UTF_8).trim()
 
 group = "io.github.winterreisender.jkdrcom"
-version = "1.1.0"
+version = "1.1.1"
 
 repositories {
     google()
@@ -40,7 +40,7 @@ dependencies {
     implementation(compose.desktop.currentOs)
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines:0.19.2")
-    implementation("com.formdev:flatlaf:2.4")
+    implementation("com.formdev:flatlaf:2.5")
 
     implementation("com.github.winterreisender:webviewko:0.4.0")
     implementation("com.github.winterreisender:webviewko-jvm:0.4.0")
