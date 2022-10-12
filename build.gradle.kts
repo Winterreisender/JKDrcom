@@ -82,7 +82,7 @@ compose.desktop {
             //includeAllModules = true
             targetFormats(TargetFormat.Msi, TargetFormat.Deb, TargetFormat.Dmg)
             packageName = "JKDrcom"
-            packageVersion = "1.1.0"
+            packageVersion = "1.1.1"
             copyright = "Copyright 2022 Winterreisender. License under AGPL-3.0-only."
             vendor = "Winterreisender"
             licenseFile.set(project.file("LICENSE"))
@@ -98,7 +98,7 @@ compose.desktop {
                 iconFile.set(project.file("asset/logo.png"))
             }
             macOS {
-                dmgPackageVersion = "1.1.0"
+                dmgPackageVersion = "1.1.1"
                 iconFile.set(project.file("asset/logo.icns"))
             }
 
