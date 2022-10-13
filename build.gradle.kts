@@ -42,8 +42,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines:0.19.2")
     implementation("com.formdev:flatlaf:2.5")
 
-    implementation("com.github.winterreisender:webviewko:0.4.0")
-    implementation("com.github.winterreisender:webviewko-jvm:0.4.0")
+    implementation("com.github.winterreisender:webviewko:0.5.0")
+    implementation("com.github.winterreisender:webviewko-jvm:0.5.0")
 
 
     /*
@@ -102,6 +102,11 @@ compose.desktop {
                 iconFile.set(project.file("asset/logo.icns"))
             }
 
+        }
+
+        buildTypes.release.proguard {
+            isEnabled.set(true)
+            obfuscate.set(false)
         }
     }
 }

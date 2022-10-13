@@ -31,8 +31,6 @@ internal class Test {
 
     @Test fun somefun() {
         FlatLightLaf.setup()
-
-
         val html = """
             <html>
             <p>本项目使用了以下开源软件:</p>
