@@ -16,7 +16,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material3.*
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+// TODO: 使用Material3的DropdownMenu github.com/JetBrains/compose-jb/issues/2284
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Edit
@@ -71,6 +74,7 @@ enum class AppStatus {
 }
 
 /** 空闲状态的界面 */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
 
@@ -87,7 +91,6 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
     // 自动检测到的MAC地址和主机名
     var hostInfos = remember { listOf<HostInfo>() }
 
-    Card(Modifier.fillMaxSize().padding(16.dp)) {
         Column(Modifier.fillMaxSize().padding(16.dp).animateContentSize(), verticalArrangement = Arrangement.SpaceAround, horizontalAlignment = Alignment.CenterHorizontally) {
             OutlinedTextField(username,{username = it}, label = {Text(Constants.UIText.Username)}, isError = !username.matches(Regex("""^\S+${'$'}""")))
 
@@ -173,10 +176,11 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
                 )
             }
         }
-    }
+
 }
 
 /** 连接状态的页面 */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConnectingPage(setStatus: (AppStatus) -> Unit) {
     val scope = rememberCoroutineScope()
@@ -237,7 +241,6 @@ fun ConnectingPage(setStatus: (AppStatus) -> Unit) {
         thread.start()
     }
 
-    Card(Modifier.fillMaxSize().padding(16.dp)) {
         Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.SpaceAround, horizontalAlignment = Alignment.CenterHorizontally) {
 
             // 进度提示
@@ -263,7 +266,6 @@ fun ConnectingPage(setStatus: (AppStatus) -> Unit) {
                 enabled = buttonEnabled
             )
         }
-    }
 
 
 }
@@ -283,6 +285,7 @@ fun AppPage() {
     //}
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 fun main() {
     application {
         LaunchedEffect(Unit) {
@@ -317,11 +320,11 @@ fun main() {
         }
 
         var primaryColorState by remember { mutableStateOf(appConfig.getPrimaryColor().toCompose()) }
-        MaterialTheme(colors = if (isSystemInDarkTheme()) darkColors(primaryColorState) else lightColors(primaryColorState)) {
+        MaterialTheme(colorScheme = if (isSystemInDarkTheme()) darkColorScheme(primaryColorState) else lightColorScheme(primaryColorState)) {
             Window({exitApplication()}, windowState,windowVisible, title = Constants.AppName,icon = painterResource("logo.png"),undecorated = true) {
                 Scaffold(
                     //modifier = Modifier.clip(RoundedCornerShape(5.dp)),
-                    modifier = Modifier.border(1.dp, color = MaterialTheme.colors.primary),
+                    modifier = Modifier.border(1.dp, color = MaterialTheme.colorScheme.primary),
                     topBar = {
                         MMenuBar(Constants.AppName,windowState, onExitClicked = { appConfig.saveToFile(); exitApplication() }) { // modifier = Modifier.height(32.dp).background(Brush.horizontalGradient(listOf(Color(0xFF00B4DB), Color(0xFF0083b0))))
                             MMenu(Constants.MenuText.Function) {

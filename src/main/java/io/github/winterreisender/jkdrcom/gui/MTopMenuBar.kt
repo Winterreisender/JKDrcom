@@ -10,14 +10,17 @@
 
 package io.github.winterreisender.jkdrcom.gui
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.window.WindowDraggableArea
-import androidx.compose.material.*
+import androidx.compose.material3.*
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.materialIcon
 import androidx.compose.material.icons.materialPath
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -64,49 +67,31 @@ object MTopMenuBar {
         windowState: WindowState,
         onIconClicked: ()->Unit = {},
         onExitClicked: ()->Unit = { exitProcess(0)},
-        modifier: Modifier = Modifier.height(32.dp),
+        modifier: Modifier = Modifier,
         menus: @Composable () -> Unit = {}
-    ) = TopAppBar(modifier = modifier) {
-        //val coroutineScope = rememberCoroutineScope()
-        WindowDraggableArea {
-            Row(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
-                Row(horizontalArrangement = Arrangement.Start, verticalAlignment = Alignment.CenterVertically) {
-                    IconButton(
-                        onClick = {
-                            onIconClicked()
-                        },
-                        content = { Icon(Icons.Default.Menu, null) },
-                        modifier = Modifier.size(20.dp)
-                    )
-                    Spacer(Modifier.width(16.dp))
-                    menus()
-                }
-
-                Text(title, maxLines = 1, fontSize = 0.8.em)
-
-                Row(horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically) {
+    ) = WindowDraggableArea {
+            CenterAlignedTopAppBar(
+                modifier = modifier,
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(),
+                title = {
+                    Text(title)
+                },
+                navigationIcon = { Row { menus() } },
+                actions = {
                     IconButton(
                         onClick = { windowState.isMinimized = true },
                         content = { Icon(MinimizeIcon, null) },
-                        modifier = Modifier.size(20.dp)
                     )
-                    Spacer(Modifier.width(16.dp))
                     IconButton(
                         onClick = { windowState.placement = if (windowState.placement == WindowPlacement.Maximized) WindowPlacement.Floating else WindowPlacement.Maximized },
                         content = { Icon(MaximizeIcon, null) },
-                        modifier = Modifier.size(22.dp)
                     )
-                    Spacer(Modifier.width(16.dp))
                     IconButton(
                         onClick = { onExitClicked() },
                         content = { Icon(Icons.Default.Close, null) },
-                        modifier = Modifier.size(21.dp)
                     )
-                    Spacer(Modifier.width(5.dp))
                 }
-            }
-        }
-    }
+            )}
 
     interface MMenuScope : ColumnScope {
         // 关闭Menu
@@ -117,7 +102,7 @@ object MTopMenuBar {
     fun MMenu(text: String, dropdownMenuItems: @Composable MMenuScope.() -> Unit) {
         var menuExpanded by remember { mutableStateOf(false) }
         Column {
-            Text(text, modifier = Modifier.padding(5.dp, 0.dp).clickable { menuExpanded = true; }, maxLines = 1, fontSize = 0.8125.em) // 13px
+            TextButton({ menuExpanded = true; }) {Text(text)}// 13px
             DropdownMenu(expanded = menuExpanded, onDismissRequest = { menuExpanded = false }, focusable = true,
                 //modifier = Modifier.onPointerEvent(PointerEventType.Exit) { menuExpanded = false }
             ) {
@@ -139,6 +124,7 @@ object MTopMenuBar {
             Text(text, maxLines = 1, fontSize = 0.8125.em)
         }
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun MMenuScope.MMenuToggle(text: String, checked :Boolean, onClick: (Boolean) -> Unit) =
         DropdownMenuItem(

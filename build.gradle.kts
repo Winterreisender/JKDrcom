@@ -26,7 +26,7 @@ plugins {
 // version = stdout.toString(Charsets.UTF_8).trim()
 
 group = "io.github.winterreisender.jkdrcom"
-version = "1.1.1"
+version = "1.2.0"
 
 repositories {
     google()
@@ -38,9 +38,10 @@ repositories {
 
 dependencies {
     implementation(compose.desktop.currentOs)
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
+    implementation("org.jetbrains.compose.material3:material3:1.2.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines:0.19.2")
-    implementation("com.formdev:flatlaf:2.5")
+    implementation("com.formdev:flatlaf:2.6")
 
     implementation("com.github.winterreisender:webviewko:0.5.0")
     implementation("com.github.winterreisender:webviewko-jvm:0.5.0")
@@ -82,7 +83,7 @@ compose.desktop {
             //includeAllModules = true
             targetFormats(TargetFormat.Msi, TargetFormat.Deb, TargetFormat.Dmg)
             packageName = "JKDrcom"
-            packageVersion = "1.1.1"
+            packageVersion = "1.2.0"
             copyright = "Copyright 2022 Winterreisender. License under AGPL-3.0-only."
             vendor = "Winterreisender"
             licenseFile.set(project.file("LICENSE"))
@@ -98,7 +99,6 @@ compose.desktop {
                 iconFile.set(project.file("asset/logo.png"))
             }
             macOS {
-                dmgPackageVersion = "1.1.1"
                 iconFile.set(project.file("asset/logo.icns"))
             }
 
