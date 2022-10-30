@@ -17,8 +17,11 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
+import androidx.compose.material.MaterialTheme as Material2Theme
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.darkColors
+import androidx.compose.material.lightColors
 // TODO: 使用Material3的DropdownMenu github.com/JetBrains/compose-jb/issues/2284
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
@@ -55,6 +58,8 @@ import java.net.URI
 import java.util.logging.Logger
 import javax.swing.JColorChooser
 import javax.swing.JOptionPane
+
+
 
 /** 用户配置类 */
 var appConfig = AppConfig.loadFromFile()
@@ -127,6 +132,7 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
                         }
                     )
                 })
+            Material2Theme(colors = if(isSystemInDarkTheme()) darkColors() else lightColors()) {
             // 检测到的MAC地址和主机名
             DropdownMenu(hostMenuExpand, {hostMenuExpand=false}, modifier = Modifier.fillMaxWidth(0.62f)) {
                 hostInfos.forEach {
@@ -141,6 +147,7 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
                         }
                     )
                 }
+            }
             }
 
 
@@ -320,6 +327,7 @@ fun main() {
         }
 
         var primaryColorState by remember { mutableStateOf(appConfig.getPrimaryColor().toCompose()) }
+
         MaterialTheme(colorScheme = if (isSystemInDarkTheme()) darkColorScheme(primaryColorState) else lightColorScheme(primaryColorState)) {
             Window({exitApplication()}, windowState,windowVisible, title = Constants.AppName,icon = painterResource("logo.png"),undecorated = true) {
                 Scaffold(
@@ -427,7 +435,10 @@ fun main() {
                         }
                     },
                     content = {
-                        AppPage()
+                        Column(Modifier.fillMaxSize()) {
+                            Spacer(Modifier.padding(20.dp))
+                            AppPage()
+                        }
                     }
                 )
             }

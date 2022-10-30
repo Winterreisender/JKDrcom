@@ -10,20 +10,25 @@
 
 package io.github.winterreisender.jkdrcom.gui
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.window.WindowDraggableArea
 import androidx.compose.material3.*
+import androidx.compose.material.MaterialTheme as Material2Theme
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.darkColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.materialIcon
 import androidx.compose.material.icons.materialPath
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material.lightColors
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
@@ -76,7 +81,11 @@ object MTopMenuBar {
                 title = {
                     Text(title)
                 },
-                navigationIcon = { Row { menus() } },
+                navigationIcon = { Row {
+                    Material2Theme(colors = if (isSystemInDarkTheme()) darkColors() else lightColors()) {
+                        menus()
+                    }
+                } },
                 actions = {
                     IconButton(
                         onClick = { windowState.isMinimized = true },
@@ -101,8 +110,11 @@ object MTopMenuBar {
     @Composable
     fun MMenu(text: String, dropdownMenuItems: @Composable MMenuScope.() -> Unit) {
         var menuExpanded by remember { mutableStateOf(false) }
+
         Column {
-            TextButton({ menuExpanded = true; }) {Text(text)}// 13px
+            TextButton( { menuExpanded = true; }) {
+                Text(text)
+            }// 13px
             DropdownMenu(expanded = menuExpanded, onDismissRequest = { menuExpanded = false }, focusable = true,
                 //modifier = Modifier.onPointerEvent(PointerEventType.Exit) { menuExpanded = false }
             ) {
