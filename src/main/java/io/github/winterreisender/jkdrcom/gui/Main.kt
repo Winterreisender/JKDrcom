@@ -59,8 +59,6 @@ import java.util.logging.Logger
 import javax.swing.JColorChooser
 import javax.swing.JOptionPane
 
-
-
 /** 用户配置类 */
 var appConfig = AppConfig.loadFromFile()
 
@@ -149,7 +147,6 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
                 }
             }
             }
-
 
             Row(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                 Row(verticalAlignment = Alignment.CenterVertically)  {

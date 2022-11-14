@@ -25,10 +25,7 @@ import androidx.compose.material.icons.materialPath
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.PointerEventType
-import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
@@ -66,6 +63,7 @@ import kotlin.system.exitProcess
 // TODO: 用Compose(或Swing)写一份托盘菜单,避免GBK乱码问题, 仿照https://blog.csdn.net/GOGO_912/article/details/115712634
 
 object MTopMenuBar {
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun WindowScope.MMenuBar(
         title: String,
