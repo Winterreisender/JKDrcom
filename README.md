@@ -45,12 +45,13 @@ JKDrcom已停止活跃开发,详见[Discussions#5](https://github.com/Winterreis
 
 | 软件                                                                                        | 许可                                                                                               |
 |-------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
-| [jlu-drcom-java](https://github.com/YouthLin/jlu-drcom-client/tree/master/jlu-drcom-java) | [AGPL-3.0-only](https://github.com/youthlin/jlu-drcom-client/blob/master/jlu-drcom-java/LICENSE) |
-| [Jetpack Compose Desktop](https://github.com/JetBrains/compose-jb/)                       | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                                   |
+| [CSSBox](https://cssbox.sourceforge.net/)                                                 | [LGPL-3.0-only](https://github.com/radkovo/CSSBox/blob/master/LICENSE)                           |
 | [FlatLaf](https://www.formdev.com/flatlaf/)                                               | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                                   |
-| [webviewko](https://github.com/Winterreisender/webviewko)                                 | [Apache-2.0](https://github.com/Winterreisender/webviewko/blob/master/LICENSE)                   |
-| [Kotlin](https://kotlinlang.org/)                                                         | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                                   |
 | Java ([GraalVM](https://www.graalvm.org/),[Eclipse Adoptium](https://adoptium.net/))      | [GPL-2.0-only WITH Classpath-exception-2.0](https://openjdk.java.net/legal/gplv2+ce.html)        |
+| [Jetpack Compose Desktop](https://github.com/JetBrains/compose-jb/)                       | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                                   |
+| [jlu-drcom-java](https://github.com/YouthLin/jlu-drcom-client/tree/master/jlu-drcom-java) | [AGPL-3.0-only](https://github.com/youthlin/jlu-drcom-client/blob/master/jlu-drcom-java/LICENSE) |
+| [Kotlin](https://kotlinlang.org/)                                                         | [Apache-2.0](https://github.com/radkovo/CSSBox/blob/master/LICENSE)                              |
+| [webviewko](https://github.com/Winterreisender/webviewko)                                 | [Apache-2.0](https://github.com/Winterreisender/webviewko/blob/master/LICENSE)                   |
 
 ---
 

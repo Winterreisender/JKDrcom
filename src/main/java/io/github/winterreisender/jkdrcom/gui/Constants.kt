@@ -28,7 +28,7 @@ object Constants {
         发布 JKDrcom 是希望它能有用，但是并无保障;甚至连可销售和符合某个特定的目的都不保证。请参看 GNU Affero 通用公共许可证，了解详情。
         你应该随程序获得一份 GNU Affero 通用公共许可证的复本。如果没有，请看 <https://www.gnu.org/licenses/>。
     """
-    const val AppCredits     = "JKDrcom离不开jlu-drcom-java以及其他开源软件."
+    const val AppCredits     = "JKDrcom离不开jlu-drcom-java以及其他开源软件. 详见主页."
 
     // 解决空格的(最佳?)实践: 用const val定义,用AppAbout.trimIndent()调用
     const val AppAbout = """

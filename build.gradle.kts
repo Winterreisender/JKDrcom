@@ -43,9 +43,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines:0.19.2")
     implementation("com.formdev:flatlaf:2.6")
-
-    implementation("com.github.winterreisender:webviewko:0.5.0")
-    implementation("com.github.winterreisender:webviewko-jvm:0.5.0")
+    implementation("net.sf.cssbox:cssbox:5.0.0")
     /*
     implementation(fileTree(mapOf(
         "dir" to "src/libs",
@@ -109,3 +107,4 @@ compose.desktop {
         }
     }
 }
+

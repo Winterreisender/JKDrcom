@@ -17,16 +17,25 @@ import java.net.URI
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 import javax.swing.*
+import javax.swing.Timer
 
-import com.github.winterreisender.webviewko.WebviewKo
+import cz.vutbr.web.css.MediaSpec
+import org.fit.cssbox.awt.BrowserCanvas
+import org.fit.cssbox.css.CSSNorm
+import org.fit.cssbox.css.DOMAnalyzer
+import org.fit.cssbox.io.DefaultDOMSource
+import org.fit.cssbox.io.DefaultDocumentSource
+import org.fit.cssbox.io.DocumentSource
+import java.awt.event.MouseEvent
+import java.awt.event.MouseListener
+import java.awt.event.WindowAdapter
+import java.awt.event.WindowEvent
+import java.io.BufferedInputStream
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.*
 
 object Utils {
-    /** 该系统是否为Win32平台 */
-    private val isWin32 :Boolean by lazy {
-        System.getProperty("os.name").lowercase(Locale.getDefault()).contains("windows")
-    }
-
     /**
      * 在窗口中显示校园网之窗
      *
@@ -37,56 +46,74 @@ object Utils {
      * @author Winterreisender
      * */
     fun showNetWindow(url :String = Constants.SchoolNetWindowURL, closeAfterSecs :Int = 0) {
-        val task = {
-            try {
-                WebviewKo(1).run {
-                    val scales = GraphicsEnvironment.getLocalGraphicsEnvironment().defaultScreenDevice.defaultConfiguration.defaultTransform
-                    title("JKDrcom Net Window")
-                    size((592 * scales.scaleX).toInt(), (455 * scales.scaleY).toInt())
-
-                    if (closeAfterSecs > 0) {
-                        init(
-                            """
-                             (function _() {
-                                var timer = setTimeout( () => { window.closeWebview() }, ${closeAfterSecs * 1000} );
-                                document.onclick = ()=>{clearTimeout(timer);};
-                             })()
-                        """.trimIndent()
-                        )
-                        bind("closeWebview") {
-                            terminate()
-                            ""
-                        }
-                    }
-
-                    navigate(url)
-                    show()
-                }
-            } catch (e :Exception) {
-                e.printStackTrace()
-                SwingUtilities.invokeLater {
-                    if(e.message == "Failed to create webview" && isWin32) {
-                        optionBox(mapOf(
-                            "前往下载" to {Desktop.getDesktop().browse(URI("https://developer.microsoft.com/zh-cn/microsoft-edge/webview2"))},
-                            "在浏览器中打开" to {openNetWindow()},
-                            "取消" to {}
-                        ),"创建WebviewKo失败,无法在窗口中显示校园网之窗\r\n 一种可能是您需要安装 Microsoft Edge WebView2, 请到 https://developer.microsoft.com/zh-cn/microsoft-edge/webview2 下载","创建WebviewKo失败")
-                    }else {
-                        msgBox("${e.message}","Error",JOptionPane.WARNING_MESSAGE)
-                    }
-                }
+        val url = URL("http://login.jlu.edu.cn/notice.php");
+        val conn = (url.openConnection() as HttpURLConnection).apply {
+            addRequestProperty("Accept-Charset", "UTF-8;");
+        }
+        val redirected = BufferedInputStream(conn.inputStream)
+            .readBytes().let{String(it)}
+            .let{
+                """<meta http-equiv="Refresh" content="0;URL=(\S+)">""".toRegex(RegexOption.IGNORE_CASE)
+                    .find(it)
+                    ?.groupValues?.get(1)!!
+            }
+        //Open the network connection
+        val docSource: DocumentSource = DefaultDocumentSource(redirected)
+        //Parse the input document
+        val doc = DefaultDOMSource(docSource).parse()
+        val da = DOMAnalyzer(doc, docSource.url).apply {
+            attributesToStyles() //convert the HTML presentation attributes to inline styles
+            addStyleSheet(null, CSSNorm.stdStyleSheet(), DOMAnalyzer.Origin.AGENT) //use the standard style sheet
+            addStyleSheet(null, CSSNorm.userStyleSheet(), DOMAnalyzer.Origin.AGENT) //use the additional style sheet
+            addStyleSheet(null, CSSNorm.formsStyleSheet(), DOMAnalyzer.Origin.AGENT) //(optional) use the forms style sheet
+            getStyleSheets() //load the author style sheets
+            //specify some media feature values
+            mediaSpec = MediaSpec("screen").apply {
+                setDimensions(800f, 600f) //set the visible area size in pixels
+                setDeviceDimensions(800f, 600f) //set the display size in pixels
             }
         }
 
-        if(isWin32) {
-            Thread(task).run {
-                uncaughtExceptionHandler = Thread.UncaughtExceptionHandler {t,e -> println("$t $e") }
-                start()
-            }
-        }else{
-            task()
-        }
+        val browser = BrowserCanvas(da.root, da, url)
+        val scales = GraphicsEnvironment.getLocalGraphicsEnvironment().defaultScreenDevice.defaultConfiguration.defaultTransform
+        val windowSize = Dimension((600 * scales.scaleX).toInt(),(458 * scales.scaleY).toInt())
+        browser.createLayout(org.fit.cssbox.layout.Dimension(windowSize.width.toFloat(),windowSize.height.toFloat()))
 
+        JFrame().apply {
+            title = Constants.MenuText.Function_SchoolNetWindow
+            defaultCloseOperation = JFrame.DISPOSE_ON_CLOSE;
+            addWindowListener(object : WindowAdapter() {
+                override fun windowClosing(e : WindowEvent) {
+                    super.windowClosed(e)
+                    docSource.close()
+                }
+                override fun windowOpened(e: WindowEvent?) {
+                    super.windowOpened(e)
+                    if(closeAfterSecs > 0)
+                        Timer(closeAfterSecs*1000) {
+                            println("timeout")
+                            dispose()
+                            (it.source as Timer).stop()
+                        }.start()
+                }
+            })
+            addMouseListener(object: MouseListener {
+                override fun mouseClicked(e: MouseEvent?) {
+                    openNetWindow()
+                    dispose()
+                }
+                override fun mousePressed(e: MouseEvent?) {}
+                override fun mouseReleased(e: MouseEvent?) {}
+                override fun mouseEntered(e: MouseEvent?) {}
+                override fun mouseExited(e: MouseEvent?) {}
+            })
+
+            JPanel().apply {
+                browser.let(::add)
+            }.also(::add)
+            size = Dimension(windowSize.width ,windowSize.height)
+            isVisible = true
+        }
     }
 
     /** 在浏览器中打开校园窗 */

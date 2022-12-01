@@ -17,12 +17,16 @@ import java.awt.Desktop
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.net.URI
-import javax.swing.*
+import javax.swing.JLabel
+import javax.swing.JOptionPane
 import kotlin.test.Test
 
+
 internal class Test {
+
     @Test fun netWindow() {
         Utils.showNetWindow(closeAfterSecs = 5)
+        Thread.sleep(50000L)
     }
 
     @Test fun hostInfo() {
