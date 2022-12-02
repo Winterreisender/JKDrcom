@@ -25,7 +25,7 @@ import kotlin.test.Test
 internal class Test {
 
     @Test fun netWindow() {
-        Utils.showNetWindow(closeAfterSecs = 5)
+        Utils.showNetWindow(closeAfterSecs = 50)
         Thread.sleep(50000L)
     }
 

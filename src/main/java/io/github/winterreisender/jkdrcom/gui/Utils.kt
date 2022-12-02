@@ -60,6 +60,8 @@ object Utils {
         //Open the network connection
         val docSource: DocumentSource = DefaultDocumentSource(redirected)
         //Parse the input document
+        val windowSize = Dimension(608,454)
+
         val doc = DefaultDOMSource(docSource).parse()
         val da = DOMAnalyzer(doc, docSource.url).apply {
             attributesToStyles() //convert the HTML presentation attributes to inline styles
@@ -69,15 +71,14 @@ object Utils {
             getStyleSheets() //load the author style sheets
             //specify some media feature values
             mediaSpec = MediaSpec("screen").apply {
-                setDimensions(800f, 600f) //set the visible area size in pixels
-                setDeviceDimensions(800f, 600f) //set the display size in pixels
+                setDimensions(windowSize.width.toFloat(), windowSize.height.toFloat()) //set the visible area size in pixels
+                setDeviceDimensions(windowSize.width.toFloat(), windowSize.height.toFloat()) //set the display size in pixels
             }
         }
 
         val browser = BrowserCanvas(da.root, da, url)
-        val scales = GraphicsEnvironment.getLocalGraphicsEnvironment().defaultScreenDevice.defaultConfiguration.defaultTransform
-        val windowSize = Dimension((600 * scales.scaleX).toInt(),(458 * scales.scaleY).toInt())
         browser.createLayout(org.fit.cssbox.layout.Dimension(windowSize.width.toFloat(),windowSize.height.toFloat()))
+
 
         JFrame().apply {
             title = Constants.MenuText.Function_SchoolNetWindow
@@ -109,7 +110,8 @@ object Utils {
             })
 
             JPanel().apply {
-                browser.let(::add)
+                layout = BorderLayout()
+                add(browser,BorderLayout.WEST)
             }.also(::add)
             size = Dimension(windowSize.width ,windowSize.height)
             isVisible = true
