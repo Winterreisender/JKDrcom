@@ -29,10 +29,12 @@ group = "io.github.winterreisender.jkdrcom"
 version = "1.2.0-dev"
 
 repositories {
+    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+    maven("https://maven.aliyun.com/repository/google")
+    maven("https://maven.aliyun.com/repository/public")
     google()
     mavenCentral()
     mavenLocal()
-    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     maven("https://gitlab.com/api/v4/projects/38224197/packages/maven")
 }
 

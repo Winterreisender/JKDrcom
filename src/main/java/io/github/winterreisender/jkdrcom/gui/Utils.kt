@@ -36,6 +36,83 @@ import java.net.URL
 import java.util.*
 
 object Utils {
+
+    /* 用Compose重构太耗时间了
+    * @Composable fun SchoolNetWindow(url :String = Constants.SchoolNetWindowURL, closeAfterSecs :Int = 0) {
+        val url = URL(url)
+        val windowSize = Dimension(608,454)
+        val windowState = rememberWindowState(size = DpSize(windowSize.width.dp,windowSize.height.dp))
+        var windowOpened by remember { mutableStateOf(true) }
+        Window({}, windowState,windowOpened,title=Constants.MenuText.Function_SchoolNetWindow,icon = painterResource("logo.svg")) {
+            val scope = rememberCoroutineScope()
+            var da by remember { mutableStateOf<DOMAnalyzer?>(null)}
+
+            if(closeAfterSecs > 0)
+            LaunchedEffect(Unit) {
+                scope.launch {
+                    delay(closeAfterSecs*1000L)
+                    windowOpened = false
+                }
+            }
+
+            LaunchedEffect(Unit) {
+                val conn = ( withContext(Dispatchers.IO) {
+                    url.openConnection()
+                } as HttpURLConnection).apply {
+                    addRequestProperty("Accept-Charset", "UTF-8;")
+                }
+                val redirected = BufferedInputStream(conn.inputStream)
+                    .readBytes().let{String(it)}
+                    .let{
+                        """<meta http-equiv="Refresh" content="0;URL=(\S+)">""".toRegex(RegexOption.IGNORE_CASE)
+                            .find(it)
+                            ?.groupValues?.get(1)!!
+                    }
+                //Open the network connection
+                val docSource: DocumentSource = DefaultDocumentSource(redirected)
+                //Parse the input document
+
+                val doc = DefaultDOMSource(docSource).parse()
+                da = DOMAnalyzer(doc, docSource.url).apply {
+                    attributesToStyles() //convert the HTML presentation attributes to inline styles
+                    addStyleSheet(null, CSSNorm.stdStyleSheet(), DOMAnalyzer.Origin.AGENT) //use the standard style sheet
+                    addStyleSheet(null, CSSNorm.userStyleSheet(), DOMAnalyzer.Origin.AGENT) //use the additional style sheet
+                    addStyleSheet(null, CSSNorm.formsStyleSheet(), DOMAnalyzer.Origin.AGENT) //(optional) use the forms style sheet
+                    getStyleSheets() //load the author style sheets
+                    //specify some media feature values
+                    mediaSpec = MediaSpec("screen").apply {
+                        setDimensions(windowSize.width.toFloat(), windowSize.height.toFloat()) //set the visible area size in pixels
+                        setDeviceDimensions(windowSize.width.toFloat(), windowSize.height.toFloat()) //set the display size in pixels
+                    }
+                }
+            }
+
+            if(da != null)
+            SwingPanel(
+                modifier = Modifier.size(windowSize.width.dp,windowSize.height.dp),
+                factory = {
+                    JPanel().apply {
+                        BrowserCanvas(da!!.root, da!!, url).also {
+                            it.createLayout(org.fit.cssbox.layout.Dimension(windowSize.width.toFloat(),windowSize.height.toFloat()))
+                            add(it)
+                        }
+                        addMouseListener(object: MouseListener{
+                            override fun mouseClicked(e: MouseEvent?) {
+                                openNetWindow()
+                                windowOpened = false
+                            }
+                            override fun mousePressed(e: MouseEvent?) {}
+                            override fun mouseReleased(e: MouseEvent?) {}
+                            override fun mouseEntered(e: MouseEvent?) {}
+                            override fun mouseExited(e: MouseEvent?) {}
+                        })
+                    }
+                }
+            )
+        }
+    }
+    * */
+
     /**
      * 在窗口中显示校园网之窗
      *
@@ -48,7 +125,7 @@ object Utils {
     fun showNetWindow(url :String = Constants.SchoolNetWindowURL, closeAfterSecs :Int = 0) {
         val url = URL("http://login.jlu.edu.cn/notice.php");
         val conn = (url.openConnection() as HttpURLConnection).apply {
-            addRequestProperty("Accept-Charset", "UTF-8;");
+            addRequestProperty("Accept-Charset", "UTF-8;"); // TODO: 阻塞UI
         }
         val redirected = BufferedInputStream(conn.inputStream)
             .readBytes().let{String(it)}
@@ -82,7 +159,10 @@ object Utils {
 
         JFrame().apply {
             title = Constants.MenuText.Function_SchoolNetWindow
-            defaultCloseOperation = JFrame.DISPOSE_ON_CLOSE;
+            size = Dimension(windowSize.width ,windowSize.height)
+
+            iconImage = toolkit.getImage(object {}.javaClass.getResource("/logo.png")!!)
+            defaultCloseOperation = JFrame.DISPOSE_ON_CLOSE
             addWindowListener(object : WindowAdapter() {
                 override fun windowClosing(e : WindowEvent) {
                     super.windowClosed(e)
@@ -92,7 +172,6 @@ object Utils {
                     super.windowOpened(e)
                     if(closeAfterSecs > 0)
                         Timer(closeAfterSecs*1000) {
-                            println("timeout")
                             dispose()
                             (it.source as Timer).stop()
                         }.start()
@@ -113,7 +192,7 @@ object Utils {
                 layout = BorderLayout()
                 add(browser,BorderLayout.WEST)
             }.also(::add)
-            size = Dimension(windowSize.width ,windowSize.height)
+
             isVisible = true
         }
     }

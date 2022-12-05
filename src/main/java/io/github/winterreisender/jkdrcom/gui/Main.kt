@@ -307,7 +307,7 @@ fun main() {
         setWindowVisible = {windowVisible = it}  //状态提升到全局
         trayState = rememberTrayState()
 
-        Tray(painterResource("logo.png"), trayState, onAction = {windowVisible=true}) {
+        Tray(painterResource("logo.svg"), trayState, onAction = {windowVisible=true}) {
             if(!windowVisible)
                 Item(Constants.MenuText.Tray_Show) {
                     windowVisible = true
@@ -326,7 +326,7 @@ fun main() {
         var primaryColorState by remember { mutableStateOf(appConfig.getPrimaryColor().toCompose()) }
 
         MaterialTheme(colorScheme = if (isSystemInDarkTheme()) darkColorScheme(primaryColorState) else lightColorScheme(primaryColorState)) {
-            Window({exitApplication()}, windowState,windowVisible, title = Constants.AppName,icon = painterResource("logo.png"),undecorated = true) {
+            Window({exitApplication()}, windowState,windowVisible, title = Constants.AppName,icon = painterResource("logo.svg"),undecorated = true) {
                 Scaffold(
                     //modifier = Modifier.clip(RoundedCornerShape(5.dp)),
                     modifier = Modifier.border(1.dp, color = MaterialTheme.colorScheme.primary),
