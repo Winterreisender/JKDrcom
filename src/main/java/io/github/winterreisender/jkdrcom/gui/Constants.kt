@@ -104,5 +104,6 @@ object Constants {
     const val SchoolNetInfoURL   = "http://10.100.61.3/"
     /** JLU.TEST登录URL,第一个%s为用户名,第二个为密码 */
     const val JluTestLoginURL    = "https://net.jlu.edu.cn/login?DDDDD=%s&upass=%s&R1=0&R2=&R3=0&R6=1&para=00&0MKKey=123456&buttonClicked=&redirect_url=&err_flag=&username=&password=&user=&cmd=&Login=&v6ip="
-
+    const val MinWindowSizeX = 440
+    const val MinWindowSizeY = 480
 }

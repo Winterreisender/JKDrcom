@@ -54,6 +54,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.skiko.SystemTheme
 import org.jetbrains.skiko.currentSystemTheme
 import java.awt.Desktop
+import java.awt.Dimension
 import java.net.URI
 import java.util.logging.Logger
 import javax.swing.JColorChooser
@@ -327,6 +328,7 @@ fun main() {
 
         MaterialTheme(colorScheme = if (isSystemInDarkTheme()) darkColorScheme(primaryColorState) else lightColorScheme(primaryColorState)) {
             Window({exitApplication()}, windowState,windowVisible, title = Constants.AppName,icon = painterResource("logo.svg"),undecorated = true) {
+                window.minimumSize = Dimension(Constants.MinWindowSizeX,Constants.MinWindowSizeY)
                 Scaffold(
                     //modifier = Modifier.clip(RoundedCornerShape(5.dp)),
                     modifier = Modifier.border(1.dp, color = MaterialTheme.colorScheme.primary),
