@@ -6,7 +6,7 @@
 ![platforms](https://img.shields.io/badge/platform-windows%20%7C%20linux%20%7C%20macos-blue)
 ![license](https://img.shields.io/github/license/Winterreisender/JKDrcom?color=663366)
 
-![status](https://img.shields.io/badge/status-graduated-green)
+![status](https://img.shields.io/badge/status-sunsetting-green)
 ![Gradle CI Linux](https://github.com/Winterreisender/JKDrcom/actions/workflows/gradle-linux.yml/badge.svg)
 ![GitHub last commit](https://img.shields.io/github/last-commit/Winterreisender/JKDrcom)
 
