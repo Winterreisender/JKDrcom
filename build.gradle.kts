@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm") version "1.7.20"
     kotlin("plugin.serialization") version "1.7.20"
-    id("org.jetbrains.compose") version "1.2.1"
+    id("org.jetbrains.compose") version "1.2.2"
 }
 
 // val stdout = org.gradle.internal.impldep.org.apache.commons.io.output.ByteArrayOutputStream()
@@ -36,22 +36,20 @@ repositories {
     mavenCentral()
     mavenLocal()
     maven("https://gitlab.com/api/v4/projects/38224197/packages/maven")
+    maven {
+        url = uri("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        name = "Compose for Desktop DEV"
+    }
 }
 
 dependencies {
     implementation(compose.desktop.currentOs)
-    implementation("org.jetbrains.compose.material3:material3:1.2.1")
-    implementation("org.jetbrains.compose.material3:material3-desktop:1.2.1")
+    implementation("org.jetbrains.compose.material3:material3:1.2.2")
+    implementation("org.jetbrains.compose.material3:material3-desktop:1.2.2")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines:0.19.2")
     implementation("com.formdev:flatlaf:2.6")
     implementation("net.sf.cssbox:cssbox:5.0.0")
-    /*
-    implementation(fileTree(mapOf(
-        "dir" to "src/libs",
-        "include" to listOf("*.jar")
-    )))
-    */
     testImplementation(kotlin("test"))
 }
 
