@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm") version "1.7.20"
     kotlin("plugin.serialization") version "1.7.20"
-    id("org.jetbrains.compose") version "1.2.2"
+    id("org.jetbrains.compose") version "1.3.0"
 }
 
 // val stdout = org.gradle.internal.impldep.org.apache.commons.io.output.ByteArrayOutputStream()
@@ -44,8 +44,8 @@ repositories {
 
 dependencies {
     implementation(compose.desktop.currentOs)
-    implementation("org.jetbrains.compose.material3:material3:1.2.2")
-    implementation("org.jetbrains.compose.material3:material3-desktop:1.2.2")
+    implementation("org.jetbrains.compose.material3:material3:1.3.0")
+    implementation("org.jetbrains.compose.material3:material3-desktop:1.3.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines:0.19.2")
     implementation("com.formdev:flatlaf:2.6")

@@ -10,19 +10,13 @@
 
 package io.github.winterreisender.jkdrcom.gui
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.window.WindowDraggableArea
 import androidx.compose.material3.*
-import androidx.compose.material.MaterialTheme as Material2Theme
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.darkColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.materialIcon
 import androidx.compose.material.icons.materialPath
-import androidx.compose.material.lightColors
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -80,9 +74,7 @@ object MTopMenuBar {
                     Text(title)
                 },
                 navigationIcon = { Row {
-                    Material2Theme(colors = if (isSystemInDarkTheme()) darkColors() else lightColors()) {
                         menus()
-                    }
                 } },
                 actions = {
                     IconButton(
@@ -128,25 +120,22 @@ object MTopMenuBar {
     @Composable
     fun MMenuScope.MMenuItem(text: String, onClick: () -> Unit) =
         DropdownMenuItem(
-            onClick = { collapseMenu(); onClick();  },
+            text = { Text(text, maxLines = 1, fontSize = 0.8125.em) },
+                    onClick = { collapseMenu(); onClick();  },
             modifier = Modifier.height(28.dp)
-        ) {
-            Text(text, maxLines = 1, fontSize = 0.8125.em)
-        }
+        )
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun MMenuScope.MMenuToggle(text: String, checked :Boolean, onClick: (Boolean) -> Unit) =
         DropdownMenuItem(
             onClick = {  },
-            modifier = Modifier.height(28.dp)
-        ) {
-            Row(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+            modifier = Modifier.height(28.dp),
+            text = {Row(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
                 Text(text, maxLines = 1, fontSize = 0.8125.em)
                 Checkbox(checked,onClick, modifier = Modifier.padding(0.dp).size(14.dp))
-            }
-
-        }
+            }}
+        )
 
 
     interface MSubmenuScope : RowScope {
@@ -158,9 +147,9 @@ object MTopMenuBar {
     @Composable
     fun MMenuScope.MSubMenu(text: String, dropdownMenuItems: @Composable MSubmenuScope.() -> Unit) {
         var menuExpanded by remember { mutableStateOf(false) }
-        DropdownMenuItem(onClick = { menuExpanded = true },modifier = Modifier.height(28.dp)
+        DropdownMenuItem(onClick = { menuExpanded = true },modifier = Modifier.height(28.dp),
             //.onPointerEvent(PointerEventType.Enter) { menuExpanded = true }
-        ) {
+            text = {
             Row(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
                 Text(text, maxLines = 1, fontSize = 0.8125.em)
                 Icon(Icons.Default.KeyboardArrowRight, contentDescription = null)
@@ -177,41 +166,43 @@ object MTopMenuBar {
                 }
             }
         }
+        )
     }
 
     //@OptIn(ExperimentalComposeUiApi::class)
     @Composable
     fun MSubmenuScope.MSubMenu(text: String, dropdownMenuItems: @Composable MSubmenuScope.() -> Unit) {
         var menuExpanded by remember { mutableStateOf(false) }
-        DropdownMenuItem(onClick = { menuExpanded = true },modifier = Modifier.height(28.dp)
+        DropdownMenuItem(onClick = { menuExpanded = true },modifier = Modifier.height(28.dp),
             //.onPointerEvent(PointerEventType.Enter) { menuExpanded = true }
-        ) {
-            Row(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
-                Text(text, maxLines = 1, fontSize = 0.8125.em)
-                Icon(Icons.Default.KeyboardArrowRight, contentDescription = null, modifier = Modifier.fillMaxHeight())
-            }
-            Row {
-                DropdownMenu(expanded = menuExpanded, onDismissRequest = { menuExpanded = false }, focusable = true, offset = DpOffset(10.dp, (-10).dp)
-                    //modifier = Modifier.onPointerEvent(PointerEventType.Exit) { menuExpanded = false }
-                ) {
-                    object : MSubmenuScope, RowScope by this@Row {
-                        override fun collapseMenu() {
-                            this@MSubMenu.collapseMenu()
-                        }
-                    }.dropdownMenuItems()
+            text = {
+                Row(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+                    Text(text, maxLines = 1, fontSize = 0.8125.em)
+                    Icon(Icons.Default.KeyboardArrowRight, contentDescription = null, modifier = Modifier.fillMaxHeight())
+                }
+                Row {
+                    DropdownMenu(
+                        expanded = menuExpanded, onDismissRequest = { menuExpanded = false }, focusable = true, offset = DpOffset(10.dp, (-10).dp)
+                        //modifier = Modifier.onPointerEvent(PointerEventType.Exit) { menuExpanded = false }
+                    ) {
+                        object : MSubmenuScope, RowScope by this@Row {
+                            override fun collapseMenu() {
+                                this@MSubMenu.collapseMenu()
+                            }
+                        }.dropdownMenuItems()
+                    }
                 }
             }
-        }
+        )
     }
 
     @Composable
     fun MSubmenuScope.MMenuItem(text: String, onClick: () -> Unit) =
         DropdownMenuItem(
             onClick = { onClick(); collapseMenu() },
-            modifier = Modifier.height(28.dp)
-        ) {
-            Text(text, maxLines = 1, fontSize = 0.8125.em)
-        }
+            modifier = Modifier.height(28.dp),
+            text = { Text(text, maxLines = 1, fontSize = 0.8125.em) }
+    )
 
 
     /** 窗口右上角最小化按钮的图标 */
