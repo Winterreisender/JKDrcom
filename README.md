@@ -50,7 +50,6 @@ JKDrcom已停止活跃开发,详见[Discussions#5](https://github.com/Winterreis
 | [Jetpack Compose Desktop](https://github.com/JetBrains/compose-jb/)                       | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                                   |
 | [jlu-drcom-java](https://github.com/YouthLin/jlu-drcom-client/tree/master/jlu-drcom-java) | [AGPL-3.0-only](https://github.com/youthlin/jlu-drcom-client/blob/master/jlu-drcom-java/LICENSE) |
 | [Kotlin](https://kotlinlang.org/)                                                         | [Apache-2.0](https://github.com/radkovo/CSSBox/blob/master/LICENSE)                              |
-| [webviewko](https://github.com/Winterreisender/webviewko)                                 | [Apache-2.0](https://github.com/Winterreisender/webviewko/blob/master/LICENSE)                   |
 
 ---
 

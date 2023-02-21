@@ -64,6 +64,8 @@ object Constants {
         const val Function                        = "功能"
         const val Function_SchoolNetWindow        = "校园网之窗"
         const val Function_SchoolNetInfo          = "上网信息窗"
+        const val Function_ServiceHall            = "网络营业厅"
+        const val Function_NetGuide               = "入网指南"
         const val Function_JLUTestLogin           = "登录JLU.TEST"
         const val Function_SetMaxRetry            = "重试次数"
         const val Function_SetMaxRetry_NeedNum    = "请输入1~128的数字"
@@ -100,6 +102,8 @@ object Constants {
     val PwdCryptoKey = byteArrayOf(0x3b, 0x79, 0x40, 0x00, 0x7c, 0x1d, 0x6C, 0x78,0x1E, 0x37,0x33, 0x58, 0x05, 0x3e, 0x11, 0x02) //淦 Java 怎么会有 byte 必须是有符号数这种zz规定啊
     /** 校园网之窗URL */
     const val SchoolNetWindowURL = "http://login.jlu.edu.cn/notice.php"
+    const val ServiceHallURL     = "https://ip.jlu.edu.cn/pay/"
+    const val NetGuideURL        = "http://login.jlu.edu.cn/guide.html"
     /** 校园网信息流量URL */
     const val SchoolNetInfoURL   = "http://10.100.61.3/"
     /** JLU.TEST登录URL,第一个%s为用户名,第二个为密码 */

@@ -22,7 +22,6 @@ import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
-// TODO: 使用Material3的DropdownMenu github.com/JetBrains/compose-jb/issues/2284
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Edit
@@ -347,7 +346,17 @@ fun main() {
                                     Utils.openNetWindow(Constants.SchoolNetInfoURL)
                                 }
 
+                                MMenuItem(Constants.MenuText.Function_ServiceHall) {
+                                    Utils.openNetWindow(Constants.ServiceHallURL)
+                                }
+
+                                MMenuItem(Constants.MenuText.Function_NetGuide) {
+                                    Utils.openNetWindow(Constants.NetGuideURL)
+                                }
+                                Divider()
                                 MMenuItem(Constants.MenuText.Function_JLUTestLogin) {
+                                    if (JOptionPane.showConfirmDialog(ComposeWindow(),"本功能可尝试连接专为移动设备提供的.TEST无线网络.\n是否开始连接向导?") != 0)
+                                        return@MMenuItem
                                     val username = JOptionPane.showInputDialog(ComposeWindow(),"输入用户名") ?: return@MMenuItem
                                     val password = JOptionPane.showInputDialog(ComposeWindow(),"输入密码") ?: return@MMenuItem
 

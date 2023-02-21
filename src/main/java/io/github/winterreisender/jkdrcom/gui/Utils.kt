@@ -125,7 +125,7 @@ object Utils {
     fun showNetWindow(url :String = Constants.SchoolNetWindowURL, closeAfterSecs :Int = 0) {
         val url = URL("http://login.jlu.edu.cn/notice.php");
         val conn = (url.openConnection() as HttpURLConnection).apply {
-            addRequestProperty("Accept-Charset", "UTF-8;"); // TODO: 阻塞UI
+            addRequestProperty("Accept-Charset", "UTF-8;"); // TODO: 避免阻塞UI
         }
         val redirected = BufferedInputStream(conn.inputStream)
             .readBytes().let{String(it)}

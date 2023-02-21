@@ -54,7 +54,7 @@ import kotlin.system.exitProcess
  * @version 0.1.0
  */
 
-// TODO: 用Compose(或Swing)写一份托盘菜单,避免GBK乱码问题, 仿照https://blog.csdn.net/GOGO_912/article/details/115712634
+// TODO: 用Compose(或Swing)写一份托盘菜单,避免GBK乱码问题
 
 object MTopMenuBar {
     @OptIn(ExperimentalMaterial3Api::class)
