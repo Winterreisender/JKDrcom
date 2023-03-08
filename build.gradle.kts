@@ -25,7 +25,7 @@ plugins {
 // version = stdout.toString(Charsets.UTF_8).trim()
 
 group = "io.github.winterreisender.jkdrcom"
-version = "1.2.0-dev"
+version = "1.2.0"
 
 repositories {
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
