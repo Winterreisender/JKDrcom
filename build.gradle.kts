@@ -14,7 +14,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm") version "1.7.20"
     kotlin("plugin.serialization") version "1.7.20"
-    id("org.jetbrains.compose") version "1.3.0"
+    id("org.jetbrains.compose") version "1.3.1"
 }
 
 // val stdout = org.gradle.internal.impldep.org.apache.commons.io.output.ByteArrayOutputStream()
@@ -25,25 +25,21 @@ plugins {
 // version = stdout.toString(Charsets.UTF_8).trim()
 
 group = "io.github.winterreisender.jkdrcom"
-version = "1.2.0"
+version = "1.2.1-dev"
 
 repositories {
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     maven("https://maven.aliyun.com/repository/google")
     maven("https://maven.aliyun.com/repository/public")
     mavenCentral()
-    mavenLocal()
-    maven("https://gitlab.com/api/v4/projects/38224197/packages/maven")
-    maven {
-        url = uri("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-        name = "Compose for Desktop DEV"
-    }
+    //mavenLocal()
+    //maven("https://gitlab.com/api/v4/projects/38224197/packages/maven")
 }
 
 dependencies {
     implementation(compose.desktop.currentOs)
-    implementation("org.jetbrains.compose.material3:material3:1.3.0")
-    implementation("org.jetbrains.compose.material3:material3-desktop:1.3.0")
+    implementation("org.jetbrains.compose.material3:material3:1.3.1")
+    implementation("org.jetbrains.compose.material3:material3-desktop:1.3.1")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines:0.19.2")
     implementation("com.formdev:flatlaf:2.6")
