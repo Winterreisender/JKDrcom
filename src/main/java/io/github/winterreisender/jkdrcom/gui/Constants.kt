@@ -20,7 +20,7 @@ object Constants {
     const val AppHomepage    = "https://github.com/Winterreisender/JKDrcom"
     const val AppFeedback    = "https://github.com/Winterreisender/JKDrcom/discussions"
     const val AppName        = "JKDrcom"
-    const val AppVersion     = "v1.2.0"
+    const val AppVersion     = "v1.2.1"
     const val AppCodeName    = "向结束的夏天说再见"
     const val AppDescription = "使用Kotlin的Drcom开源实现."
     const val AppCopyright = """
@@ -99,7 +99,7 @@ object Constants {
 
     // 3.其他
     /** 加密密码时用到的固定AES密钥 */
-    val PwdCryptoKey = byteArrayOf(0x3b, 0x79, 0x40, 0x00, 0x7c, 0x1d, 0x6C, 0x78,0x1E, 0x37,0x33, 0x58, 0x05, 0x3e, 0x11, 0x02) //淦 Java 怎么会有 byte 必须是有符号数这种zz规定啊
+    val PwdCryptoKey = byteArrayOf(0x3b, 0x79, 0x40, 0x00, 0x7c, 0x1d, 0x6C, 0x78,0x1E, 0x37,0x33, 0x58, 0x05, 0x3e, 0x11, 0x02) //淦怎么会有 byte 必须是有符号数这种zz规定啊
     /** 校园网之窗URL */
     const val SchoolNetWindowURL = "http://login.jlu.edu.cn/notice.php"
     const val ServiceHallURL     = "https://ip.jlu.edu.cn/pay/"
