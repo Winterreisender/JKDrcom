@@ -18,155 +18,35 @@ import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 import javax.swing.*
 import javax.swing.Timer
-
-import cz.vutbr.web.css.MediaSpec
-import org.fit.cssbox.awt.BrowserCanvas
-import org.fit.cssbox.css.CSSNorm
-import org.fit.cssbox.css.DOMAnalyzer
-import org.fit.cssbox.io.DefaultDOMSource
-import org.fit.cssbox.io.DefaultDocumentSource
-import org.fit.cssbox.io.DocumentSource
-import java.awt.event.MouseEvent
-import java.awt.event.MouseListener
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
-import java.io.BufferedInputStream
-import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
+import javax.swing.event.HyperlinkEvent
+import javax.swing.text.html.HTMLEditorKit
+import javax.swing.text.html.StyleSheet
 
 object Utils {
 
-    /* 用Compose重构太耗时间了
-    * @Composable fun SchoolNetWindow(url :String = Constants.SchoolNetWindowURL, closeAfterSecs :Int = 0) {
-        val url = URL(url)
-        val windowSize = Dimension(608,454)
-        val windowState = rememberWindowState(size = DpSize(windowSize.width.dp,windowSize.height.dp))
-        var windowOpened by remember { mutableStateOf(true) }
-        Window({}, windowState,windowOpened,title=Constants.MenuText.Function_SchoolNetWindow,icon = painterResource("logo.svg")) {
-            val scope = rememberCoroutineScope()
-            var da by remember { mutableStateOf<DOMAnalyzer?>(null)}
-
-            if(closeAfterSecs > 0)
-            LaunchedEffect(Unit) {
-                scope.launch {
-                    delay(closeAfterSecs*1000L)
-                    windowOpened = false
-                }
-            }
-
-            LaunchedEffect(Unit) {
-                val conn = ( withContext(Dispatchers.IO) {
-                    url.openConnection()
-                } as HttpURLConnection).apply {
-                    addRequestProperty("Accept-Charset", "UTF-8;")
-                }
-                val redirected = BufferedInputStream(conn.inputStream)
-                    .readBytes().let{String(it)}
-                    .let{
-                        """<meta http-equiv="Refresh" content="0;URL=(\S+)">""".toRegex(RegexOption.IGNORE_CASE)
-                            .find(it)
-                            ?.groupValues?.get(1)!!
-                    }
-                //Open the network connection
-                val docSource: DocumentSource = DefaultDocumentSource(redirected)
-                //Parse the input document
-
-                val doc = DefaultDOMSource(docSource).parse()
-                da = DOMAnalyzer(doc, docSource.url).apply {
-                    attributesToStyles() //convert the HTML presentation attributes to inline styles
-                    addStyleSheet(null, CSSNorm.stdStyleSheet(), DOMAnalyzer.Origin.AGENT) //use the standard style sheet
-                    addStyleSheet(null, CSSNorm.userStyleSheet(), DOMAnalyzer.Origin.AGENT) //use the additional style sheet
-                    addStyleSheet(null, CSSNorm.formsStyleSheet(), DOMAnalyzer.Origin.AGENT) //(optional) use the forms style sheet
-                    getStyleSheets() //load the author style sheets
-                    //specify some media feature values
-                    mediaSpec = MediaSpec("screen").apply {
-                        setDimensions(windowSize.width.toFloat(), windowSize.height.toFloat()) //set the visible area size in pixels
-                        setDeviceDimensions(windowSize.width.toFloat(), windowSize.height.toFloat()) //set the display size in pixels
-                    }
-                }
-            }
-
-            if(da != null)
-            SwingPanel(
-                modifier = Modifier.size(windowSize.width.dp,windowSize.height.dp),
-                factory = {
-                    JPanel().apply {
-                        BrowserCanvas(da!!.root, da!!, url).also {
-                            it.createLayout(org.fit.cssbox.layout.Dimension(windowSize.width.toFloat(),windowSize.height.toFloat()))
-                            add(it)
-                        }
-                        addMouseListener(object: MouseListener{
-                            override fun mouseClicked(e: MouseEvent?) {
-                                openNetWindow()
-                                windowOpened = false
-                            }
-                            override fun mousePressed(e: MouseEvent?) {}
-                            override fun mouseReleased(e: MouseEvent?) {}
-                            override fun mouseEntered(e: MouseEvent?) {}
-                            override fun mouseExited(e: MouseEvent?) {}
-                        })
-                    }
-                }
-            )
-        }
-    }
-    * */
-
     /**
      * 在窗口中显示校园网之窗
-     *
-     * 在Windows下使用线程来实现,在Linux下由于一个Bug,只得阻塞主线程运行。项目依赖WebviewKo只在这里用到
      *
      * @param url 要显示的URL
      * @param closeAfterSecs 在显示后多少秒自动退出
      * @author Winterreisender
      * */
     fun showNetWindow(url :String = Constants.SchoolNetWindowURL, closeAfterSecs :Int = 0) {
-        val url = URL("http://login.jlu.edu.cn/notice.php");
-        val conn = (url.openConnection() as HttpURLConnection).apply {
-            addRequestProperty("Accept-Charset", "UTF-8;"); // TODO: 避免阻塞UI
-        }
-        val redirected = BufferedInputStream(conn.inputStream)
-            .readBytes().let{String(it)}
-            .let{
-                """<meta http-equiv="Refresh" content="0;URL=(\S+)">""".toRegex(RegexOption.IGNORE_CASE)
-                    .find(it)
-                    ?.groupValues?.get(1)!!
-            }
-        //Open the network connection
-        val docSource: DocumentSource = DefaultDocumentSource(redirected)
-        //Parse the input document
-        val windowSize = Dimension(608,454)
-
-        val doc = DefaultDOMSource(docSource).parse()
-        val da = DOMAnalyzer(doc, docSource.url).apply {
-            attributesToStyles() //convert the HTML presentation attributes to inline styles
-            addStyleSheet(null, CSSNorm.stdStyleSheet(), DOMAnalyzer.Origin.AGENT) //use the standard style sheet
-            addStyleSheet(null, CSSNorm.userStyleSheet(), DOMAnalyzer.Origin.AGENT) //use the additional style sheet
-            addStyleSheet(null, CSSNorm.formsStyleSheet(), DOMAnalyzer.Origin.AGENT) //(optional) use the forms style sheet
-            getStyleSheets() //load the author style sheets
-            //specify some media feature values
-            mediaSpec = MediaSpec("screen").apply {
-                setDimensions(windowSize.width.toFloat(), windowSize.height.toFloat()) //set the visible area size in pixels
-                setDeviceDimensions(windowSize.width.toFloat(), windowSize.height.toFloat()) //set the display size in pixels
-            }
-        }
-
-        val browser = BrowserCanvas(da.root, da, url)
-        browser.createLayout(org.fit.cssbox.layout.Dimension(windowSize.width.toFloat(),windowSize.height.toFloat()))
-
-
-        JFrame().apply {
+        // TODO: 处理meta标签的refresh的跳转
+        val minSize = Dimension(Constants.MinWindowSizeX,Constants.MinWindowSizeY)
+        JFrame(Constants.MenuText.Function_SchoolNetWindow).apply {
             title = Constants.MenuText.Function_SchoolNetWindow
-            size = Dimension(windowSize.width ,windowSize.height)
+            minimumSize = minSize
 
             iconImage = toolkit.getImage(object {}.javaClass.getResource("/logo.png")!!)
             defaultCloseOperation = JFrame.DISPOSE_ON_CLOSE
             addWindowListener(object : WindowAdapter() {
                 override fun windowClosing(e : WindowEvent) {
                     super.windowClosed(e)
-                    docSource.close()
                 }
                 override fun windowOpened(e: WindowEvent?) {
                     super.windowOpened(e)
@@ -177,22 +57,29 @@ object Utils {
                         }.start()
                 }
             })
-            addMouseListener(object: MouseListener {
-                override fun mouseClicked(e: MouseEvent?) {
-                    openNetWindow()
-                    dispose()
+
+            JEditorPane().apply {
+                page = URL(url)
+                isEditable = false
+                minimumSize = minSize
+
+                // 处理点击事件
+                addHyperlinkListener {
+                    when(it.eventType) {
+                        HyperlinkEvent.EventType.ACTIVATED -> Desktop.getDesktop().browse(it.url.toURI())
+                        HyperlinkEvent.EventType.ENTERED   -> Unit
+                        HyperlinkEvent.EventType.EXITED    -> Unit
+                    }
                 }
-                override fun mousePressed(e: MouseEvent?) {}
-                override fun mouseReleased(e: MouseEvent?) {}
-                override fun mouseEntered(e: MouseEvent?) {}
-                override fun mouseExited(e: MouseEvent?) {}
-            })
 
-            JPanel().apply {
-                layout = BorderLayout()
-                add(browser,BorderLayout.WEST)
-            }.also(::add)
+                // 调整样式
+                val htmlKit = editorKit as HTMLEditorKit
+                htmlKit.styleSheet.addRule("a {color: white; text-decoration: none;}")
 
+            }.let(contentPane::add)
+
+            pack()
+            validate()
             isVisible = true
         }
     }
