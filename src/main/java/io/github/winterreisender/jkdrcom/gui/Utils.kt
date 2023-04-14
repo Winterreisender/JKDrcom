@@ -12,16 +12,19 @@ package io.github.winterreisender.jkdrcom.gui
 
 import androidx.compose.ui.awt.ComposeWindow
 import androidx.compose.ui.graphics.Color
+import com.formdev.flatlaf.ui.FlatRoundBorder
 import java.awt.*
+import java.awt.event.*
 import java.net.URI
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 import javax.swing.*
 import javax.swing.Timer
-import java.awt.event.WindowAdapter
-import java.awt.event.WindowEvent
+import java.io.BufferedInputStream
+import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
+import java.util.logging.Logger
 import javax.swing.event.HyperlinkEvent
 import javax.swing.text.html.HTMLEditorKit
 import javax.swing.text.html.StyleSheet
@@ -36,7 +39,24 @@ object Utils {
      * @author Winterreisender
      * */
     fun showNetWindow(url :String = Constants.SchoolNetWindowURL, closeAfterSecs :Int = 0) {
-        // TODO: 处理meta标签的refresh的跳转
+
+        fun getRedirectedURL(url :URL): URL {
+            val conn = (url.openConnection() as HttpURLConnection).apply {
+                connectTimeout = 5000
+                addRequestProperty("Accept-Charset", "UTF-8;")
+            }
+            val redirectedURL = BufferedInputStream(conn.inputStream)
+                .readBytes().let{String(it)}
+                .let{
+                    """<meta http-equiv="Refresh" content="0;URL=(\S+)">""".toRegex(RegexOption.IGNORE_CASE)
+                        .find(it)
+                        ?.groupValues?.get(1)!!
+                }
+            return URL(redirectedURL)
+        }
+        val redirectedURL = getRedirectedURL(URL(url))
+        Logger.getLogger("showNetWindow").info("redirectedURL: $redirectedURL")
+
         val minSize = Dimension(Constants.MinWindowSizeX,Constants.MinWindowSizeY)
         JFrame(Constants.MenuText.Function_SchoolNetWindow).apply {
             title = Constants.MenuText.Function_SchoolNetWindow
@@ -44,12 +64,13 @@ object Utils {
 
             iconImage = toolkit.getImage(object {}.javaClass.getResource("/logo.png")!!)
             defaultCloseOperation = JFrame.DISPOSE_ON_CLOSE
+
             addWindowListener(object : WindowAdapter() {
                 override fun windowClosing(e : WindowEvent) {
                     super.windowClosed(e)
                 }
                 override fun windowOpened(e: WindowEvent?) {
-                    super.windowOpened(e)
+                    // 定时关闭
                     if(closeAfterSecs > 0)
                         Timer(closeAfterSecs*1000) {
                             dispose()
@@ -59,7 +80,7 @@ object Utils {
             })
 
             JEditorPane().apply {
-                page = URL(url)
+                page = redirectedURL
                 isEditable = false
                 minimumSize = minSize
 
@@ -74,7 +95,7 @@ object Utils {
 
                 // 调整样式
                 val htmlKit = editorKit as HTMLEditorKit
-                htmlKit.styleSheet.addRule("a {color: white; text-decoration: none;}")
+                htmlKit.styleSheet.addRule("a {color: white; text-decoration: none; font-size: 10px}")
 
             }.let(contentPane::add)
 

@@ -16,7 +16,7 @@ import kotlin.test.Test
 internal class Test {
 
     @Test fun netWindowSwing() {
-        Utils.showNetWindow("http://login.jlu.edu.cn/notice_win.php")
+        Utils.showNetWindow("http://login.jlu.edu.cn/notice.php")
 
         Thread.sleep(50000L)
     }
