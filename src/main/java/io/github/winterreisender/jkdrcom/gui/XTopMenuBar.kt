@@ -56,10 +56,10 @@ import kotlin.system.exitProcess
 
 // TODO: 用Compose(或Swing)写一份托盘菜单,避免GBK乱码问题
 
-object MTopMenuBar {
+object XTopMenuBar {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun WindowScope.MMenuBar(
+    fun WindowScope.XMenuBar(
         title: String,
         windowState: WindowState,
         onIconClicked: ()->Unit = {},
@@ -92,13 +92,13 @@ object MTopMenuBar {
                 }
             )}
 
-    interface MMenuScope : ColumnScope {
+    interface XMenuScope : ColumnScope {
         // 关闭Menu
         fun collapseMenu()
     }
 
     @Composable
-    fun MMenu(text: String, dropdownMenuItems: @Composable MMenuScope.() -> Unit) {
+    fun XMenu(text: String, dropdownMenuItems: @Composable XMenuScope.() -> Unit) {
         var menuExpanded by remember { mutableStateOf(false) }
 
         Column {
@@ -108,7 +108,7 @@ object MTopMenuBar {
             DropdownMenu(expanded = menuExpanded, onDismissRequest = { menuExpanded = false }, focusable = true,
                 //modifier = Modifier.onPointerEvent(PointerEventType.Exit) { menuExpanded = false }
             ) {
-                object : MMenuScope, ColumnScope by this {
+                object : XMenuScope, ColumnScope by this {
                     override fun collapseMenu() {
                         menuExpanded = false
                     }
@@ -118,7 +118,7 @@ object MTopMenuBar {
     }
 
     @Composable
-    fun MMenuScope.MMenuItem(text: String, onClick: () -> Unit) =
+    fun XMenuScope.XMenuItem(text: String, onClick: () -> Unit) =
         DropdownMenuItem(
             text = { Text(text, maxLines = 1, fontSize = 0.8125.em) },
                     onClick = { collapseMenu(); onClick();  },
@@ -127,7 +127,7 @@ object MTopMenuBar {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun MMenuScope.MMenuToggle(text: String, checked :Boolean, onClick: (Boolean) -> Unit) =
+    fun XMenuScope.MMenuToggle(text: String, checked :Boolean, onClick: (Boolean) -> Unit) =
         DropdownMenuItem(
             onClick = {  },
             modifier = Modifier.height(28.dp),
@@ -138,14 +138,14 @@ object MTopMenuBar {
         )
 
 
-    interface MSubmenuScope : RowScope {
+    interface XSubmenuScope : RowScope {
         // 关闭Menu
         fun collapseMenu()
     }
 
     //@OptIn(ExperimentalComposeUiApi::class)
     @Composable
-    fun MMenuScope.MSubMenu(text: String, dropdownMenuItems: @Composable MSubmenuScope.() -> Unit) {
+    fun XMenuScope.XSubMenu(text: String, dropdownMenuItems: @Composable XSubmenuScope.() -> Unit) {
         var menuExpanded by remember { mutableStateOf(false) }
         DropdownMenuItem(onClick = { menuExpanded = true },modifier = Modifier.height(28.dp),
             //.onPointerEvent(PointerEventType.Enter) { menuExpanded = true }
@@ -158,9 +158,9 @@ object MTopMenuBar {
                 DropdownMenu(expanded = menuExpanded, onDismissRequest = { menuExpanded = false }, focusable = true,offset = DpOffset(10.dp, (-10).dp)
                     //modifier = Modifier.onPointerEvent(PointerEventType.Exit) { menuExpanded = false }
                 ) {
-                    object : MSubmenuScope, RowScope by this@Row {
+                    object : XSubmenuScope, RowScope by this@Row {
                         override fun collapseMenu() {
-                            this@MSubMenu.collapseMenu()
+                            this@XSubMenu.collapseMenu()
                         }
                     }.dropdownMenuItems()
                 }
@@ -171,7 +171,7 @@ object MTopMenuBar {
 
     //@OptIn(ExperimentalComposeUiApi::class)
     @Composable
-    fun MSubmenuScope.MSubMenu(text: String, dropdownMenuItems: @Composable MSubmenuScope.() -> Unit) {
+    fun XSubmenuScope.XSubMenu(text: String, dropdownMenuItems: @Composable XSubmenuScope.() -> Unit) {
         var menuExpanded by remember { mutableStateOf(false) }
         DropdownMenuItem(onClick = { menuExpanded = true },modifier = Modifier.height(28.dp),
             //.onPointerEvent(PointerEventType.Enter) { menuExpanded = true }
@@ -185,9 +185,9 @@ object MTopMenuBar {
                         expanded = menuExpanded, onDismissRequest = { menuExpanded = false }, focusable = true, offset = DpOffset(10.dp, (-10).dp)
                         //modifier = Modifier.onPointerEvent(PointerEventType.Exit) { menuExpanded = false }
                     ) {
-                        object : MSubmenuScope, RowScope by this@Row {
+                        object : XSubmenuScope, RowScope by this@Row {
                             override fun collapseMenu() {
-                                this@MSubMenu.collapseMenu()
+                                this@XSubMenu.collapseMenu()
                             }
                         }.dropdownMenuItems()
                     }
@@ -197,7 +197,7 @@ object MTopMenuBar {
     }
 
     @Composable
-    fun MSubmenuScope.MMenuItem(text: String, onClick: () -> Unit) =
+    fun XSubmenuScope.XMenuItem(text: String, onClick: () -> Unit) =
         DropdownMenuItem(
             onClick = { onClick(); collapseMenu() },
             modifier = Modifier.height(28.dp),

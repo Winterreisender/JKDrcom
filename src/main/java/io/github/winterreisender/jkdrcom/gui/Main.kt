@@ -45,9 +45,9 @@ import io.github.winterreisender.jkdrcom.core.util.HostInfo
 import io.github.winterreisender.jkdrcom.core.util.IPUtil
 import io.github.winterreisender.jkdrcom.core.util.JKDCommunication
 import io.github.winterreisender.jkdrcom.core.util.JKDNotification
-import io.github.winterreisender.jkdrcom.gui.MTopMenuBar.MMenu
-import io.github.winterreisender.jkdrcom.gui.MTopMenuBar.MMenuBar
-import io.github.winterreisender.jkdrcom.gui.MTopMenuBar.MMenuItem
+import io.github.winterreisender.jkdrcom.gui.XTopMenuBar.XMenu
+import io.github.winterreisender.jkdrcom.gui.XTopMenuBar.XMenuBar
+import io.github.winterreisender.jkdrcom.gui.XTopMenuBar.XMenuItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.skiko.SystemTheme
@@ -332,9 +332,9 @@ fun main() {
                     //modifier = Modifier.clip(RoundedCornerShape(5.dp)),
                     modifier = Modifier.border(1.dp, color = MaterialTheme.colorScheme.primary),
                     topBar = {
-                        MMenuBar(Constants.AppName,windowState, onExitClicked = { appConfig.saveToFile(); exitApplication() }) { // modifier = Modifier.height(32.dp).background(Brush.horizontalGradient(listOf(Color(0xFF00B4DB), Color(0xFF0083b0))))
-                            MMenu(Constants.MenuText.Function) {
-                                MMenuItem(Constants.MenuText.Function_SchoolNetWindow) {
+                        XMenuBar(Constants.AppName,windowState, onExitClicked = { appConfig.saveToFile(); exitApplication() }) { // modifier = Modifier.height(32.dp).background(Brush.horizontalGradient(listOf(Color(0xFF00B4DB), Color(0xFF0083b0))))
+                            XMenu(Constants.MenuText.Function) {
+                                XMenuItem(Constants.MenuText.Function_SchoolNetWindow) {
                                     when(appConfig.netWindow) {
                                         AppConfig.NetWindowType.WINDOWED -> {Utils.showNetWindow()}
                                         AppConfig.NetWindowType.NONE -> {Utils.showNetWindow()}
@@ -342,34 +342,34 @@ fun main() {
                                     }
                                 }
 
-                                MMenuItem(Constants.MenuText.Function_SchoolNetInfo) {
+                                XMenuItem(Constants.MenuText.Function_SchoolNetInfo) {
                                     Utils.openNetWindow(Constants.SchoolNetInfoURL)
                                 }
 
-                                MMenuItem(Constants.MenuText.Function_ServiceHall) {
+                                XMenuItem(Constants.MenuText.Function_ServiceHall) {
                                     Utils.openNetWindow(Constants.ServiceHallURL)
                                 }
 
-                                MMenuItem(Constants.MenuText.Function_NetGuide) {
+                                XMenuItem(Constants.MenuText.Function_NetGuide) {
                                     Utils.openNetWindow(Constants.NetGuideURL)
                                 }
                                 Divider()
-                                MMenuItem(Constants.MenuText.Function_JLUTestLogin) {
+                                XMenuItem(Constants.MenuText.Function_JLUTestLogin) {
                                     if (JOptionPane.showConfirmDialog(ComposeWindow(),"本功能可尝试连接专为移动设备提供的.TEST无线网络.\n是否开始连接向导?") != 0)
-                                        return@MMenuItem
-                                    val username = JOptionPane.showInputDialog(ComposeWindow(),"输入用户名") ?: return@MMenuItem
-                                    val password = JOptionPane.showInputDialog(ComposeWindow(),"输入密码") ?: return@MMenuItem
+                                        return@XMenuItem
+                                    val username = JOptionPane.showInputDialog(ComposeWindow(),"输入用户名") ?: return@XMenuItem
+                                    val password = JOptionPane.showInputDialog(ComposeWindow(),"输入密码") ?: return@XMenuItem
 
                                     Utils.openNetWindow(String.format(Constants.JluTestLoginURL,username,password))
                                 }
 
-                                MMenuItem(Constants.MenuText.Function_HideWindow) {
+                                XMenuItem(Constants.MenuText.Function_HideWindow) {
                                     windowVisible = false
                                 }
                             }
 
-                            MMenu(Constants.MenuText.Settings) {
-                                MMenuItem(Constants.MenuText.Function_CloseAfterSecs) {
+                            XMenu(Constants.MenuText.Settings) {
+                                XMenuItem(Constants.MenuText.Function_CloseAfterSecs) {
                                     when(val r :Int? = Utils.inputBox(Constants.MenuText.Function_CloseAfterSecs_Text,appConfig.closeAfterSecs.toString()).toIntOrNull()) {
                                         in -1..3600 -> {appConfig.closeAfterSecs = r!!}
                                         else -> {
@@ -377,19 +377,19 @@ fun main() {
                                     }
                                 }
 
-                                MMenuItem(Constants.MenuText.Function_NetWindowType) {
+                                XMenuItem(Constants.MenuText.Function_NetWindowType) {
                                     val windowTypes = AppConfig.NetWindowType.values()
                                     val chosen = Utils.chooseBox(Constants.MenuText.Function_NetWindowType,windowTypes, appConfig.netWindow, title = Constants.MenuText.Function_NetWindowType)
                                     appConfig.netWindow = chosen
                                 }
 
-                                MMenuItem(Constants.MenuText.Function_SetThemeColor) {
-                                    val jColor = JColorChooser.showDialog(ComposeWindow(),Constants.MenuText.Function_SetThemeColor,Constants.DefaultPrimaryColor.toAwt()) ?: return@MMenuItem
+                                XMenuItem(Constants.MenuText.Function_SetThemeColor) {
+                                    val jColor = JColorChooser.showDialog(ComposeWindow(),Constants.MenuText.Function_SetThemeColor,Constants.DefaultPrimaryColor.toAwt()) ?: return@XMenuItem
                                     appConfig.mainColor = Utils.WebColor.from(jColor).toString()
                                     primaryColorState = appConfig.getPrimaryColor().toCompose()
                                 }
 
-                                MMenuItem(Constants.MenuText.Function_SetMaxRetry) {
+                                XMenuItem(Constants.MenuText.Function_SetMaxRetry) {
                                     when(val r :Int? = Utils.inputBox(Constants.MenuText.Function_SetMaxRetry, appConfig.maxRetry.toString()).toIntOrNull()) {
                                         null -> {
                                             Utils.msgBox(Constants.MenuText.Function_SetMaxRetry_NeedNum,Constants.MenuText.Function_SetMaxRetry)}
@@ -401,7 +401,7 @@ fun main() {
 
                                 Divider()
 
-                                MMenuItem(Constants.MenuText.Function_EditConfig) {
+                                XMenuItem(Constants.MenuText.Function_EditConfig) {
                                     try {
                                         Desktop.getDesktop().open(AppConfig.configFile)
                                     } catch (e :Exception) {
@@ -414,29 +414,29 @@ fun main() {
                                     }
                                 }
 
-                                MMenuItem(Constants.MenuText.Function_ResetConfig) {
+                                XMenuItem(Constants.MenuText.Function_ResetConfig) {
                                     appConfig = AppConfig()
                                     Utils.msgBox(Constants.MenuText.Function_ResetConfig_Done + ":\n" + appConfig.toString(),Constants.MenuText.Function_ResetConfig)
                                 }
 
-                                MMenuItem(Constants.MenuText.Function_SaveConfig) {
+                                XMenuItem(Constants.MenuText.Function_SaveConfig) {
                                     val r = runCatching {appConfig.saveToFile()}.fold({Constants.MenuText.Function_SaveConfig_Done},{"${Constants.MenuText.Function_SaveConfig_Failed} $it"})
                                     Utils.msgBox(r,Constants.MenuText.Function_SaveConfig)
                                 }
                             }
 
-                            MMenu(Constants.MenuText.Help) {
-                                MMenuItem(Constants.MenuText.Help_HomePage) {
+                            XMenu(Constants.MenuText.Help) {
+                                XMenuItem(Constants.MenuText.Help_HomePage) {
                                     Desktop.getDesktop().browse(URI(Constants.AppHomepage))
                                 }
-                                MMenuItem(Constants.MenuText.Help_Feedback) {
+                                XMenuItem(Constants.MenuText.Help_Feedback) {
                                     Desktop.getDesktop().browse(URI(Constants.AppFeedback))
                                 }
                                 Divider()
-                                MMenuItem(Constants.MenuText.Help_Credits) {
+                                XMenuItem(Constants.MenuText.Help_Credits) {
                                     Desktop.getDesktop().browse(URI(Constants.MenuText.Help_Credits_URL))
                                 }
-                                MMenuItem(Constants.MenuText.Help_About) {
+                                XMenuItem(Constants.MenuText.Help_About) {
                                     Utils.msgBox(Constants.AppAbout.trimIndent(), Constants.MenuText.Help_About)
                                 }
                             }

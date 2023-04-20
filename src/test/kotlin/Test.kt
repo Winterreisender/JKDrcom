@@ -8,12 +8,34 @@
  * You should have received a copy of the GNU Affero General Public License along with this program. If not, see <https://www.gnu.org/licenses/>
  */
 
+import androidx.compose.material3.*
+import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.application
 import io.github.winterreisender.jkdrcom.core.util.IPUtil
+import io.github.winterreisender.jkdrcom.gui.Constants
 import io.github.winterreisender.jkdrcom.gui.Utils
+import io.github.winterreisender.jkdrcom.gui.Utils.XTabView
+import androidx.compose.foundation.text.selection.SelectionContainer
 import kotlin.test.Test
 
 
 internal class Test {
+
+    // 新的关于页面
+    @Test fun newAboutWindow() {
+        application {
+            Window({}) {
+            XTabView(mapOf(
+                "关于" to {SelectionContainer {
+                    Text(Constants.AppAbout.trimIndent())
+                }},
+                "许可" to {
+
+                }
+            ))
+            }
+        }
+    }
 
     @Test fun netWindowSwing() {
         Utils.showNetWindow("http://login.jlu.edu.cn/notice.php")

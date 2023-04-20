@@ -10,6 +10,11 @@
 
 package io.github.winterreisender.jkdrcom.gui
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
 import androidx.compose.ui.awt.ComposeWindow
 import androidx.compose.ui.graphics.Color
 import com.formdev.flatlaf.ui.FlatRoundBorder
@@ -30,6 +35,29 @@ import javax.swing.text.html.HTMLEditorKit
 import javax.swing.text.html.StyleSheet
 
 object Utils {
+
+    @Composable
+    fun XTabView(tabs: Map<String, @Composable () -> Unit>) {
+        var selectedTabIndex by remember { mutableStateOf(0) }
+
+        Column {
+            TabRow(
+                selectedTabIndex = selectedTabIndex,
+            ) {
+                tabs.keys.forEachIndexed { index, title ->
+                    Tab(
+                        selected = selectedTabIndex == index,
+                        onClick = { selectedTabIndex = index },
+                        text = {
+                            Text(text = title)
+                        }
+                    )
+                }
+            }
+
+            tabs.values.toList()[selectedTabIndex]()
+        }
+    }
 
     /**
      * 在窗口中显示校园网之窗

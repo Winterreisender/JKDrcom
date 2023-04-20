@@ -6,29 +6,19 @@
 ![platforms](https://img.shields.io/badge/platform-windows%20%7C%20linux%20%7C%20macos-blue)
 ![license](https://img.shields.io/github/license/Winterreisender/JKDrcom?color=663366)
 
-![status](https://img.shields.io/badge/status-sunsetting-green)
-![Gradle CI Linux](https://github.com/Winterreisender/JKDrcom/actions/workflows/gradle-linux.yml/badge.svg)
+![status](https://img.shields.io/badge/status-retired-lightgray)
 ![GitHub last commit](https://img.shields.io/github/last-commit/Winterreisender/JKDrcom)
 
 JKDrcom(JLU Kotlin Drcom)是一个从YouthLin的[jlu-drcom-java](https://github.com/YouthLin/jlu-drcom-client/tree/master/jlu-drcom-java)修改而来的第三方开源Drcom客户端实现,抽出了核心的联网功能并用Kotlin重写GUI。
 
 ![screenshot](screenshot.png)
 
-## 参与进来/接手项目
+## 参与进来
 
-JKDrcom已停止活跃开发,详见[Discussions#5](https://github.com/Winterreisender/JKDrcom/discussions/5)
+本项目已停止开发维护。
 
-本项目仍欢迎并感谢任何代码贡献和反馈。
+更多信息详见[Discussions#5](https://github.com/Winterreisender/JKDrcom/discussions/5)。
 
-<!--
-请尝试查看以下项目作为推荐
-
-| 项目                                                    | 作者              | 备注  |
-|-------------------------------------------------------|-----------------|-----|
-| [KJDrcom](https://github.com/AutumnTraveller/KJDrcom) | AutumnTraveller | 虚构的 |
-|                                                       |                 |     |
-
--->
 
 ## 帮助
 
@@ -43,7 +33,6 @@ JKDrcom已停止活跃开发,详见[Discussions#5](https://github.com/Winterreis
 
 | 软件                                                                                        | 许可                                                                                               |
 |-------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
-| [CSSBox](https://cssbox.sourceforge.net/)                                                 | [LGPL-3.0-only](https://github.com/radkovo/CSSBox/blob/master/LICENSE)                           |
 | [FlatLaf](https://www.formdev.com/flatlaf/)                                               | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html)                                   |
 | [Fira Code](https://github.com/tonsky/FiraCode)                                           | [OFL-1.1](https://github.com/tonsky/FiraCode/blob/master/LICENSE)                                |
 | Java ([GraalVM](https://www.graalvm.org/),[Eclipse Adoptium](https://adoptium.net/))      | [GPL-2.0-only WITH Classpath-exception-2.0](https://openjdk.java.net/legal/gplv2+ce.html)        |
@@ -53,7 +42,7 @@ JKDrcom已停止活跃开发,详见[Discussions#5](https://github.com/Winterreis
 
 ---
 
-**_以下为部分原[jlu-drcom-java](https://github.com/YouthLin/jlu-drcom-client/tree/master/jlu-drcom-java)的说明,也请详细阅读并遵守相关行为准则_**
+**_以下为[jlu-drcom-java](https://github.com/YouthLin/jlu-drcom-client/tree/master/jlu-drcom-java)的附加说明,请阅读和遵守_**
 
 <details>
 <summary>展开</summary>
@@ -89,7 +78,7 @@ JKDrcom已停止活跃开发,详见[Discussions#5](https://github.com/Winterreis
 
 ## 版权与许可
 
-Copyright 2022 Winterreisender.  
+Copyright 2022-2023 Winterreisender.  
 Licensed under GNU Affero General Public License Version 3 (**AGPL-3.0-only**).
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, version 3.  
@@ -99,6 +88,8 @@ You should have received a copy of the GNU Affero General Public License along w
 发布该程序是希望它能有用，但是并无保障;甚至连可销售和符合某个特定的目的都不保证。请参看 GNU Affero通用公共许可证，了解详情。  
 你应该随程序获得一份 GNU Affero通用公共许可证的复本。如果没有，请看 <https://www.gnu.org/licenses/>。
 
-本项目的名称、图标与文档等非代码资源遵循[署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)](https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh)。
+本项目的名称、图标、文档以、发布的安装文件以及可执行文件等非代码资源遵循[署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)](https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh)。
+此软件仅用于学习交流使用，请勿用于商业用途，引用本项目的任何代码请注明出处并链接到本页面。
+
 
 ![GNU AGPL Logo](https://www.gnu.org/graphics/agplv3-155x51.png)
