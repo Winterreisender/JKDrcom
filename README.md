@@ -15,10 +15,7 @@ JKDrcom(JLU Kotlin Drcom)是一个从YouthLin的[jlu-drcom-java](https://github.
 
 ## 参与进来
 
-本项目已停止开发维护。
-
-更多信息详见[Discussions#5](https://github.com/Winterreisender/JKDrcom/discussions/5)。
-
+本项目已停止开发维护。 更多信息详见[Issues#6](https://github.com/Winterreisender/JKDrcom/issues/6)。
 
 ## 帮助
 
