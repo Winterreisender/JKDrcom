@@ -8,20 +8,45 @@
  * You should have received a copy of the GNU Affero General Public License along with this program. If not, see <https://www.gnu.org/licenses/>
  */
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.*
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import io.github.winterreisender.jkdrcom.core.util.IPUtil
 import io.github.winterreisender.jkdrcom.gui.Constants
 import io.github.winterreisender.jkdrcom.gui.Utils
-import io.github.winterreisender.jkdrcom.gui.Utils.XTabView
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.runtime.*
 import kotlin.test.Test
 
 
 internal class Test {
 
-    // 新的关于页面
+    // 一个Tab实现
+    @Composable
+    fun XTabView(tabs: Map<String, @Composable () -> Unit>) {
+        var selectedTabIndex by remember { mutableStateOf(0) }
+
+        Column {
+            TabRow(
+                selectedTabIndex = selectedTabIndex,
+            ) {
+                tabs.keys.forEachIndexed { index, title ->
+                    Tab(
+                        selected = selectedTabIndex == index,
+                        onClick = { selectedTabIndex = index },
+                        text = {
+                            Text(text = title)
+                        }
+                    )
+                }
+            }
+
+            tabs.values.toList()[selectedTabIndex]()
+        }
+    }
+
+    // 新的关于页面,很遗憾没有来得及实装
     @Test fun newAboutWindow() {
         application {
             Window({}) {
@@ -39,7 +64,6 @@ internal class Test {
 
     @Test fun netWindowSwing() {
         Utils.showNetWindow("http://login.jlu.edu.cn/notice.php")
-
         Thread.sleep(50000L)
     }
 

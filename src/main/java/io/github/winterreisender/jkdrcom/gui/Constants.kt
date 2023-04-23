@@ -66,7 +66,6 @@ object Constants {
         const val Function_SchoolNetInfo          = "上网信息窗"
         const val Function_ServiceHall            = "网络营业厅"
         const val Function_NetGuide               = "入网指南"
-        const val Function_JLUTestLogin           = "登录JLU.TEST"
         const val Function_SetMaxRetry            = "重试次数"
         const val Function_SetMaxRetry_NeedNum    = "请输入1~128的数字"
         const val Function_HideWindow             = "隐藏到托盘"
@@ -106,8 +105,6 @@ object Constants {
     const val NetGuideURL        = "http://login.jlu.edu.cn/guide.html"
     /** 校园网信息流量URL */
     const val SchoolNetInfoURL   = "http://10.100.61.3/"
-    /** JLU.TEST登录URL,第一个%s为用户名,第二个为密码 */
-    const val JluTestLoginURL    = "https://net.jlu.edu.cn/login?DDDDD=%s&upass=%s&R1=0&R2=&R3=0&R6=1&para=00&0MKKey=123456&buttonClicked=&redirect_url=&err_flag=&username=&password=&user=&cmd=&Login=&v6ip="
     const val MinWindowSizeX = 440
     const val MinWindowSizeY = 500
 }

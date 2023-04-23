@@ -353,15 +353,6 @@ fun main() {
                                 XMenuItem(Constants.MenuText.Function_NetGuide) {
                                     Utils.openNetWindow(Constants.NetGuideURL)
                                 }
-                                Divider()
-                                XMenuItem(Constants.MenuText.Function_JLUTestLogin) {
-                                    if (JOptionPane.showConfirmDialog(ComposeWindow(),"本功能可尝试连接专为移动设备提供的.TEST无线网络.\n是否开始连接向导?") != 0)
-                                        return@XMenuItem
-                                    val username = JOptionPane.showInputDialog(ComposeWindow(),"输入用户名") ?: return@XMenuItem
-                                    val password = JOptionPane.showInputDialog(ComposeWindow(),"输入密码") ?: return@XMenuItem
-
-                                    Utils.openNetWindow(String.format(Constants.JluTestLoginURL,username,password))
-                                }
 
                                 XMenuItem(Constants.MenuText.Function_HideWindow) {
                                     windowVisible = false

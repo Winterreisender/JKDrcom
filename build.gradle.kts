@@ -18,7 +18,7 @@ plugins {
 }
 
 group = "io.github.winterreisender.jkdrcom"
-version = "1.2.1-dev"
+version = "1.2.1"
 
 repositories {
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")

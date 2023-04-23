@@ -35,30 +35,6 @@ import javax.swing.text.html.HTMLEditorKit
 import javax.swing.text.html.StyleSheet
 
 object Utils {
-
-    @Composable
-    fun XTabView(tabs: Map<String, @Composable () -> Unit>) {
-        var selectedTabIndex by remember { mutableStateOf(0) }
-
-        Column {
-            TabRow(
-                selectedTabIndex = selectedTabIndex,
-            ) {
-                tabs.keys.forEachIndexed { index, title ->
-                    Tab(
-                        selected = selectedTabIndex == index,
-                        onClick = { selectedTabIndex = index },
-                        text = {
-                            Text(text = title)
-                        }
-                    )
-                }
-            }
-
-            tabs.values.toList()[selectedTabIndex]()
-        }
-    }
-
     /**
      * 在窗口中显示校园网之窗
      *
