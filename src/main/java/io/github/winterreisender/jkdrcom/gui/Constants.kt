@@ -80,6 +80,7 @@ object Constants {
         const val Function_CloseAfterSecs         = "自动隐藏窗口时间"
         const val Function_CloseAfterSecs_Text    = "设置自动隐藏时间(秒). -1表示不设置"
         const val Function_CloseAfterSecs_NeedNum = "请输入1~128的数字"
+        const val Function_JLUWifiLogin           = "登录.WIFI无线网络"
 
         const val Settings = "设置"
 
@@ -107,4 +108,7 @@ object Constants {
     const val SchoolNetInfoURL   = "http://10.100.61.3/"
     const val MinWindowSizeX = 440
     const val MinWindowSizeY = 500
+    /** .WIFI登录URL,第一个%s为用户名,第二个为密码 */
+    const val JluTestLoginURL    = "https://net.jlu.edu.cn/login?DDDDD=%s&upass=%s&R1=0&R2=&R3=0&R6=1&para=00&0MKKey=123456&buttonClicked=&redirect_url=&err_flag=&username=&password=&user=&cmd=&Login=&v6ip="
+
 }

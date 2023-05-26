@@ -334,6 +334,15 @@ fun main() {
                     topBar = {
                         XMenuBar(Constants.AppName,windowState, onExitClicked = { appConfig.saveToFile(); exitApplication() }) { // modifier = Modifier.height(32.dp).background(Brush.horizontalGradient(listOf(Color(0xFF00B4DB), Color(0xFF0083b0))))
                             XMenu(Constants.MenuText.Function) {
+                                XMenuItem(Constants.MenuText.Function_JLUTestLogin) {
+                                    if (JOptionPane.showConfirmDialog(ComposeWindow(),"本功能可尝试连接专为移动设备提供的.TEST无线网络.\n是否开始连接向导?") != 0)
+                                        return@XMenuItem
+                                    val username = JOptionPane.showInputDialog(ComposeWindow(),"输入用户名") ?: return@XMenuItem
+                                    val password = JOptionPane.showInputDialog(ComposeWindow(),"输入密码") ?: return@XMenuItem
+
+                                    Utils.openNetWindow(String.format(Constants.JluTestLoginURL,username,password))
+                                }
+
                                 XMenuItem(Constants.MenuText.Function_SchoolNetWindow) {
                                     when(appConfig.netWindow) {
                                         AppConfig.NetWindowType.WINDOWED -> {Utils.showNetWindow()}
@@ -341,7 +350,6 @@ fun main() {
                                         AppConfig.NetWindowType.BROWSER -> {Utils.openNetWindow()}
                                     }
                                 }
-
                                 XMenuItem(Constants.MenuText.Function_SchoolNetInfo) {
                                     Utils.openNetWindow(Constants.SchoolNetInfoURL)
                                 }
