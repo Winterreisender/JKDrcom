@@ -108,7 +108,7 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
             )
 
             OutlinedTextField(hostName,{hostName = it}, label = {Text(Constants.UIText.HostName)}, isError = hostName.isEmpty())
-            OutlinedTextField(macAddress,{macAddress = it}, label = {Text(Constants.UIText.MacAddress)}, isError = !macAddress.matches(Regex("""([A-E,\d]{2}-?){5}([A-E,\d]{2})""",RegexOption.IGNORE_CASE)),
+            OutlinedTextField(macAddress,{macAddress = it}, label = {Text(Constants.UIText.MacAddress)}, isError = !macAddress.matches(Regex("""([A-F,\d]{2}-?){5}([A-F,\d]{2})""",RegexOption.IGNORE_CASE)),
                 trailingIcon = { // 自动检测MAC地址和主机名的按钮
                     var isLoading by remember { mutableStateOf(false) }
                     Button(onClick = {
@@ -173,7 +173,7 @@ fun IdlePage(setAppStatus :(status :AppStatus)->Unit = {}) {
                         }
                         setAppStatus(AppStatus.CONNECTING)
                     },
-                    enabled = macAddress.matches("""([A-E,\d]{2}-?){5}([A-E,\d]{2})""".toRegex(RegexOption.IGNORE_CASE)) && password.isNotEmpty(),
+                    enabled = macAddress.matches("""([A-F,\d]{2}-?){5}([A-F,\d]{2})""".toRegex(RegexOption.IGNORE_CASE)) && password.isNotEmpty(),
                     content = {
                         Text(Constants.UIText.Login)
                     }
