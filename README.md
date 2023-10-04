@@ -17,6 +17,11 @@ JKDrcom(JLU Kotlin Drcom)是一个从YouthLin的[jlu-drcom-java](https://github.
 
 本项目已停止开发维护。 更多信息详见[Issues#6](https://github.com/Winterreisender/JKDrcom/issues/6)。
 
+## 告别信
+这是我的第一个开源项目，也是我写的第一个有实用价值、规模不算太小的、有别人用的软件。  
+这是为大学校园网准备的，但遗憾的是，我从来没有体验过真正的大学生活。  
+现在想来，这种心情多半是怀念中夹杂这一些不甘。 如同只达成NORMAL END的一次性游戏一样。
+
 ## 帮助
 
 - [用户指南](https://github.com/Winterreisender/JKDrcom/wiki/%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97)
